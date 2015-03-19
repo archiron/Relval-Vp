@@ -364,51 +364,39 @@ class ovalGui(QWidget):
         self.quelclient_update(to_transmit)
         
     def quelclient_update(self, to_transmit):
-        from operator import itemgetter
         """Lance la deuxième fenêtre"""
         self.quelclient = Quelclient()
         
-        self.rel_list_mod = []
-        self.ref_list_mod = []
-    
         self.quelclient.bouton.setText("Go")
         self.quelclient.TextEdit_H1.clear()
         self.quelclient.TextEdit_H2.clear()
         self.quelclient.QGBox_H1.setTitle(to_transmit[0])
         self.quelclient.QGBox_H2.setTitle(to_transmit[1])
+#        self.quelclient.TextEdit.append(to_transmit[0])
+#        for items in to_transmit[2]:
+#            line_TE = ''
+#            for items2 in explode_item(items):
+#                line_TE += items2 + ' '
+#            self.quelclient.TextEdit.append(line_TE)
+#        self.quelclient.TextEdit.append(to_transmit[1])
+#        for items in to_transmit[3]:
+#            line_TE = ''
+#            for items2 in explode_item(items):
+#                line_TE += items2 + ' '
+#            self.quelclient.TextEdit.append(line_TE)
+#        self.quelclient.TextEdit_H1.append(to_transmit[0])
         for items in to_transmit[2]:
-            items3 = explode_item(items)
-            items4 = (items3[1], items3[2], items3[0])
-            self.rel_list_mod.append(items4)
-        for items in to_transmit[3]:
-            items3 = explode_item(items)
-            items4 = (items3[1], items3[2], items3[0])
-            self.ref_list_mod.append(items4)
-
-#        for items in self.rel_list_mod:
-#            print "rel : ", items
-        list_tmp = sorted(self.rel_list_mod, key=itemgetter(0,1), reverse=True)
-        self.rel_list_mod = list_tmp
-#        for items in self.rel_list_mod:
-#            print "rel : ", items
-#        for items in self.ref_list_mod:
-#            print "ref : ", items
-        list_tmp = sorted(self.ref_list_mod, key=itemgetter(0,1), reverse=True)
-        self.ref_list_mod = list_tmp
-#        for items in self.ref_list_mod:
-#            print "ref : ", items
-        
-        for items in self.rel_list_mod:
             line_TE = ''
-            for items2 in items:
+            for items2 in explode_item(items):
                 line_TE += items2 + ' '
             self.quelclient.TextEdit_H1.append(line_TE)
-        for items in self.ref_list_mod:
+#        self.quelclient.TextEdit_H2.append(to_transmit[1])
+        for items in to_transmit[3]:
             line_TE = ''
-            for items2 in items:
+            for items2 in explode_item(items):
                 line_TE += items2 + ' '
             self.quelclient.TextEdit_H2.append(line_TE)
-
+        
         # en cas de signal "fermeturequelclient()" reçu de self.quelclient => exécutera clienchoisi 
         self.connect(self.quelclient, SIGNAL("fermeturequelclient(PyQt_PyObject)"), self.clientchoisi) 
         # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)

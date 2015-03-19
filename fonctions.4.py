@@ -533,6 +533,5 @@ def explode_item(item):
     for it in temp_item2:
         temp_item.append(it)
 #    print "coucou : ", temp_item
-
     return temp_item
     
