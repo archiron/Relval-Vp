@@ -1,0 +1,19 @@
+trier par dataset puis par release
+voir si pour la creation des repertoires GED PU25/50 et FAST on ne peut pas les mettre par défaut et changer le texte (textedit)
+mettre un decocher tout pour le fullsim
+verifier le chemin : si on n'est pas dans Validation/RecoEgamma/test alors signaler et ne rien faire.
+
+mettre les langues sous forme de fichier txt.
+
+resume:
+self.choix_calcul = 'Full'   # default
+self.choix_job = '8nh'       # default
+self.choix_etape = 'analyze' # default
+
+radio01-4 : analyze, finalize, store, publish
+radio11-3 : FULL, PU, FAST
+radio21-2 : store, force
+check31-6 : Pt10Startup_UP15, Pt35Startup_UP15, Pt1000Startup_UP15, QcdPt80Pt120Startup_13, TTbarStartup_13, ZEEStartup_13
+check37-8 : TTbarStartup_13, ZEEStartup_13
+radio41-2 : batch, interactif
+radio51-2 : 8nh, 1nh
