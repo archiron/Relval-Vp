@@ -41,9 +41,12 @@ class Quelclient(QWidget):
         vbox_H2 = QVBoxLayout()
         vbox_H2.addWidget(self.TextEdit_H2)
         self.QGBox_H2.setLayout(vbox_H2)
-        hbox_H0 = QHBoxLayout()
-        hbox_H0.addWidget(self.QGBox_H1)
-        hbox_H0.addWidget(self.QGBox_H2)
+#        hbox_H0 = QHBoxLayout()
+#        hbox_H0.addWidget(self.QGBox_H1)
+#        hbox_H0.addWidget(self.QGBox_H2)
+        vbox_H0 = QVBoxLayout()
+        vbox_H0.addWidget(self.QGBox_H1)
+        vbox_H0.addWidget(self.QGBox_H2)
 
         # créer un bouton
         self.bouton = QPushButton("Ok", self)
@@ -52,7 +55,8 @@ class Quelclient(QWidget):
         posit = QVBoxLayout()
         posit.addWidget(self.QGBox_0)
 #        posit.addWidget(self.TextEdit)
-        posit.addLayout(hbox_H0)
+#        posit.addLayout(hbox_H0)
+        posit.addLayout(vbox_H0)
         posit.addWidget(self.bouton)
 
         self.setLayout(posit)

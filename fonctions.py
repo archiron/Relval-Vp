@@ -508,7 +508,7 @@ def list_search(self):
     print '\n-----'
     for items in self.rel_list:
         print items
-        print explode_item(items)
+#        print explode_item(items)
     print '-----'
     for items in self.ref_list:
         print items
