@@ -17,3 +17,9 @@ check31-6 : Pt10Startup_UP15, Pt35Startup_UP15, Pt1000Startup_UP15, QcdPt80Pt120
 check37-8 : TTbarStartup_13, ZEEStartup_13
 radio41-2 : batch, interactif
 radio51-2 : 8nh, 1nh
+
+self.rel_list : liste les fichiers DQM_V001_**.root pour les différents datasets cochés (check3*) pour la release a valider
+self.ref_list : liste les fichiers DQM_V001_**.root pour les différents datasets cochés (check3*) pour la release de reference
+
+self.rel_list_mod : liste les releases, globaltags et datasets a partir des datasets cochés (check3*) pour la release a valider
+self.ref_list_mod : liste les releases, globaltags et datasets a partir des datasets cochés (check3*) pour la release de reference
