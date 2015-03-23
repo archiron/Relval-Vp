@@ -414,7 +414,10 @@ class ovalGui(QWidget):
             j = 0
             for items2 in items:
                 print "--"
-                t = QRadioButton(items2)
+                if ( j != 2):
+                    t = QRadioButton(items2)
+                else: # j = 2
+                    t = QLabel(items2)
                 self.buttons_rel.append(t)
                 self.quelclient.gbox_H1.addWidget(self.buttons_rel[i], k, j)
                 self.connect(self.buttons_rel[i], SIGNAL("clicked()"), self.buttons_relClicked)
@@ -430,7 +433,10 @@ class ovalGui(QWidget):
             j = 0
             for items2 in items:
                 print "--"
-                t = QRadioButton(items2)
+                if ( j != 2):
+                    t = QRadioButton(items2)
+                else: # j = 2
+                    t = QLabel(items2)
                 self.buttons_ref.append(t)
                 self.quelclient.gbox_H2.addWidget(self.buttons_ref[i], k, j)
                 self.connect(self.buttons_ref[i], SIGNAL("clicked()"), self.buttons_refClicked)
@@ -457,8 +463,9 @@ class ovalGui(QWidget):
         for items in self.rel_list_mod:
             j = 0
             for items2 in items:
-                if self.buttons_rel[i].isChecked():
-                    print self.buttons_rel[i].text(), " checked"
+                if ( j != 2):
+                    if self.buttons_rel[i].isChecked():
+                        print self.buttons_rel[i].text(), " checked"
                 j += 1
                 i += 1
             k += 1
@@ -470,8 +477,9 @@ class ovalGui(QWidget):
         for items in self.ref_list_mod:
             j = 0
             for items2 in items:
-                if self.buttons_ref[i].isChecked():
-                    print self.buttons_ref[i].text(), " checked"
+                if ( j != 2):
+                    if self.buttons_ref[i].isChecked():
+                        print self.buttons_ref[i].text(), " checked"
                 j += 1
                 i += 1
             k += 1
