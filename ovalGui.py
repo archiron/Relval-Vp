@@ -24,9 +24,6 @@ class Quelclient(QWidget):
         vbox_0 = QVBoxLayout()
         vbox_0.addWidget(self.lineEdit)
         self.QGBox_0.setLayout(vbox_0)
-        # créer un Edit
-#        self.TextEdit = QTextEdit(self)
-#        self.TextEdit.append("Coucou ! \n")
         
         # QHBoxLayout + 2 QGroupBox
         self.QGBox_H1 = QGroupBox("Release list")
@@ -41,12 +38,19 @@ class Quelclient(QWidget):
         vbox_H2 = QVBoxLayout()
         vbox_H2.addWidget(self.TextEdit_H2)
         self.QGBox_H2.setLayout(vbox_H2)
-#        hbox_H0 = QHBoxLayout()
-#        hbox_H0.addWidget(self.QGBox_H1)
-#        hbox_H0.addWidget(self.QGBox_H2)
+        
+        self.QGBox_H1b = QGroupBox("Release list b")
+        self.gbox_H1 = QGridLayout()
+        self.QGBox_H1b.setLayout(self.gbox_H1)
+        self.QGBox_H2b = QGroupBox("Reference list b")
+        self.gbox_H2 = QGridLayout()
+        self.QGBox_H2b.setLayout(self.gbox_H2)
+
         vbox_H0 = QVBoxLayout()
         vbox_H0.addWidget(self.QGBox_H1)
+        vbox_H0.addWidget(self.QGBox_H1b)
         vbox_H0.addWidget(self.QGBox_H2)
+        vbox_H0.addWidget(self.QGBox_H2b)
 
         # créer un bouton
         self.bouton = QPushButton("Ok", self)
@@ -54,8 +58,6 @@ class Quelclient(QWidget):
         # positionner les widgets dans la fenêtre
         posit = QVBoxLayout()
         posit.addWidget(self.QGBox_0)
-#        posit.addWidget(self.TextEdit)
-#        posit.addLayout(hbox_H0)
         posit.addLayout(vbox_H0)
         posit.addWidget(self.bouton)
 
@@ -389,18 +391,10 @@ class ovalGui(QWidget):
             items4 = (items3[1], items3[2], items3[0])
             self.ref_list_mod.append(items4)
 
-#        for items in self.rel_list_mod:
-#            print "rel : ", items
         list_tmp = sorted(self.rel_list_mod, key=itemgetter(0,1), reverse=True)
         self.rel_list_mod = list_tmp
-#        for items in self.rel_list_mod:
-#            print "rel : ", items
-#        for items in self.ref_list_mod:
-#            print "ref : ", items
         list_tmp = sorted(self.ref_list_mod, key=itemgetter(0,1), reverse=True)
         self.ref_list_mod = list_tmp
-#        for items in self.ref_list_mod:
-#            print "ref : ", items
         
         for items in self.rel_list_mod:
             line_TE = ''
@@ -413,6 +407,38 @@ class ovalGui(QWidget):
                 line_TE += items2 + ' '
             self.quelclient.TextEdit_H2.append(line_TE)
 
+        i = 0
+        k = 0
+        self.buttons_rel = []
+        for items in self.rel_list_mod:
+            j = 0
+            for items2 in items:
+                print "--"
+                t = QRadioButton(items2)
+                self.buttons_rel.append(t)
+                self.quelclient.gbox_H1.addWidget(self.buttons_rel[i], k, j)
+                self.connect(self.buttons_rel[i], SIGNAL("clicked()"), self.buttons_relClicked)
+                j += 1
+                i += 1
+                print k, " - ", j
+            k += 1           
+            
+        i = 0
+        k = 0
+        self.buttons_ref = []
+        for items in self.ref_list_mod:
+            j = 0
+            for items2 in items:
+                print "--"
+                t = QRadioButton(items2)
+                self.buttons_ref.append(t)
+                self.quelclient.gbox_H2.addWidget(self.buttons_ref[i], k, j)
+                self.connect(self.buttons_ref[i], SIGNAL("clicked()"), self.buttons_refClicked)
+                j += 1
+                i += 1
+                print k, " - ", j
+            k += 1           
+            
         # en cas de signal "fermeturequelclient()" reçu de self.quelclient => exécutera clienchoisi 
         self.connect(self.quelclient, SIGNAL("fermeturequelclient(PyQt_PyObject)"), self.clientchoisi) 
         # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
@@ -425,7 +451,32 @@ class ovalGui(QWidget):
 #        self.lineEdit1.setText(x)
         print "recup = ", x
 
-        
+    def buttons_relClicked(self):
+        i = 0
+        k = 0
+        for items in self.rel_list_mod:
+            j = 0
+            for items2 in items:
+                if self.buttons_rel[i].isChecked():
+                    print self.buttons_rel[i].text(), " checked"
+                j += 1
+                i += 1
+            k += 1
+        QtCore.QCoreApplication.processEvents()
+
+    def buttons_refClicked(self):
+        i = 0
+        k = 0
+        for items in self.ref_list_mod:
+            j = 0
+            for items2 in items:
+                if self.buttons_ref[i].isChecked():
+                    print self.buttons_ref[i].text(), " checked"
+                j += 1
+                i += 1
+            k += 1
+        QtCore.QCoreApplication.processEvents()
+                
     def radio01Clicked(self):
         if self.radio01.isChecked():
             self.QGBox2.setEnabled(False)
