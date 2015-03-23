@@ -9,6 +9,7 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_test, liste, cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files, cmd_relval, cmd_listeRECO, cmd_listeDQM, list_search, explode_item
+from fonctions import list_simplify
 		
 #############################################################################
 class Quelclient(QWidget):
@@ -390,12 +391,18 @@ class ovalGui(QWidget):
             items3 = explode_item(items)
             items4 = (items3[1], items3[2], items3[0])
             self.ref_list_mod.append(items4)
-
+            
         list_tmp = sorted(self.rel_list_mod, key=itemgetter(0,1), reverse=True)
         self.rel_list_mod = list_tmp
         list_tmp = sorted(self.ref_list_mod, key=itemgetter(0,1), reverse=True)
         self.ref_list_mod = list_tmp
         
+        for items in self.rel_list_mod:
+            print items
+        for items in self.ref_list_mod:
+            print items
+
+        # to be removed later
         for items in self.rel_list_mod:
             line_TE = ''
             for items2 in items:
@@ -406,6 +413,9 @@ class ovalGui(QWidget):
             for items2 in items:
                 line_TE += items2 + ' '
             self.quelclient.TextEdit_H2.append(line_TE)
+        # to be removed later
+        
+        list_simplify(self)
 
         i = 0
         k = 0
@@ -413,7 +423,7 @@ class ovalGui(QWidget):
         for items in self.rel_list_mod:
             j = 0
             for items2 in items:
-                print "--"
+#                print "--"
                 if ( j != 2):
                     t = QRadioButton(items2)
                 else: # j = 2
@@ -423,7 +433,7 @@ class ovalGui(QWidget):
                 self.connect(self.buttons_rel[i], SIGNAL("clicked()"), self.buttons_relClicked)
                 j += 1
                 i += 1
-                print k, " - ", j
+#                print k, " - ", j
             k += 1           
             
         i = 0
@@ -432,7 +442,7 @@ class ovalGui(QWidget):
         for items in self.ref_list_mod:
             j = 0
             for items2 in items:
-                print "--"
+#                print "--"
                 if ( j != 2):
                     t = QRadioButton(items2)
                 else: # j = 2
@@ -442,7 +452,7 @@ class ovalGui(QWidget):
                 self.connect(self.buttons_ref[i], SIGNAL("clicked()"), self.buttons_refClicked)
                 j += 1
                 i += 1
-                print k, " - ", j
+#                print k, " - ", j
             k += 1           
             
         # en cas de signal "fermeturequelclient()" reçu de self.quelclient => exécutera clienchoisi 

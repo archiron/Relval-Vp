@@ -9,6 +9,7 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_test, liste, cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files, cmd_relval, cmd_listeRECO, cmd_listeDQM, list_search, explode_item
+from fonctions import list_simplify
 		
 #############################################################################
 class ovalGui(QWidget):
@@ -35,40 +36,55 @@ class ovalGui(QWidget):
         
 		# creation du tableau
         self.toto_list = []
-        self.titi_list = []
         for i in range(3):
             print i
             line_1 = str(i) + "G"
             line_2 = str(i) + "M"
             line_3 = str(i) + "D"
-            it = [line_1, line_2, line_3]
+            it = (line_1, line_2, line_3)
             self.toto_list.append(it) # toto est en liste de liste
-        for i in range(5):
-            self.titi_list.append(str(i)) # titi est en string ( int )
         for items in self.toto_list:
             print "toto : ", items
+ 
+        self.titi_list = []
+        t = ('a', 'b', 'c')
+        self.titi_list.append(t)
+        t = ('a', 'b', 'd')
+        self.titi_list.append(t)
+        t = ('a', 'b', 'g')
+        self.titi_list.append(t)
+        t = ('a', 'e', 'c')
+        self.titi_list.append(t)
+        t = ('a', 'e', 'd')
+        self.titi_list.append(t)
+        t = ('a', 'f', 'g')
+        self.titi_list.append(t)
+        t = ('h', 'f', 'c')
+        self.titi_list.append(t)
+        print self.titi_list
             
+        list_simplify(self)
+
         # creation du grpe liste des datas
         self.QGBox32 = QGroupBox("Data Sets")
         self.QGBox32.setMinimumHeight(150)
         self.layout = QGridLayout()
         
-        print self.toto_list
-        print self.titi_list
         i = 0
         k = 0
         self.bouton = []
-        self.bouton2 = []
-        for items in self.toto_list:
+        for items in self.titi_list:
             j = 0
             for items2 in items:
-                t = QRadioButton(items2)
+                if ( j != 2):
+                    t = QRadioButton(items2)
+                else: # j = 2
+                    t = QLabel(items2)
                 self.bouton.append(t)
                 self.layout.addWidget(self.bouton[i], k, j)
                 self.connect(self.bouton[i], SIGNAL("clicked()"), self.boutonClicked)
                 j += 1
                 i += 1
-                print k, " - ", j
             k += 1
         self.QGBox32.setLayout(self.layout)
         
@@ -118,12 +134,13 @@ class ovalGui(QWidget):
     def boutonClicked(self):
         i = 0
         k = 0
-        for items in self.toto_list:
+        for items in self.titi_list:
             j = 0
             for items2 in items:
-#                print self.bouton[i].text()
-                if self.bouton[i].isChecked():
-                    print self.bouton[i].text(), " checked"
+#                print k, " - ", j
+                if ( j != 2):
+                    if self.bouton[i].isChecked():
+                        print self.bouton[i].text(), " checked"
                 j += 1
                 i += 1
             k += 1

@@ -535,4 +535,19 @@ def explode_item(item):
 #    print "coucou : ", temp_item
 
     return temp_item
+
+def list_simplify(self):
+    # simplification of self.rel_list_mod and self.ref_list_mod
+    # WARNING : test before about len() = 1 -> do nothing
+    print "coucou : ", self.titi_list[0], len(self.titi_list)
+    temp = []
+#    i = 0 # pour temp.append
+    for i in range(0, len(self.titi_list)-1):
+        print i, " : ", self.titi_list[i]
+        (a, b, c) = self.titi_list[i]
+        (t, u, v) = self.titi_list[i+1]
+        print "a : ", a
+    print "last : ", self.titi_list[i+1]
     
+    return 
+            
