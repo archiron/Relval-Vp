@@ -52,28 +52,24 @@ class ovalGui(QWidget):
         self.QGBox32 = QGroupBox("Data Sets")
         self.QGBox32.setMinimumHeight(150)
         self.layout = QGridLayout()
-        self.radio01 = QRadioButton("analyze") # Liste par defaut
-        self.radio02 = QRadioButton("finalize")
-        self.radio03 = QRadioButton("grand")
-        self.radio01.setChecked(True)
-        self.layout.addWidget(self.radio01, 0, 0)
-        self.layout.addWidget(self.radio02, 0, 1)
-        self.layout.addWidget(self.radio03, 1, 0, 1, 2)
         
-        self.list = QListWidget()
         print self.toto_list
         print self.titi_list
-        self.list.addItems(self.titi_list) # ne fonctionne pas si on n'a pas de string
-#        self.list.addItems(self.toto_list)
-        it = QListWidgetItem(self.list)
         i = 0
+        k = 0
         self.bouton = []
-        for items in self.titi_list:
-            t = QRadioButton(items)
-            self.bouton.append(t)
-            self.layout.addWidget(self.bouton[i])
-            self.connect(self.bouton[i], SIGNAL("clicked()"), self.boutonClicked)
-            i +=1
+        self.bouton2 = []
+        for items in self.toto_list:
+            j = 0
+            for items2 in items:
+                t = QRadioButton(items2)
+                self.bouton.append(t)
+                self.layout.addWidget(self.bouton[i], k, j)
+                self.connect(self.bouton[i], SIGNAL("clicked()"), self.boutonClicked)
+                j += 1
+                i += 1
+                print k, " - ", j
+            k += 1
         self.QGBox32.setLayout(self.layout)
         
         #Layout intermédiaire : création et peuplement des gpes radios
@@ -120,14 +116,17 @@ class ovalGui(QWidget):
         self.setLayout(self.layout_general)
         
     def boutonClicked(self):
-#        if self.radio21.isChecked():
-#            self.choix_etape = 'store'
         i = 0
-        for items in self.titi_list:
-            print self.bouton[i].text()
-            if self.bouton[i].isChecked():
-                print "checked"
-            i += 1
+        k = 0
+        for items in self.toto_list:
+            j = 0
+            for items2 in items:
+#                print self.bouton[i].text()
+                if self.bouton[i].isChecked():
+                    print self.bouton[i].text(), " checked"
+                j += 1
+                i += 1
+            k += 1
         QtCore.QCoreApplication.processEvents()
 
        
