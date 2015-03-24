@@ -536,18 +536,51 @@ def explode_item(item):
 
     return temp_item
 
-def list_simplify(self):
-    # simplification of self.rel_list_mod and self.ref_list_mod
+def list_simplify(tablo):
+    # simplification of tablo and self.ref_list_mod
     # WARNING : test before about len() = 1 -> do nothing
-    print "coucou : ", self.rel_list_mod[0], len(self.rel_list_mod)
+    print "coucou : ", tablo[0], len(tablo)
     temp = []
 #    i = 0 # pour temp.append
-    for i in range(0, len(self.rel_list_mod)-1):
-        print i, " : ", self.rel_list_mod[i]
-        (a, b, c) = self.rel_list_mod[i]
-        (t, u, v) = self.rel_list_mod[i+1]
-        print "a : ", a
-    print "last : ", self.rel_list_mod[i+1]
+    item_line = tablo[0]
+    temp2 = [item_line[2]]
+    print "item_line : ", item_line
+    for i in range(1, len(tablo)-0):
+        (t, u, v) = tablo[i]
+#        print i, " : ", tablo[i]
+        if ( t == item_line[0]):
+            print "t = a"
+            if (u == item_line[1]):
+                print "u = b"
+                print temp2
+                temp2.append(v)
+                print temp2
+                item_line = (item_line[0], item_line[1], temp2 )
+                print "item_line : ", item_line
+            else :
+                print " u != b"
+                item2 = (item_line[0], item_line[1], temp2)
+                print temp2
+                temp.append(item_line) # 
+                item_line = tablo[i]
+                temp2 = [item_line[2]]
+                print "new item_line b : ", item_line
+                if ( i == len(tablo)-1 ):
+                    print "fin"
+                    temp.append(item_line)
+        else:
+            print "t != a"
+            temp.append(item_line)
+            item_line = tablo[i]
+            temp2 = [item_line[2]]
+            print "new item_line a : ", item_line
+            if ( i == len(tablo)-1 ):
+                print "fin"
+                temp.append(item_line)
+    
+    for items in temp:
+        print items
+#    print "last : ", tablo[i+1]
     
     return 
         

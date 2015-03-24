@@ -415,7 +415,8 @@ class ovalGui(QWidget):
             self.quelclient.TextEdit_H2.append(line_TE)
         # to be removed later
         
-        list_simplify(self)
+        list_simplify(self.rel_list_mod)
+        list_simplify(self.ref_list_mod)
 
         i = 0
         k = 0

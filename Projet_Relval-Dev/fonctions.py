@@ -273,14 +273,10 @@ def get_choix_calcul_search(self):
     
 def clean_files(self):
     import os,sys,subprocess,glob
-#    print glob.glob('dd*.olog')
-#    print glob.glob('dqm*.root')
     for items in glob.glob('dd*.olog'): 
         os.remove(items)
     for items in glob.glob('dqm*.root'): 
         os.remove(items)
-#    print glob.glob('dd*.olog')
-#    print glob.glob('dqm*.root')
     return
     
 def copy_files(self):
@@ -542,12 +538,45 @@ def list_simplify(self):
     print "coucou : ", self.titi_list[0], len(self.titi_list)
     temp = []
 #    i = 0 # pour temp.append
-    for i in range(0, len(self.titi_list)-1):
-        print i, " : ", self.titi_list[i]
-        (a, b, c) = self.titi_list[i]
-        (t, u, v) = self.titi_list[i+1]
-        print "a : ", a
-    print "last : ", self.titi_list[i+1]
+    item_line = self.titi_list[0]
+    temp2 = [item_line[2]]
+    print "item_line : ", item_line
+    for i in range(1, len(self.titi_list)-0):
+        (t, u, v) = self.titi_list[i]
+#        print i, " : ", self.titi_list[i]
+        if ( t == item_line[0]):
+            print "t = a"
+            if (u == item_line[1]):
+                print "u = b"
+                print temp2
+                temp2.append(v)
+                print temp2
+                item_line = (item_line[0], item_line[1], temp2 )
+                print "item_line : ", item_line
+            else :
+                print " u != b"
+                item2 = (item_line[0], item_line[1], temp2)
+                print temp2
+                temp.append(item_line) # 
+                item_line = self.titi_list[i]
+                temp2 = [item_line[2]]
+                print "new item_line b : ", item_line
+                if ( i == len(self.titi_list)-1 ):
+                    print "fin"
+                    temp.append(item_line)
+        else:
+            print "t != a"
+            temp.append(item_line)
+            item_line = self.titi_list[i]
+            temp2 = [item_line[2]]
+            print "new item_line a : ", item_line
+            if ( i == len(self.titi_list)-1 ):
+                print "fin"
+                temp.append(item_line)
+    
+    for items in temp:
+        print items
+#    print "last : ", self.titi_list[i+1]
     
     return 
             

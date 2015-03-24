@@ -59,8 +59,8 @@ class ovalGui(QWidget):
         self.titi_list.append(t)
         t = ('a', 'f', 'g')
         self.titi_list.append(t)
-        t = ('h', 'f', 'c')
-        self.titi_list.append(t)
+#        t = ('h', 'f', 'c')
+#        self.titi_list.append(t)
         print self.titi_list
             
         list_simplify(self)
