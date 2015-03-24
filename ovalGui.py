@@ -377,6 +377,8 @@ class ovalGui(QWidget):
         
         self.rel_list_mod = []
         self.ref_list_mod = []
+        self.rel_list_mod2 = []
+        self.ref_list_mod2 = []
     
         self.quelclient.bouton.setText("Go")
         self.quelclient.TextEdit_H1.clear()
@@ -415,16 +417,26 @@ class ovalGui(QWidget):
             self.quelclient.TextEdit_H2.append(line_TE)
         # to be removed later
         
-        list_simplify(self.rel_list_mod)
-        list_simplify(self.ref_list_mod)
+        self.rel_list_mod2 = list_simplify(self.rel_list_mod)
+        print "retour tablo : ", self.rel_list_mod2
+        self.ref_list_mod2 = list_simplify(self.ref_list_mod)
+        print "retour tablo : ", self.ref_list_mod2
 
         i = 0
         k = 0
         self.buttons_rel = []
-        for items in self.rel_list_mod:
+        for items in self.rel_list_mod2:
+            it1 = ''
+            it2 = items[2]
+            print "it2 :", it2, " ,longueur it2 : ",len(it2)
+            for it in it2:
+#                print it
+                it1 += it + ', '
+            it1 = it1[0:len(it1)-2]
+#            print it1, it2
+            items = (items[0], items[1], it1)
             j = 0
             for items2 in items:
-#                print "--"
                 if ( j != 2):
                     t = QRadioButton(items2)
                 else: # j = 2
@@ -434,13 +446,20 @@ class ovalGui(QWidget):
                 self.connect(self.buttons_rel[i], SIGNAL("clicked()"), self.buttons_relClicked)
                 j += 1
                 i += 1
-#                print k, " - ", j
             k += 1           
             
         i = 0
         k = 0
         self.buttons_ref = []
-        for items in self.ref_list_mod:
+        for items in self.ref_list_mod2:
+            it1 = ''
+            it2 = items[2]
+            for it in it2:
+#                print it
+                it1 += it + ', '
+            it1 = it1[0:len(it1)-2]
+#            print it1, it2
+            items = (items[0], items[1], it1)
             j = 0
             for items2 in items:
 #                print "--"
@@ -471,7 +490,7 @@ class ovalGui(QWidget):
     def buttons_relClicked(self):
         i = 0
         k = 0
-        for items in self.rel_list_mod:
+        for items in self.rel_list_mod2:
             j = 0
             for items2 in items:
                 if ( j != 2):
@@ -485,7 +504,7 @@ class ovalGui(QWidget):
     def buttons_refClicked(self):
         i = 0
         k = 0
-        for items in self.ref_list_mod:
+        for items in self.ref_list_mod2:
             j = 0
             for items2 in items:
                 if ( j != 2):

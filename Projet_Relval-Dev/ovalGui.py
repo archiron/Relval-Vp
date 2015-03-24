@@ -47,23 +47,25 @@ class ovalGui(QWidget):
             print "toto : ", items
  
         self.titi_list = []
+        self.titi_list2 = []
         t = ('a', 'b', 'c')
         self.titi_list.append(t)
         t = ('a', 'b', 'd')
         self.titi_list.append(t)
-        t = ('a', 'b', 'g')
-        self.titi_list.append(t)
-        t = ('a', 'e', 'c')
-        self.titi_list.append(t)
-        t = ('a', 'e', 'd')
-        self.titi_list.append(t)
-        t = ('a', 'f', 'g')
-        self.titi_list.append(t)
-#        t = ('h', 'f', 'c')
+#        t = ('a', 'b', 'g')
 #        self.titi_list.append(t)
+#        t = ('a', 'e', 'c')
+#        self.titi_list.append(t)
+#        t = ('a', 'e', 'd')
+#        self.titi_list.append(t)
+#        t = ('a', 'f', 'g')
+#        self.titi_list.append(t)
+        t = ('h', 'f', 'c')
+        self.titi_list.append(t)
         print self.titi_list
             
-        list_simplify(self)
+        self.titi_list2 = list_simplify(self.titi_list)
+        print "retour tablo : ", self.titi_list2
 
         # creation du grpe liste des datas
         self.QGBox32 = QGroupBox("Data Sets")

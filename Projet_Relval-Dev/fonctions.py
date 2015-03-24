@@ -532,18 +532,16 @@ def explode_item(item):
 
     return temp_item
 
-def list_simplify(self):
+def list_simplify(tablo):
     # simplification of self.rel_list_mod and self.ref_list_mod
     # WARNING : test before about len() = 1 -> do nothing
-    print "coucou : ", self.titi_list[0], len(self.titi_list)
+    print "coucou : ", tablo[0], len(tablo)
     temp = []
-#    i = 0 # pour temp.append
-    item_line = self.titi_list[0]
+    item_line = tablo[0]
     temp2 = [item_line[2]]
     print "item_line : ", item_line
-    for i in range(1, len(self.titi_list)-0):
-        (t, u, v) = self.titi_list[i]
-#        print i, " : ", self.titi_list[i]
+    for i in range(1, len(tablo)):
+        (t, u, v) = tablo[i]
         if ( t == item_line[0]):
             print "t = a"
             if (u == item_line[1]):
@@ -555,28 +553,31 @@ def list_simplify(self):
                 print "item_line : ", item_line
             else :
                 print " u != b"
-                item2 = (item_line[0], item_line[1], temp2)
+                temp2 = (item_line[0], item_line[1], temp2)
                 print temp2
                 temp.append(item_line) # 
-                item_line = self.titi_list[i]
+                item_line = ( tablo[i][0], tablo[i][1], [ tablo[i][2] ] )
                 temp2 = [item_line[2]]
                 print "new item_line b : ", item_line
-                if ( i == len(self.titi_list)-1 ):
+                if ( i == len(tablo)-1 ):
                     print "fin"
                     temp.append(item_line)
         else:
             print "t != a"
             temp.append(item_line)
-            item_line = self.titi_list[i]
+            item_line = ( tablo[i][0], tablo[i][1], [ tablo[i][2] ] )
             temp2 = [item_line[2]]
             print "new item_line a : ", item_line
-            if ( i == len(self.titi_list)-1 ):
+            if ( i == len(tablo)-1 ):
                 print "fin"
                 temp.append(item_line)
     
+    print "longueur tablo : ", len(temp)
+    print "item_line : ", item_line
+    if ( len(temp) == 0):
+        temp.append(item_line)
     for items in temp:
-        print items
-#    print "last : ", self.titi_list[i+1]
+        print "temp : ", items  
     
-    return 
+    return temp
             
