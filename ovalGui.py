@@ -54,13 +54,16 @@ class Quelclient(QWidget):
         vbox_H0.addWidget(self.QGBox_H2b)
 
         # créer un bouton
-        self.bouton = QPushButton("Ok", self)
+        self.bouton = QPushButton("Cancel", self)
         self.bouton.clicked.connect(self.ok_m)
+        hbox_button = QHBoxLayout()
+        hbox_button.addStretch(1)
+        hbox_button.addWidget(self.bouton)
         # positionner les widgets dans la fenêtre
         posit = QVBoxLayout()
         posit.addWidget(self.QGBox_0)
         posit.addLayout(vbox_H0)
-        posit.addWidget(self.bouton)
+        posit.addLayout(hbox_button)
 
         self.setLayout(posit)
  
@@ -147,8 +150,6 @@ class ovalGui(QWidget):
         self.QGBox32 = QGroupBox("Data Sets")
         self.QGBox31.setMaximumHeight(150)
         self.QGBox32.setMaximumHeight(150)
-#        self.QGBox31.setMinimumHeight(150)
-#        self.QGBox32.setMinimumHeight(150)
         self.QGBox31.setVisible(True)
         self.QGBox32.setVisible(False)
         self.check31 = QCheckBox("Pt10Startup_UP15")
@@ -245,8 +246,6 @@ class ovalGui(QWidget):
         hbox62 = QHBoxLayout()
         hbox62.addWidget(self.label62)
         hbox62.addWidget(self.lineedit3)
-#        self.label62.setVisible(False) # new
-#        self.lineedit3.setVisible(False) # new
         vbox6 = QVBoxLayout()
         vbox6.addLayout(hbox61)
         vbox6.addLayout(hbox62)
@@ -280,8 +279,8 @@ class ovalGui(QWidget):
         self.boutonQ.setIcon(QIcon("../images/smile.png"))
         self.connect(self.boutonQ, SIGNAL("clicked()"), qApp, SLOT("quit()"))
 
-        # Création du bouton Get list !, ayant pour parent la "fenetre"
-        self.bouton3 = QPushButton(self.trUtf8("Get list !"),self)
+        # Création du bouton Get choice !, ayant pour parent la "fenetre"
+        self.bouton3 = QPushButton(self.trUtf8("Get choice !"),self)
         self.bouton3.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
         self.bouton3.setIcon(QIcon("../images/smile.png"))
         self.connect(self.bouton3, SIGNAL("clicked()"), self.liste4) 
@@ -380,7 +379,7 @@ class ovalGui(QWidget):
         self.rel_list_mod2 = []
         self.ref_list_mod2 = []
     
-        self.quelclient.bouton.setText("Go")
+        self.quelclient.bouton.setText("Quit") # to be removed ?
         self.quelclient.TextEdit_H1.clear()
         self.quelclient.TextEdit_H2.clear()
         self.quelclient.QGBox_H1.setTitle(to_transmit[0])
@@ -399,10 +398,10 @@ class ovalGui(QWidget):
         list_tmp = sorted(self.ref_list_mod, key=itemgetter(0,1), reverse=True)
         self.ref_list_mod = list_tmp
         
-        for items in self.rel_list_mod:
-            print items
-        for items in self.ref_list_mod:
-            print items
+#        for items in self.rel_list_mod:
+#            print items
+#        for items in self.ref_list_mod:
+#            print items
 
         # to be removed later
         for items in self.rel_list_mod:
@@ -430,14 +429,12 @@ class ovalGui(QWidget):
             it2 = items[2]
             print "it2 :", it2, " ,longueur it2 : ",len(it2)
             for it in it2:
-#                print it
                 it1 += it + ', '
             it1 = it1[0:len(it1)-2]
-#            print it1, it2
             items = (items[0], items[1], it1)
             j = 0
             for items2 in items:
-                if ( j != 2):
+                if ( j == 1 ):
                     t = QRadioButton(items2)
                 else: # j = 2
                     t = QLabel(items2)
@@ -455,15 +452,12 @@ class ovalGui(QWidget):
             it1 = ''
             it2 = items[2]
             for it in it2:
-#                print it
                 it1 += it + ', '
             it1 = it1[0:len(it1)-2]
-#            print it1, it2
             items = (items[0], items[1], it1)
             j = 0
             for items2 in items:
-#                print "--"
-                if ( j != 2):
+                if ( j == 1 ):
                     t = QRadioButton(items2)
                 else: # j = 2
                     t = QLabel(items2)
@@ -493,9 +487,10 @@ class ovalGui(QWidget):
         for items in self.rel_list_mod2:
             j = 0
             for items2 in items:
-                if ( j != 2):
+                if ( j == 1 ):
                     if self.buttons_rel[i].isChecked():
-                        print self.buttons_rel[i].text(), " checked"
+                        print self.buttons_rel[i].text(), " checked with (%s, %s, %s)", i, j, k
+                        print self.buttons_rel[i].text(), " checked with ", self.rel_list_mod2[k]
                 j += 1
                 i += 1
             k += 1
@@ -507,9 +502,10 @@ class ovalGui(QWidget):
         for items in self.ref_list_mod2:
             j = 0
             for items2 in items:
-                if ( j != 2):
+                if ( j == 1 ):
                     if self.buttons_ref[i].isChecked():
-                        print self.buttons_ref[i].text(), " checked"
+                        print self.buttons_ref[i].text(), " checked with (%s, %s, %s)", i, j, k
+                        print self.buttons_ref[i].text(), " checked with ", self.ref_list_mod2[k]
                 j += 1
                 i += 1
             k += 1

@@ -539,7 +539,7 @@ def explode_item(item):
 def list_simplify(tablo):
     # simplification of tablo and self.ref_list_mod
     # WARNING : test before about len() = 1 -> do nothing
-#    print "coucou : ", tablo[0], len(tablo)
+
     temp = []
     item_line = tablo[0]
     temp2 = [item_line[2]]
@@ -547,24 +547,15 @@ def list_simplify(tablo):
     for i in range(1, len(tablo)-0):
         (t, u, v) = tablo[i]
         if ( t == item_line[0]):
-#            print "t = a"
             if (u == item_line[1]):
-#                print "u = b"
-#                print temp2
                 temp2.append(v)
-#                print temp2
                 item_line = (item_line[0], item_line[1], temp2 )
-#                print "item_line : ", item_line
             else :
-#                print " u != b"
                 temp2 = (item_line[0], item_line[1], temp2)
-#                print temp2
                 temp.append(item_line) # 
                 item_line = ( tablo[i][0], tablo[i][1], [ tablo[i][2] ] )
                 temp2 = item_line[2]
-#                print "new item_line b : ", item_line
                 if ( i == len(tablo)-1 ):
-#                    print "fin"
                     temp.append(item_line)
         else:
             print "t != a"
@@ -573,11 +564,9 @@ def list_simplify(tablo):
             temp2 = item_line[2]
             print "new item_line a : ", item_line
             if ( i == len(tablo)-1 ):
-#                print "fin"
                 temp.append(item_line)
     
     print "longueur tablo : ", len(temp)
-#    print "item_line : ", item_line
     if ( len(temp) == 0):
         temp.append(item_line)
 #    for items in temp:

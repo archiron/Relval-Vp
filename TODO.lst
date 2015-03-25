@@ -1,6 +1,6 @@
 trier par dataset puis par release
 voir si pour la creation des repertoires GED PU25/50 et FAST on ne peut pas les mettre par défaut et changer le texte (textedit)
-mettre un decocher tout pour le fullsim
+test before about len() = 1 -> do nothing
 verifier le chemin : si on n'est pas dans Validation/RecoEgamma/test alors signaler et ne rien faire.
 
 mettre les langues sous forme de fichier txt.
@@ -23,3 +23,5 @@ self.ref_list : liste les fichiers DQM_V001_**.root pour les différents datasets
 
 self.rel_list_mod : liste les releases, globaltags et datasets a partir des datasets cochés (check3*) pour la release a valider
 self.ref_list_mod : liste les releases, globaltags et datasets a partir des datasets cochés (check3*) pour la release de reference
+self.rel_list_mod2 : liste classee des releases, globaltags et datasets a partir de self.rel_list_mod pour la release a valider
+self.ref_list_mod2 : liste classee des releases, globaltags et datasets a partir de self.ref_list_mod pour la release de reference
