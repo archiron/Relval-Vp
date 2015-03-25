@@ -8,7 +8,7 @@ from PyQt4 import QtCore
 import os,sys,subprocess
 
 from getEnv import env
-from fonctions import cmd_test, liste, cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files, cmd_relval, cmd_listeRECO, cmd_listeDQM, list_search, explode_item
+from fonctions import cmd_test, liste, cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files, cmd_fetch, cmd_relval, cmd_listeRECO, cmd_listeDQM, list_search, explode_item
 from fonctions import list_simplify
 		
 #############################################################################
@@ -84,6 +84,8 @@ class ovalGui(QWidget):
         self.choix_calcul = 'Full'   # default
         self.choix_job = '8nh'       # default
         self.choix_etape = 'analyze' # default
+        self.choice_rel = ""
+        self.choice_ref = ""
 		
 		# creation du grpe Etapes
         self.QGBox0 = QGroupBox("Etapes")
@@ -285,6 +287,12 @@ class ovalGui(QWidget):
         self.bouton3.setIcon(QIcon("../images/smile.png"))
         self.connect(self.bouton3, SIGNAL("clicked()"), self.liste4) 
 
+        # Création du bouton Get files !, ayant pour parent la "fenetre"
+        self.bouton5 = QPushButton(self.trUtf8("Get files !"),self)
+        self.bouton5.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
+        self.bouton5.setIcon(QIcon("../images/smile.png"))
+        self.connect(self.bouton5, SIGNAL("clicked()"), self.liste5) 
+
         # Création du bouton Publish !, ayant pour parent la "fenetre"
         self.bouton4 = QPushButton(self.trUtf8("Publish !"),self)
         self.bouton4.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
@@ -294,6 +302,7 @@ class ovalGui(QWidget):
         #Layout intermédiaire : boutons
         self.layoutH_boutons = QHBoxLayout()
         self.layoutH_boutons.addWidget(self.bouton3)
+        self.layoutH_boutons.addWidget(self.bouton5)
         self.layoutH_boutons.addWidget(self.bouton4)
         self.layoutH_boutons.addStretch(1)
         self.layoutH_boutons.addWidget(self.boutonQ)
@@ -369,6 +378,54 @@ class ovalGui(QWidget):
         to_transmit = [str(self.lineedit1.text()), str(self.lineedit3.text()), self.rel_list, self.ref_list]
         self.quelclient_update(to_transmit)
         
+    def liste5(self):
+        print "liste 5"
+        # pour recuperer les fichiers DQM*.root
+        print "liste 5 : coucou"
+        if ( self.my_choice_rel ) :
+            print "self.choice_rel : ", self.choice_rel
+            if ( self.my_choice_ref ) :
+                print "self.choice_ref : ", self.choice_ref 
+                # step 1 : done
+                option_is_from_data = "mc" # mc ou data
+                option_mthreads = 3
+                option_dry_run = False # False telecharge , True liste
+                # step 2 : to be modified as a function
+                part_rel_1 = self.choice_rel[0]
+                part_rel_2 = self.choice_rel[1]
+                itl2 = self.choice_rel[2]
+                name_rel_base = "DQM_V0001_R000000001__RelVal" 
+                name_rel_suffix = "__" + part_rel_1 + "-" + part_rel_2 + "__DQMIO.root"
+                option_release_rel = str(part_rel_1) 
+                for part_rel_3 in itl2:
+                    name_rel = name_rel_base + part_rel_3 + name_rel_suffix
+                    print "name_rel : ", name_rel
+                    option_regexp_rel = str( name_rel ) 
+                    cmd_fetch(option_is_from_data, option_release_rel, option_regexp_rel, option_mthreads, option_dry_run)
+                part_ref_1 = self.choice_ref[0]
+                part_ref_2 = self.choice_ref[1]
+                itf2 = self.choice_ref[2]
+                name_ref_base = "DQM_V0001_R000000001__RelVal" 
+                name_ref_suffix = "__" + part_ref_1 + "-" + part_ref_2 + "__DQMIO.root"
+                option_release_ref = str(part_ref_1) 
+                for part_ref_3 in itf2:
+                    name_ref = name_ref_base + part_ref_3 + name_ref_suffix
+                    print "name_ref : ", name_ref
+                    option_regexp_ref = str( name_ref ) 
+                    cmd_fetch(option_is_from_data, option_release_ref, option_regexp_ref, option_mthreads, option_dry_run)
+                # step 2 : done
+                # step 3 : done
+
+            else:
+                print "no reference choosed. Nothing to do."
+        else:
+            print "no release choosed. Nothing to do."
+
+        # step 1 : si pas de release et/ou de reference : ne rien faire
+        # step 2 : refaire une liste des fichiers a recuperer
+        # step 3 : charger les fichiers (on passe le nom du fichier comme option -e="nom_fichier")
+        # (liste_fichiers_3) = cmd_fetch(option_is_from_data, option_release_3, option_regexp, option_mthreads, option_dry_run)
+         
     def quelclient_update(self, to_transmit):
         from operator import itemgetter
         """Lance la deuxième fenêtre"""
@@ -483,19 +540,17 @@ class ovalGui(QWidget):
 
     def clientchoisi(self, x):
         """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
-        print "test choice_rel"
-        if (self.my_choice_rel):
-            print "OK"
         tmp = self.trUtf8(self.texte) 
-        tmp += "<br />Release : "
+        tmp += "<br /><strong>Release : </strong>"
         if ( self.my_choice_rel ) :
             tmp += str(self.my_choice_rel)
-        tmp += "<br />Reference : "
+#            self.choice_rel = self.my_choice_rel
+        tmp += "<br /><strong>Reference : </strong>"
         if ( self.my_choice_ref ) :
             tmp += str(self.my_choice_ref)
         self.labelResume.setText(tmp)
         QtCore.QCoreApplication.processEvents()
-        print "recup = ", x
+        print "recup = ", x # to be removed
 
     def buttons_relClicked(self):
         i = 0
@@ -506,6 +561,7 @@ class ovalGui(QWidget):
                 if ( j == 1 ):
                     if self.buttons_rel[i].isChecked():
                         self.my_choice_rel = self.rel_list_mod2[k]
+                        self.choice_rel = self.rel_list_mod2[k]
                         print self.buttons_rel[i].text(), " checked with (%i, %i, %i)", i, j, k
                         print self.buttons_rel[i].text(), " checked with ", self.rel_list_mod2[k]
                 j += 1
@@ -522,6 +578,7 @@ class ovalGui(QWidget):
                 if ( j == 1 ):
                     if self.buttons_ref[i].isChecked():
                         self.my_choice_ref = self.ref_list_mod2[k]
+                        self.choice_ref = self.ref_list_mod2[k]
                         print self.buttons_ref[i].text(), " checked with (%s, %s, %s)", i, j, k
                         print self.buttons_ref[i].text(), " checked with ", self.ref_list_mod2[k]
                 j += 1

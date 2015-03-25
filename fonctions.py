@@ -396,13 +396,13 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
     relvaldir = "RelVal"
     if option_is_from_data == 'data':
         relvaldir = "RelValData"
-    print "relvaldir : ", relvaldir
+#    print "relvaldir : ", relvaldir
     release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
-    print release
+#    print release
     if not release:
         parser.error('No such CMSSW release found. Please check the ``--release`` commandline option value.')
     releasedir = release[0] + "x"
-    print "releasedir : ", releasedir
+#    print "releasedir : ", releasedir
     base_url = 'https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/'
     filedir_url = base_url + relvaldir + '/' + releasedir + '/'
     filedir_html = auth_wget(filedir_url)
@@ -422,6 +422,7 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
         print '%d. %s' % (i+1, name)
         
     if option_dry_run:
+        print "done"
         return selected_files
     if not option_dry_run:
         print '\nProgress:'
