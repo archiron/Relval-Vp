@@ -416,10 +416,12 @@ class ovalGui(QWidget):
             self.quelclient.TextEdit_H2.append(line_TE)
         # to be removed later
         
+        print "tablo avant : ", self.rel_list_mod
         self.rel_list_mod2 = list_simplify(self.rel_list_mod)
         print "retour tablo : ", self.rel_list_mod2
+#        print "tablo avant : ", self.ref_list_mod
         self.ref_list_mod2 = list_simplify(self.ref_list_mod)
-        print "retour tablo : ", self.ref_list_mod2
+#        print "retour tablo : ", self.ref_list_mod2
 
         i = 0
         k = 0
@@ -427,8 +429,8 @@ class ovalGui(QWidget):
         for items in self.rel_list_mod2:
             it1 = ''
             it2 = items[2]
-            print "it2 :", it2, " ,longueur it2 : ",len(it2)
             for it in it2:
+                print "+-+-+-", it
                 it1 += it + ', '
             it1 = it1[0:len(it1)-2]
             items = (items[0], items[1], it1)
@@ -466,7 +468,6 @@ class ovalGui(QWidget):
                 self.connect(self.buttons_ref[i], SIGNAL("clicked()"), self.buttons_refClicked)
                 j += 1
                 i += 1
-#                print k, " - ", j
             k += 1           
             
         # en cas de signal "fermeturequelclient()" reçu de self.quelclient => exécutera clienchoisi 
@@ -489,7 +490,7 @@ class ovalGui(QWidget):
             for items2 in items:
                 if ( j == 1 ):
                     if self.buttons_rel[i].isChecked():
-                        print self.buttons_rel[i].text(), " checked with (%s, %s, %s)", i, j, k
+                        print self.buttons_rel[i].text(), " checked with (%i, %i, %i)", i, j, k
                         print self.buttons_rel[i].text(), " checked with ", self.rel_list_mod2[k]
                 j += 1
                 i += 1

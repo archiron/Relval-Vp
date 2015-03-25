@@ -54,12 +54,12 @@ class ovalGui(QWidget):
         self.titi_list.append(t)
         t = ('a', 'b', 'g')
         self.titi_list.append(t)
-        t = ('a', 'e', 'c')
-        self.titi_list.append(t)
-        t = ('a', 'e', 'd')
-        self.titi_list.append(t)
-        t = ('a', 'f', 'g')
-        self.titi_list.append(t)
+#        t = ('a', 'e', 'c')
+#        self.titi_list.append(t)
+#        t = ('a', 'e', 'd')
+#        self.titi_list.append(t)
+#        t = ('a', 'e', 'g')
+#        self.titi_list.append(t)
         t = ('h', 'f', 'c')
         self.titi_list.append(t)
         print self.titi_list
@@ -75,12 +75,18 @@ class ovalGui(QWidget):
         i = 0
         k = 0
         self.bouton = []
-        for items in self.titi_list:
+        for items in self.titi_list2:
+            it1 = ''
+            it2 = items[2]
+            for it in it2:
+                print "+-+-+-", it
+                it1 += it + ', '
+            it1 = it1[0:len(it1)-2]
+            items = (items[0], items[1], it1)
             j = 0
             for items2 in items:
                 if ( j == 1):
                     t = QRadioButton(items2)
-#                    self.layout.addWidget(t, k, j)
                 else: # j = 2
                     t = QLabel(items2)
                 self.bouton.append(t)
@@ -137,14 +143,14 @@ class ovalGui(QWidget):
     def boutonClicked(self):
         i = 0
         k = 0
-        for items in self.titi_list:
+        for items in self.titi_list2:
             j = 0
             for items2 in items:
 #                print k, " - ", j
                 if ( j == 1):
                     if self.bouton[i].isChecked():
                         print self.bouton[i].text(), " checked with (%s, %s, %s)", i, j, k
-                        print self.bouton[i].text(), " checked with ", self.titi_list[k]
+                        print self.bouton[i].text(), " checked with ", self.titi_list2[k]
                 j += 1
                 i += 1
             k += 1

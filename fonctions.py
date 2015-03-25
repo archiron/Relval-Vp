@@ -544,23 +544,28 @@ def list_simplify(tablo):
     item_line = tablo[0]
     temp2 = [item_line[2]]
 
+    for items in tablo:
+        print "tablo : ", items  
     for i in range(1, len(tablo)-0):
+        print "i = ", i
         (t, u, v) = tablo[i]
         if ( t == item_line[0]):
             if (u == item_line[1]):
                 temp2.append(v)
                 item_line = (item_line[0], item_line[1], temp2 )
+                if ( i == len(tablo)-1 ):
+                    temp.append(item_line)
             else :
                 temp2 = (item_line[0], item_line[1], temp2)
-                temp.append(item_line) # 
+                temp.append(item_line)
                 item_line = ( tablo[i][0], tablo[i][1], [ tablo[i][2] ] )
                 temp2 = item_line[2]
+                print "new item_line a : ", item_line
                 if ( i == len(tablo)-1 ):
                     temp.append(item_line)
         else:
-            print "t != a"
             temp.append(item_line)
-            item_line = ( tablo[i][0], tablo[i][1], [ tablo[i][2] ] )
+            item_line = ( tablo[i][0], tablo[i][1],  [ tablo[i][2] ]  )
             temp2 = item_line[2]
             print "new item_line a : ", item_line
             if ( i == len(tablo)-1 ):
@@ -569,8 +574,9 @@ def list_simplify(tablo):
     print "longueur tablo : ", len(temp)
     if ( len(temp) == 0):
         temp.append(item_line)
-#    for items in temp:
-#        print "temp : ", items  
+
+    for items in temp:
+        print "temp : ", items  
     
     return temp
         
