@@ -378,6 +378,8 @@ class ovalGui(QWidget):
         self.ref_list_mod = []
         self.rel_list_mod2 = []
         self.ref_list_mod2 = []
+        self.my_choice_rel = "" # for transmission data between the 2 windows
+        self.my_choice_ref = "" # for transmission data between the 2 windows
     
         self.quelclient.bouton.setText("Quit") # to be removed ?
         self.quelclient.TextEdit_H1.clear()
@@ -446,6 +448,7 @@ class ovalGui(QWidget):
                 j += 1
                 i += 1
             k += 1           
+#        self.buttons_rel[1].setChecked(True) # default
             
         i = 0
         k = 0
@@ -469,6 +472,7 @@ class ovalGui(QWidget):
                 j += 1
                 i += 1
             k += 1           
+#        self.buttons_ref[1].setChecked(True) # default
             
         # en cas de signal "fermeturequelclient()" reçu de self.quelclient => exécutera clienchoisi 
         self.connect(self.quelclient, SIGNAL("fermeturequelclient(PyQt_PyObject)"), self.clientchoisi) 
@@ -479,7 +483,18 @@ class ovalGui(QWidget):
 
     def clientchoisi(self, x):
         """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
-#        self.lineEdit1.setText(x)
+        print "test choice_rel"
+        if (self.my_choice_rel):
+            print "OK"
+        tmp = self.trUtf8(self.texte) 
+        tmp += "<br />Release : "
+        if ( self.my_choice_rel ) :
+            tmp += str(self.my_choice_rel)
+        tmp += "<br />Reference : "
+        if ( self.my_choice_ref ) :
+            tmp += str(self.my_choice_ref)
+        self.labelResume.setText(tmp)
+        QtCore.QCoreApplication.processEvents()
         print "recup = ", x
 
     def buttons_relClicked(self):
@@ -490,6 +505,7 @@ class ovalGui(QWidget):
             for items2 in items:
                 if ( j == 1 ):
                     if self.buttons_rel[i].isChecked():
+                        self.my_choice_rel = self.rel_list_mod2[k]
                         print self.buttons_rel[i].text(), " checked with (%i, %i, %i)", i, j, k
                         print self.buttons_rel[i].text(), " checked with ", self.rel_list_mod2[k]
                 j += 1
@@ -505,6 +521,7 @@ class ovalGui(QWidget):
             for items2 in items:
                 if ( j == 1 ):
                     if self.buttons_ref[i].isChecked():
+                        self.my_choice_ref = self.ref_list_mod2[k]
                         print self.buttons_ref[i].text(), " checked with (%s, %s, %s)", i, j, k
                         print self.buttons_ref[i].text(), " checked with ", self.ref_list_mod2[k]
                 j += 1
