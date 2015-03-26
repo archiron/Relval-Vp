@@ -280,49 +280,60 @@ class ovalGui(QWidget):
     def liste3(self):
         
         # step 1 : test if arborescence is OK Validation/RecoEgamma/test
-        # step 2 : create the OvalFile for the calcul (Full, Fast, PU) choice
+        my_folder = os.getcwd()
+        f_test = 'Validation/RecoEgamma/test'
+        print "my folder : ", my_folder
+        if not f_test in my_folder:
+            print "pas bon"
+            BoiteMessage = QMessageBox()
+            BoiteMessage.setText("You must be in the Validation/RecoEgamma/test of the release to work.")
+            BoiteMessage.setWindowTitle("WARNING !")
+            BoiteMessage.exec_()
+        else:
+            print "Validation/RecoEgamma/test OK"
+            # step 2 : create the OvalFile for the calcul (Full, Fast, PU) choice
         
-        # choix interaction
-        if self.radio41.isChecked():
-            self.choix_interaction = './electronBsub ' + self.choix_job + ' /afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
-        if self.radio42.isChecked():
-            self.choix_interaction = '/afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
+            # choix interaction
+            if self.radio41.isChecked():
+                self.choix_interaction = './electronBsub ' + self.choix_job + ' /afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
+            if self.radio42.isChecked():
+                self.choix_interaction = '/afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
         
-        get_choix_calcul(self)        
-        print "choix_calcul : ", self.choix_calcul
+            get_choix_calcul(self)        
+            print "choix_calcul : ", self.choix_calcul
         
-        # creation des repertoires
-        cmd_folder_creation(self.choix_calcul)
+            # creation des repertoires
+            cmd_folder_creation(self.choix_calcul)
         
-        # if store is checked then copy of DQM*.root files
-        if self.radio03.isChecked():
-            copy_files(self)
+            # if store is checked then copy of DQM*.root files
+            if self.radio03.isChecked():
+                copy_files(self)
         
-        # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
-        coll_list = get_collection_list(self)
+            # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
+            coll_list = get_collection_list(self)
 
-        # work to execute
-        if self.radio04.isChecked():     # publish
-            print "publish to be done"
-            if self.radio13.isChecked(): # FAST
-                print "Fast & publish"
-                for val_Fast in ['VsFull', 'VsFast']:
+            # work to execute
+            if self.radio04.isChecked():     # publish
+                print "publish to be done"
+                if self.radio13.isChecked(): # FAST
+                    print "Fast & publish"
+                    for val_Fast in ['VsFull', 'VsFast']:
+                        for items in coll_list:
+                            cmd = self.choix_interaction + self.choix_calcul + val_Fast + items + '_gedGsfE'
+                            subprocess.call(cmd, shell = True)
+                else:                        # no FAST
+                    print "no Fast & publish"
                     for items in coll_list:
-                        cmd = self.choix_interaction + self.choix_calcul + val_Fast + items + '_gedGsfE'
+                        cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
                         subprocess.call(cmd, shell = True)
-            else:                        # no FAST
-                print "no Fast & publish"
+            
+                # rm dd*.olog dqm*.root 
+                clean_files(self)
+            else:
+                print "no publish : general case"
                 for items in coll_list:
                     cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
                     subprocess.call(cmd, shell = True)
-            
-            # rm dd*.olog dqm*.root 
-            clean_files(self)
-        else:
-            print "no publish : general case"
-            for items in coll_list:
-                cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
-                subprocess.call(cmd, shell = True)
 
         print "fin"
 
