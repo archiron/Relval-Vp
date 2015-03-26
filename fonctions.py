@@ -342,7 +342,7 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
     from optparse import OptionParser
     from urllib2 import build_opener, Request
     
-    print "CMD_FETCH : "
+    print "\n CMD_FETCH : "
     cmsenv = env()
    
     ## Define options
@@ -351,7 +351,7 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
 #    option_regexp = 'TTbar,PU,25'
 #    option_mthreads = 3
 #    option_dry_run = True
-    print option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run
+#    print option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run
         
     try:
         from Utilities.RelMon.authentication import X509CertOpen

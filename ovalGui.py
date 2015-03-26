@@ -280,6 +280,7 @@ class ovalGui(QWidget):
         self.boutonQ.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
         self.boutonQ.setIcon(QIcon("../images/smile.png"))
         self.connect(self.boutonQ, SIGNAL("clicked()"), qApp, SLOT("quit()"))
+        
 
         # Création du bouton Get choice !, ayant pour parent la "fenetre"
         self.bouton3 = QPushButton(self.trUtf8("Get choice !"),self)
@@ -292,6 +293,7 @@ class ovalGui(QWidget):
         self.bouton5.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
         self.bouton5.setIcon(QIcon("../images/smile.png"))
         self.connect(self.bouton5, SIGNAL("clicked()"), self.liste5) 
+        self.bouton5.setEnabled(False)
 
         # Création du bouton Publish !, ayant pour parent la "fenetre"
         self.bouton4 = QPushButton(self.trUtf8("Publish !"),self)
@@ -314,6 +316,7 @@ class ovalGui(QWidget):
         # creation des onglets
         self.onglets = QTabWidget()
         self.generalTab = QWidget()
+        self.generalTab.setMinimumHeight(250)
         self.onglets.insertTab(0, self.generalTab, "General")
         #Set Layout for Tabs Pages
         self.generalTab.setLayout(self.layoutV_combobox)   
@@ -386,6 +389,7 @@ class ovalGui(QWidget):
             print "self.choice_rel : ", self.choice_rel
             if ( self.my_choice_ref ) :
                 print "self.choice_ref : ", self.choice_ref 
+                # Normalement ce double test est déjà fait
                 # step 1 : done
                 option_is_from_data = "mc" # mc ou data
                 option_mthreads = 3
@@ -415,6 +419,10 @@ class ovalGui(QWidget):
                     cmd_fetch(option_is_from_data, option_release_ref, option_regexp_ref, option_mthreads, option_dry_run)
                 # step 2 : done
                 # step 3 : done
+                tmp = self.labelResume.text()
+                tmp += "<br /><strong>All files loaded.</strong>"
+                self.labelResume.setText(tmp)
+                QtCore.QCoreApplication.processEvents()
 
             else:
                 print "no reference choosed. Nothing to do."
@@ -551,6 +559,12 @@ class ovalGui(QWidget):
         self.labelResume.setText(tmp)
         QtCore.QCoreApplication.processEvents()
         print "recup = ", x # to be removed
+        self.bouton5.setEnabled(False)
+        if ( self.my_choice_rel ) :
+            print "self.choice_rel : ", self.choice_rel
+            if ( self.my_choice_ref ) :
+                print "self.choice_ref : ", self.choice_ref 
+                self.bouton5.setEnabled(True)
 
     def buttons_relClicked(self):
         i = 0
