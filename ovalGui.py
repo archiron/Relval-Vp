@@ -10,69 +10,9 @@ import os,sys,subprocess
 from getEnv import env
 from fonctions import cmd_test, liste, cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files, cmd_fetch, cmd_relval, cmd_listeRECO, cmd_listeDQM, list_search, explode_item
 from fonctions import list_simplify
+from getChoice import *
+from getPublish import *
 		
-#############################################################################
-class Quelclient(QWidget):
- 
-    def __init__(self, parent=None):
-        super(Quelclient, self).__init__(parent)
-        self.setWindowTitle("Files choice")
- 
-        # créer un lineEdit
-        self.lineEdit = QLineEdit(self)
-        self.QGBox_0 = QGroupBox("Files list")
-        self.QGBox_0.setMinimumWidth(1000)
-        vbox_0 = QVBoxLayout()
-        vbox_0.addWidget(self.lineEdit)
-        self.QGBox_0.setLayout(vbox_0)
-        
-        # QHBoxLayout + 2 QGroupBox
-        self.QGBox_H1 = QGroupBox("Release list")
-        self.TextEdit_H1 = QTextEdit(self)
-        self.TextEdit_H1.append("Coucou ! \n")
-        vbox_H1 = QVBoxLayout()
-        vbox_H1.addWidget(self.TextEdit_H1)
-        self.QGBox_H1.setLayout(vbox_H1)
-        self.QGBox_H2 = QGroupBox("Reference list")
-        self.TextEdit_H2 = QTextEdit(self)
-        self.TextEdit_H2.append("Coucou ! \n")
-        vbox_H2 = QVBoxLayout()
-        vbox_H2.addWidget(self.TextEdit_H2)
-        self.QGBox_H2.setLayout(vbox_H2)
-        
-        self.QGBox_H1b = QGroupBox("Release list b")
-        self.gbox_H1 = QGridLayout()
-        self.QGBox_H1b.setLayout(self.gbox_H1)
-        self.QGBox_H2b = QGroupBox("Reference list b")
-        self.gbox_H2 = QGridLayout()
-        self.QGBox_H2b.setLayout(self.gbox_H2)
-
-        vbox_H0 = QVBoxLayout()
-        vbox_H0.addWidget(self.QGBox_H1)
-        vbox_H0.addWidget(self.QGBox_H1b)
-        vbox_H0.addWidget(self.QGBox_H2)
-        vbox_H0.addWidget(self.QGBox_H2b)
-
-        # créer un bouton
-        self.bouton = QPushButton("Cancel", self)
-        self.bouton.clicked.connect(self.ok_m)
-        hbox_button = QHBoxLayout()
-        hbox_button.addStretch(1)
-        hbox_button.addWidget(self.bouton)
-        # positionner les widgets dans la fenêtre
-        posit = QVBoxLayout()
-        posit.addWidget(self.QGBox_0)
-        posit.addLayout(vbox_H0)
-        posit.addLayout(hbox_button)
-
-        self.setLayout(posit)
- 
-    def ok_m(self):
-        # emettra un signal "fermeturequelclient()" avec l'argument cité
-        self.emit(SIGNAL("fermeturequelclient(PyQt_PyObject)"), unicode(self.lineEdit.text())) 
-        # fermer la fenêtre
-        self.close()
- 
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
@@ -86,6 +26,8 @@ class ovalGui(QWidget):
         self.choix_etape = 'analyze' # default
         self.choice_rel = ""
         self.choice_ref = ""
+        self.my_choice_rel = "" # for transmission data between the 2 windows
+        self.my_choice_ref = "" # for transmission data between the 2 windows
 		
 		# creation du grpe Etapes
         self.QGBox0 = QGroupBox("Etapes")
@@ -295,6 +237,12 @@ class ovalGui(QWidget):
         self.connect(self.bouton5, SIGNAL("clicked()"), self.liste5) 
         self.bouton5.setEnabled(False)
 
+        # Création du bouton Publish config, ayant pour parent la "fenetre"
+        self.bouton6 = QPushButton(self.trUtf8("Publish config"),self)
+        self.bouton6.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
+        self.bouton6.setIcon(QIcon("../images/smile.png"))
+        self.connect(self.bouton6, SIGNAL("clicked()"), self.liste6) 
+
         # Création du bouton Publish !, ayant pour parent la "fenetre"
         self.bouton4 = QPushButton(self.trUtf8("Publish !"),self)
         self.bouton4.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
@@ -305,6 +253,7 @@ class ovalGui(QWidget):
         self.layoutH_boutons = QHBoxLayout()
         self.layoutH_boutons.addWidget(self.bouton3)
         self.layoutH_boutons.addWidget(self.bouton5)
+        self.layoutH_boutons.addWidget(self.bouton6)
         self.layoutH_boutons.addWidget(self.bouton4)
         self.layoutH_boutons.addStretch(1)
         self.layoutH_boutons.addWidget(self.boutonQ)
@@ -379,11 +328,15 @@ class ovalGui(QWidget):
         # mettre la fonction liste3 du ovalGui de Projet_DQM-V2
         list_search(self)
         to_transmit = [str(self.lineedit1.text()), str(self.lineedit3.text()), self.rel_list, self.ref_list]
-        self.quelclient_update(to_transmit)
+        self.getChoice_update(to_transmit)
         
     def liste5(self):
         print "liste 5"
         # pour recuperer les fichiers DQM*.root
+        # step 1 : si pas de release et/ou de reference : ne rien faire
+        # step 2 : refaire une liste des fichiers a recuperer
+        # step 3 : charger les fichiers (on passe le nom du fichier comme option -e="nom_fichier")
+        # (liste_fichiers_3) = cmd_fetch(option_is_from_data, option_release_3, option_regexp, option_mthreads, option_dry_run)
         print "liste 5 : coucou"
         if ( self.my_choice_rel ) :
             print "self.choice_rel : ", self.choice_rel
@@ -428,29 +381,38 @@ class ovalGui(QWidget):
                 print "no reference choosed. Nothing to do."
         else:
             print "no release choosed. Nothing to do."
-
-        # step 1 : si pas de release et/ou de reference : ne rien faire
-        # step 2 : refaire une liste des fichiers a recuperer
-        # step 3 : charger les fichiers (on passe le nom du fichier comme option -e="nom_fichier")
-        # (liste_fichiers_3) = cmd_fetch(option_is_from_data, option_release_3, option_regexp, option_mthreads, option_dry_run)
          
-    def quelclient_update(self, to_transmit):
+    def liste6(self):
+        print "liste 6"
+
+        name_rel_p = ( self.lineedit1.text(), '', '' ) # default
+        name_ref_p = ( self.lineedit3.text(), '', '' ) # default
+        if ( self.my_choice_rel ) :
+            print "self.choice_rel : ", self.choice_rel
+            if ( self.my_choice_ref ) :
+                print "self.choice_ref : ", self.choice_ref
+                name_rel_p = self.choice_rel
+                name_ref_p = self.choice_ref
+        to_transmit = [name_rel_p, name_ref_p]
+        self.getPublish_update(to_transmit)
+        
+    def getChoice_update(self, to_transmit):
         from operator import itemgetter
         """Lance la deuxième fenêtre"""
-        self.quelclient = Quelclient()
+        self.getChoice = GetChoice()
         
         self.rel_list_mod = []
         self.ref_list_mod = []
         self.rel_list_mod2 = []
         self.ref_list_mod2 = []
-        self.my_choice_rel = "" # for transmission data between the 2 windows
-        self.my_choice_ref = "" # for transmission data between the 2 windows
+#        self.my_choice_rel = "" # for transmission data between the 2 windows
+#        self.my_choice_ref = "" # for transmission data between the 2 windows
     
-        self.quelclient.bouton.setText("Quit") # to be removed ?
-        self.quelclient.TextEdit_H1.clear()
-        self.quelclient.TextEdit_H2.clear()
-        self.quelclient.QGBox_H1.setTitle(to_transmit[0])
-        self.quelclient.QGBox_H2.setTitle(to_transmit[1])
+        self.getChoice.bouton.setText("Quit") # to be removed ?
+        self.getChoice.TextEdit_H1.clear()
+        self.getChoice.TextEdit_H2.clear()
+        self.getChoice.QGBox_H1.setTitle(to_transmit[0])
+        self.getChoice.QGBox_H2.setTitle(to_transmit[1])
         for items in to_transmit[2]:
             items3 = explode_item(items)
             items4 = (items3[1], items3[2], items3[0])
@@ -475,12 +437,12 @@ class ovalGui(QWidget):
             line_TE = ''
             for items2 in items:
                 line_TE += items2 + ' '
-            self.quelclient.TextEdit_H1.append(line_TE)
+            self.getChoice.TextEdit_H1.append(line_TE)
         for items in self.ref_list_mod:
             line_TE = ''
             for items2 in items:
                 line_TE += items2 + ' '
-            self.quelclient.TextEdit_H2.append(line_TE)
+            self.getChoice.TextEdit_H2.append(line_TE)
         # to be removed later
         
         print "tablo avant : ", self.rel_list_mod
@@ -508,7 +470,7 @@ class ovalGui(QWidget):
                 else: # j = 2
                     t = QLabel(items2)
                 self.buttons_rel.append(t)
-                self.quelclient.gbox_H1.addWidget(self.buttons_rel[i], k, j)
+                self.getChoice.gbox_H1.addWidget(self.buttons_rel[i], k, j)
                 self.connect(self.buttons_rel[i], SIGNAL("clicked()"), self.buttons_relClicked)
                 j += 1
                 i += 1
@@ -532,21 +494,21 @@ class ovalGui(QWidget):
                 else: # j = 2
                     t = QLabel(items2)
                 self.buttons_ref.append(t)
-                self.quelclient.gbox_H2.addWidget(self.buttons_ref[i], k, j)
+                self.getChoice.gbox_H2.addWidget(self.buttons_ref[i], k, j)
                 self.connect(self.buttons_ref[i], SIGNAL("clicked()"), self.buttons_refClicked)
                 j += 1
                 i += 1
             k += 1           
 #        self.buttons_ref[1].setChecked(True) # default
             
-        # en cas de signal "fermeturequelclient()" reçu de self.quelclient => exécutera clienchoisi 
-        self.connect(self.quelclient, SIGNAL("fermeturequelclient(PyQt_PyObject)"), self.clientchoisi) 
+        # en cas de signal "fermeturegetChoice()" reçu de self.getChoice => exécutera clienchoisi 
+        self.connect(self.getChoice, SIGNAL("fermeturegetChoice(PyQt_PyObject)"), self.clientchoice) 
         # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
-        self.quelclient.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.getChoice.setWindowModality(QtCore.Qt.ApplicationModal)
         # appel de la deuxième fenêtre
-        self.quelclient.show()
+        self.getChoice.show()
 
-    def clientchoisi(self, x):
+    def clientchoice(self, x):
         """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
         tmp = self.trUtf8(self.texte) 
         tmp += "<br /><strong>Release : </strong>"
@@ -600,6 +562,36 @@ class ovalGui(QWidget):
             k += 1
         QtCore.QCoreApplication.processEvents()
                 
+    def getPublish_update(self, to_transmit):
+        from operator import itemgetter
+        """Lance la troisième fenêtre"""
+        self.getPublish = GetPublish()
+           
+        self.getPublish.bouton_P.setText("Quit") # to be removed ?
+
+        for items in to_transmit:
+            print "Publish : ", items
+
+        t_rel = QLabel(to_transmit[0][0])
+        t_ref = QLabel(to_transmit[1][0])
+        self.getPublish.gbox_H1P.addWidget(t_rel, 0, 0)
+        self.getPublish.gbox_H2P.addWidget(t_ref, 0, 0)
+        
+        # en cas de signal "fermeturegetPublish()" reçu de self.getPublish => exécutera clienchoisi 
+        self.connect(self.getPublish, SIGNAL("fermeturegetPublish(PyQt_PyObject)"), self.clientpublish) 
+        # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
+        self.getPublish.setWindowModality(QtCore.Qt.ApplicationModal)
+        # appel de la deuxième fenêtre
+        self.getPublish.show()
+
+    def clientpublish(self, x):
+        """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
+        tmp = self.labelResume.text()
+        tmp += "<br /><strong>A que coucou</strong>"
+        self.labelResume.setText(tmp)
+        QtCore.QCoreApplication.processEvents()
+        print "recup2 = ", x # to be removed
+
     def radio01Clicked(self):
         if self.radio01.isChecked():
             self.QGBox2.setEnabled(False)
