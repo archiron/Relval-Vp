@@ -28,15 +28,40 @@ class GetPublish(QWidget):
         
         # QHBoxLayout + 2 QGroupBox
         self.QGBox_H1P = QGroupBox("Release ")
-        self.gbox_H1P = QGridLayout()
+        self.gbox_H1P = QVBoxLayout()
         self.QGBox_H1P.setLayout(self.gbox_H1P)
         self.QGBox_H2P = QGroupBox("Reference ")
-        self.gbox_H2P = QGridLayout()
+        self.gbox_H2P = QVBoxLayout()
         self.QGBox_H2P.setLayout(self.gbox_H2P)
+
+		# creation du grpe local/external
+        self.QGBox2_P = QGroupBox("local/external")
+        self.QGBox2_P.setMaximumHeight(150)
+        self.QGBox2_P.setMinimumHeight(150)
+        self.QGBox2_P.setMaximumWidth(100)		
+        self.radio21_P = QRadioButton("local") # par defaut
+        self.radio22_P = QRadioButton("non local")
+        self.radio21_P.setChecked(True)
+        self.connect(self.radio21_P, SIGNAL("clicked()"), self.radio21_PClicked)
+        self.connect(self.radio22_P, SIGNAL("clicked()"), self.radio22_PClicked)
+        vbox2_P = QVBoxLayout()
+        vbox2_P.addWidget(self.radio21_P)
+        vbox2_P.addWidget(self.radio22_P)
+        vbox2_P.addStretch(1)
+        self.QGBox2_P.setLayout(vbox2_P)
+				
+		# creation du grpe OvalFile
+        self.QGBox3_P = QGroupBox("OvalFile")
+        self.QGBox3_P.setMaximumHeight(150)
+        self.QGBox3_P.setMinimumHeight(150)
+        self.vbox3_P = QVBoxLayout()
+        self.QGBox3_P.setLayout(self.vbox3_P)
 
         hbox_H0_P = QHBoxLayout()
         hbox_H0_P.addWidget(self.QGBox_H1P)
         hbox_H0_P.addWidget(self.QGBox_H2P)
+        hbox_H0_P.addWidget(self.QGBox2_P)
+        hbox_H0_P.addWidget(self.QGBox3_P)
 
         # créer un bouton
         self.bouton_P = QPushButton("Cancel", self)
@@ -57,4 +82,15 @@ class GetPublish(QWidget):
         self.emit(SIGNAL("fermeturegetPublish(PyQt_PyObject)"), unicode(self.lineEdit.text())) 
         # fermer la fenêtre
         self.close()
- 
+
+    def radio21_PClicked(self):
+        if self.radio21_P.isChecked():
+            print 'local'
+        QtCore.QCoreApplication.processEvents()
+
+    def radio22_PClicked(self):
+        if self.radio22_P.isChecked():
+            print 'external'
+        QtCore.QCoreApplication.processEvents()
+        
+        

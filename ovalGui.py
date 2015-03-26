@@ -265,7 +265,7 @@ class ovalGui(QWidget):
         # creation des onglets
         self.onglets = QTabWidget()
         self.generalTab = QWidget()
-        self.generalTab.setMinimumHeight(250)
+        self.generalTab.setMinimumHeight(150)
         self.onglets.insertTab(0, self.generalTab, "General")
         #Set Layout for Tabs Pages
         self.generalTab.setLayout(self.layoutV_combobox)   
@@ -278,6 +278,9 @@ class ovalGui(QWidget):
         self.setLayout(self.layout_general)
 
     def liste3(self):
+        
+        # step 1 : test if arborescence is OK Validation/RecoEgamma/test
+        # step 2 : create the OvalFile for the calcul (Full, Fast, PU) choice
         
         # choix interaction
         if self.radio41.isChecked():
@@ -572,10 +575,18 @@ class ovalGui(QWidget):
         for items in to_transmit:
             print "Publish : ", items
 
-        t_rel = QLabel(to_transmit[0][0])
-        t_ref = QLabel(to_transmit[1][0])
-        self.getPublish.gbox_H1P.addWidget(t_rel, 0, 0)
-        self.getPublish.gbox_H2P.addWidget(t_ref, 0, 0)
+        t_rel = QLabel('release : ' + to_transmit[0][0])
+        t_ref = QLabel('reference : ' + to_transmit[1][0])
+        self.getPublish.gbox_H1P.addWidget(t_rel) #, 0, 0
+        self.getPublish.gbox_H2P.addWidget(t_ref) #, 0, 0
+        self.getPublish.gbox_H1P.addStretch(1)
+        self.getPublish.gbox_H2P.addStretch(1)
+        
+        # insert the web folder name
+        t_rel_default_text = to_transmit[0][1] + "_std"
+        t_rel_default = QLabel("Default web folder name : " + t_rel_default_text)
+        self.getPublish.vbox3_P.addWidget(t_rel_default)
+        self.getPublish.vbox3_P.addStretch(1)
         
         # en cas de signal "fermeturegetPublish()" reçu de self.getPublish => exécutera clienchoisi 
         self.connect(self.getPublish, SIGNAL("fermeturegetPublish(PyQt_PyObject)"), self.clientpublish) 

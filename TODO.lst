@@ -2,7 +2,7 @@ voir si pour la creation des repertoires GED PU25/50 et FAST on ne peut pas les 
 test before about len() = 1 -> do nothing opur simplify
 verifier le chemin : si on n'est pas dans Validation/RecoEgamma/test alors signaler et ne rien faire.
 verifier si on fait bien PU25(50) avec PU25(50), et idem pour les datasets
-remettre les nvelles valeurs des releases apres le Choice
+remettre les nvelles valeurs des releases/dataset apres le Choice
 
 mettre les langues sous forme de fichier txt.
 
