@@ -585,19 +585,20 @@ class ovalGui(QWidget):
 
         for items in to_transmit:
             print "Publish : ", items
+        self.getPublish.to_transmit = to_transmit
 
-        t_rel = QLabel('release : ' + to_transmit[0][0])
-        t_ref = QLabel('reference : ' + to_transmit[1][0])
-        self.getPublish.gbox_H1P.addWidget(t_rel) #, 0, 0
-        self.getPublish.gbox_H2P.addWidget(t_ref) #, 0, 0
-        self.getPublish.gbox_H1P.addStretch(1)
-        self.getPublish.gbox_H2P.addStretch(1)
+        self.getPublish.transmit_rel = to_transmit[0][0]
+        self.getPublish.transmit_ref = to_transmit[1][0]
+        print self.getPublish.transmit_rel
         
-        # insert the web folder name
-        t_rel_default_text = to_transmit[0][1] + "_std"
-        t_rel_default = QLabel("Default web folder name : " + t_rel_default_text)
-        self.getPublish.vbox3_P.addWidget(t_rel_default)
-        self.getPublish.vbox3_P.addStretch(1)
+        self.getPublish.t_rel.setText('release : ' + to_transmit[0][0])
+        self.getPublish.t_ref.setText('reference : ' + to_transmit[1][0])
+        self.getPublish.test_new.setText('test new : ' + self.getPublish.transmit_rel[6:])
+        self.getPublish.test_ref.setText('test ref : ' + self.getPublish.transmit_ref[6:])
+        
+        # insert the web folder name            
+        t_rel_default_text = to_transmit[0][0][6:] + self.getPublish.text_ext 
+        self.getPublish.t_rel_default.setText("Default web folder name : " + t_rel_default_text)
         
         # en cas de signal "fermeturegetPublish()" reçu de self.getPublish => exécutera clienchoisi 
         self.connect(self.getPublish, SIGNAL("fermeturegetPublish(PyQt_PyObject)"), self.clientpublish) 

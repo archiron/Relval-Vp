@@ -544,7 +544,14 @@ def list_simplify(tablo):
     temp = []
     item_line = tablo[0]
     temp2 = [item_line[2]]
+    
+    item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ] )
 
+    print "list simplify : longueur tablo : ", len(tablo)
+    if ( len(tablo) == 1 ):
+        item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ] )
+        print "item_line : ", item_line
+        
     for items in tablo:
         print "tablo : ", items  
     for i in range(1, len(tablo)-0):

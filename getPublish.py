@@ -18,10 +18,15 @@ class GetPublish(QWidget):
         super(GetPublish, self).__init__(parent)
         self.setWindowTitle("Publish configuration")
  
+        self.text_ext = "_dev" # default
+        self.to_transmit = []
+        self.transmit_rel = ""
+        self.transmit_ref = ""
+
         # créer un lineEdit
         self.lineEdit = QLineEdit(self)
         self.QGBox_P0 = QGroupBox("Publish configuration")
-        self.QGBox_P0.setMinimumWidth(1000)
+        self.QGBox_P0.setMinimumWidth(1050)
         vbox_P0 = QVBoxLayout()
         vbox_P0.addWidget(self.lineEdit)
         self.QGBox_P0.setLayout(vbox_P0)
@@ -30,8 +35,18 @@ class GetPublish(QWidget):
         self.QGBox_H1P = QGroupBox("Release ")
         self.gbox_H1P = QVBoxLayout()
         self.QGBox_H1P.setLayout(self.gbox_H1P)
+        self.t_rel = QLabel('release : ' )
+        self.gbox_H1P.addWidget(self.t_rel) 
+        self.test_new = QLabel('test new : ' )
+        self.gbox_H1P.addWidget(self.test_new) 
+        self.gbox_H1P.addStretch(1)
         self.QGBox_H2P = QGroupBox("Reference ")
         self.gbox_H2P = QVBoxLayout()
+        self.t_ref = QLabel('reference : ' )
+        self.gbox_H2P.addWidget(self.t_ref) 
+        self.test_ref = QLabel('test ref : ' )
+        self.gbox_H2P.addWidget(self.test_ref) 
+        self.gbox_H2P.addStretch(1)
         self.QGBox_H2P.setLayout(self.gbox_H2P)
 
 		# creation du grpe local/external
@@ -50,17 +65,37 @@ class GetPublish(QWidget):
         vbox2_P.addStretch(1)
         self.QGBox2_P.setLayout(vbox2_P)
 				
+		# creation du grpe std/dev
+        self.QGBox4_P = QGroupBox("std/dev")
+        self.QGBox4_P.setMaximumHeight(150)
+        self.QGBox4_P.setMinimumHeight(150)
+        self.QGBox4_P.setMaximumWidth(100)		
+        self.radio41_P = QRadioButton("std")
+        self.radio42_P = QRadioButton("dev") # par defaut
+        self.radio42_P.setChecked(True)
+        self.connect(self.radio41_P, SIGNAL("clicked()"), self.radio41_PClicked)
+        self.connect(self.radio42_P, SIGNAL("clicked()"), self.radio42_PClicked)
+        vbox4_P = QVBoxLayout()
+        vbox4_P.addWidget(self.radio41_P)
+        vbox4_P.addWidget(self.radio42_P)
+        vbox4_P.addStretch(1)
+        self.QGBox4_P.setLayout(vbox4_P)
+				
 		# creation du grpe OvalFile
         self.QGBox3_P = QGroupBox("OvalFile")
         self.QGBox3_P.setMaximumHeight(150)
         self.QGBox3_P.setMinimumHeight(150)
         self.vbox3_P = QVBoxLayout()
+        self.t_rel_default = QLabel("Default web folder name : " )
+        self.vbox3_P.addWidget(self.t_rel_default)
+        self.vbox3_P.addStretch(1)
         self.QGBox3_P.setLayout(self.vbox3_P)
 
         hbox_H0_P = QHBoxLayout()
         hbox_H0_P.addWidget(self.QGBox_H1P)
         hbox_H0_P.addWidget(self.QGBox_H2P)
         hbox_H0_P.addWidget(self.QGBox2_P)
+        hbox_H0_P.addWidget(self.QGBox4_P)
         hbox_H0_P.addWidget(self.QGBox3_P)
 
         # créer un bouton
@@ -91,6 +126,18 @@ class GetPublish(QWidget):
     def radio22_PClicked(self):
         if self.radio22_P.isChecked():
             print 'external'
+        QtCore.QCoreApplication.processEvents()
+        
+    def radio41_PClicked(self):
+        if self.radio41_P.isChecked():
+            self.text_ext = "_std"
+            self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + self.text_ext)
+        QtCore.QCoreApplication.processEvents()
+
+    def radio42_PClicked(self):
+        if self.radio42_P.isChecked():
+            self.text_ext = "_dev"
+            self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + self.text_ext)
         QtCore.QCoreApplication.processEvents()
         
         
