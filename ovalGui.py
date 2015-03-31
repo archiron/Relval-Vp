@@ -419,86 +419,99 @@ class ovalGui(QWidget):
         self.ref_list_mod = []
         self.rel_list_mod2 = []
         self.ref_list_mod2 = []
-#        self.my_choice_rel = "" # for transmission data between the 2 windows
-#        self.my_choice_ref = "" # for transmission data between the 2 windows
     
-        self.getChoice.bouton.setText("Quit") # to be removed ?
-        for items in to_transmit[2]:
-            items3 = explode_item(items)
-            items4 = (items3[1], items3[2], items3[0])
-            self.rel_list_mod.append(items4)
-        for items in to_transmit[3]:
-            items3 = explode_item(items)
-            items4 = (items3[1], items3[2], items3[0])
-            self.ref_list_mod.append(items4)
+        print "longueur tablo to_transmit[2] : ", len(to_transmit[2])
+        print "longueur tablo to_transmit[3] : ", len(to_transmit[3])
+        if ( len(to_transmit[2]) == 0): # release empty
+            print "pas bon"
+            BoiteMessage = QMessageBox()
+            BoiteMessage.setText("There is no data release.")
+            BoiteMessage.setWindowTitle("WARNING !")
+            BoiteMessage.exec_()
+        else: # release data OK
+            if ( len(to_transmit[3]) == 0): # reference empty
+                BoiteMessage = QMessageBox()
+                BoiteMessage.setText("There is no data reference to compare.")
+                BoiteMessage.setWindowTitle("WARNING !")
+                BoiteMessage.exec_()
+            else: # release and reference are OK
+                self.getChoice.bouton.setText("Quit") # to be removed ?
+                for items in to_transmit[2]:
+                    items3 = explode_item(items)
+                    items4 = (items3[1], items3[2], items3[0])
+                    self.rel_list_mod.append(items4)
+                for items in to_transmit[3]:
+                    items3 = explode_item(items)
+                    items4 = (items3[1], items3[2], items3[0])
+                    self.ref_list_mod.append(items4)
             
-        list_tmp = sorted(self.rel_list_mod, key=itemgetter(0,1), reverse=True)
-        self.rel_list_mod = list_tmp
-        list_tmp = sorted(self.ref_list_mod, key=itemgetter(0,1), reverse=True)
-        self.ref_list_mod = list_tmp
+                list_tmp = sorted(self.rel_list_mod, key=itemgetter(0,1), reverse=True)
+                self.rel_list_mod = list_tmp
+                list_tmp = sorted(self.ref_list_mod, key=itemgetter(0,1), reverse=True)
+                self.ref_list_mod = list_tmp
         
-        print "release tablo avant : ", self.rel_list_mod
-        self.rel_list_mod2 = list_simplify(self.rel_list_mod)
-        print "release retour tablo : ", self.rel_list_mod2
-        print "reference tablo avant : ", self.ref_list_mod
-        self.ref_list_mod2 = list_simplify(self.ref_list_mod)
-        print "reference retour tablo : ", self.ref_list_mod2
+                print "release tablo avant : ", self.rel_list_mod
+                print "longueur tablo : ", len(self.rel_list_mod)
+                self.rel_list_mod2 = list_simplify(self.rel_list_mod)
+                print "release retour tablo : ", self.rel_list_mod2
+                print "reference tablo avant : ", self.ref_list_mod
+                print "longueur tablo : ", len(self.ref_list_mod)
+                self.ref_list_mod2 = list_simplify(self.ref_list_mod)
+                print "reference retour tablo : ", self.ref_list_mod2
 
-        i = 0
-        k = 0
-        self.buttons_rel = []
-        for items in self.rel_list_mod2:
-            it1 = ''
-            it2 = items[2]
-            for it in it2:
-                print "+-+-+-", it
-                it1 += it + ', '
-            it1 = it1[0:len(it1)-2]
-            items = (items[0], items[1], it1)
-            j = 0
-            for items2 in items:
-                if ( j == 1 ):
-                    t = QRadioButton(items2)
-                else: # j = 2
-                    t = QLabel(items2)
-                self.buttons_rel.append(t)
-                self.getChoice.gbox_H1.addWidget(self.buttons_rel[i], k, j)
-                self.connect(self.buttons_rel[i], SIGNAL("clicked()"), self.buttons_relClicked)
-                j += 1
-                i += 1
-            k += 1           
-#        self.buttons_rel[1].setChecked(True) # default
+                i = 0
+                k = 0
+                self.buttons_rel = []
+                for items in self.rel_list_mod2:
+                    it1 = ''
+                    it2 = items[2]
+                    for it in it2:
+                        print "+-+-+-", it
+                        it1 += it + ', '
+                    it1 = it1[0:len(it1)-2]
+                    items = (items[0], items[1], it1)
+                    j = 0
+                    for items2 in items:
+                        if ( j == 1 ):
+                            t = QRadioButton(items2)
+                        else: # j = 2
+                            t = QLabel(items2)
+                        self.buttons_rel.append(t)
+                        self.getChoice.gbox_H1.addWidget(self.buttons_rel[i], k, j)
+                        self.connect(self.buttons_rel[i], SIGNAL("clicked()"), self.buttons_relClicked)
+                        j += 1
+                        i += 1
+                    k += 1           
             
-        i = 0
-        k = 0
-        self.buttons_ref = []
-        for items in self.ref_list_mod2:
-            it1 = ''
-            it2 = items[2]
-            for it in it2:
-                it1 += it + ', '
-            it1 = it1[0:len(it1)-2]
-            items = (items[0], items[1], it1)
-            j = 0
-            for items2 in items:
-                if ( j == 1 ):
-                    t = QRadioButton(items2)
-                else: # j = 2
-                    t = QLabel(items2)
-                self.buttons_ref.append(t)
-                self.getChoice.gbox_H2.addWidget(self.buttons_ref[i], k, j)
-                self.connect(self.buttons_ref[i], SIGNAL("clicked()"), self.buttons_refClicked)
-                j += 1
-                i += 1
-            k += 1           
-#        self.buttons_ref[1].setChecked(True) # default
+                i = 0
+                k = 0
+                self.buttons_ref = []
+                for items in self.ref_list_mod2:
+                    it1 = ''
+                    it2 = items[2]
+                    for it in it2:
+                        it1 += it + ', '
+                    it1 = it1[0:len(it1)-2]
+                    items = (items[0], items[1], it1)
+                    j = 0
+                    for items2 in items:
+                        if ( j == 1 ):
+                            t = QRadioButton(items2)
+                        else: # j = 2
+                            t = QLabel(items2)
+                        self.buttons_ref.append(t)
+                        self.getChoice.gbox_H2.addWidget(self.buttons_ref[i], k, j)
+                        self.connect(self.buttons_ref[i], SIGNAL("clicked()"), self.buttons_refClicked)
+                        j += 1
+                        i += 1
+                    k += 1           
             
-        # en cas de signal "fermeturegetChoice()" reçu de self.getChoice => exécutera clienchoisi 
-        self.connect(self.getChoice, SIGNAL("fermeturegetChoice(PyQt_PyObject)"), self.clientchoice) 
-        # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
-        self.getChoice.setWindowModality(QtCore.Qt.ApplicationModal)
-        # appel de la deuxième fenêtre
-        self.getChoice.show()
+                # en cas de signal "fermeturegetChoice()" reçu de self.getChoice => exécutera clienchoisi 
+                self.connect(self.getChoice, SIGNAL("fermeturegetChoice(PyQt_PyObject)"), self.clientchoice) 
+                # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
+                self.getChoice.setWindowModality(QtCore.Qt.ApplicationModal)
+                # appel de la deuxième fenêtre
+                self.getChoice.show()
 
     def clientchoice(self, x):
         """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
