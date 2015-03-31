@@ -423,10 +423,6 @@ class ovalGui(QWidget):
 #        self.my_choice_ref = "" # for transmission data between the 2 windows
     
         self.getChoice.bouton.setText("Quit") # to be removed ?
-        self.getChoice.TextEdit_H1.clear()
-        self.getChoice.TextEdit_H2.clear()
-        self.getChoice.QGBox_H1.setTitle(to_transmit[0])
-        self.getChoice.QGBox_H2.setTitle(to_transmit[1])
         for items in to_transmit[2]:
             items3 = explode_item(items)
             items4 = (items3[1], items3[2], items3[0])
@@ -441,30 +437,12 @@ class ovalGui(QWidget):
         list_tmp = sorted(self.ref_list_mod, key=itemgetter(0,1), reverse=True)
         self.ref_list_mod = list_tmp
         
-#        for items in self.rel_list_mod:
-#            print items
-#        for items in self.ref_list_mod:
-#            print items
-
-        # to be removed later
-        for items in self.rel_list_mod:
-            line_TE = ''
-            for items2 in items:
-                line_TE += items2 + ' '
-            self.getChoice.TextEdit_H1.append(line_TE)
-        for items in self.ref_list_mod:
-            line_TE = ''
-            for items2 in items:
-                line_TE += items2 + ' '
-            self.getChoice.TextEdit_H2.append(line_TE)
-        # to be removed later
-        
-        print "tablo avant : ", self.rel_list_mod
+        print "release tablo avant : ", self.rel_list_mod
         self.rel_list_mod2 = list_simplify(self.rel_list_mod)
-        print "retour tablo : ", self.rel_list_mod2
-#        print "tablo avant : ", self.ref_list_mod
+        print "release retour tablo : ", self.rel_list_mod2
+        print "reference tablo avant : ", self.ref_list_mod
         self.ref_list_mod2 = list_simplify(self.ref_list_mod)
-#        print "retour tablo : ", self.ref_list_mod2
+        print "reference retour tablo : ", self.ref_list_mod2
 
         i = 0
         k = 0

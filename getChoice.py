@@ -27,19 +27,6 @@ class GetChoice(QWidget):
         self.QGBox_0.setLayout(vbox_0)
         
         # QHBoxLayout + 2 QGroupBox
-        self.QGBox_H1 = QGroupBox("Release list")
-        self.TextEdit_H1 = QTextEdit(self)
-        self.TextEdit_H1.append("Coucou ! \n")
-        vbox_H1 = QVBoxLayout()
-        vbox_H1.addWidget(self.TextEdit_H1)
-        self.QGBox_H1.setLayout(vbox_H1)
-        self.QGBox_H2 = QGroupBox("Reference list")
-        self.TextEdit_H2 = QTextEdit(self)
-        self.TextEdit_H2.append("Coucou ! \n")
-        vbox_H2 = QVBoxLayout()
-        vbox_H2.addWidget(self.TextEdit_H2)
-        self.QGBox_H2.setLayout(vbox_H2)
-        
         self.QGBox_H1b = QGroupBox("Release list b")
         self.gbox_H1 = QGridLayout()
         self.QGBox_H1b.setLayout(self.gbox_H1)
@@ -48,9 +35,7 @@ class GetChoice(QWidget):
         self.QGBox_H2b.setLayout(self.gbox_H2)
 
         vbox_H0 = QVBoxLayout()
-        vbox_H0.addWidget(self.QGBox_H1)
         vbox_H0.addWidget(self.QGBox_H1b)
-        vbox_H0.addWidget(self.QGBox_H2)
         vbox_H0.addWidget(self.QGBox_H2b)
 
         # créer un bouton
