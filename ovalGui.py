@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v0.2.0')
+        self.setWindowTitle('DQMGui publish v0.7.5')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -26,6 +26,7 @@ class ovalGui(QWidget):
         self.choix_etape = 'analyze' # default
         self.choice_rel = ""
         self.choice_ref = ""
+        self.coll_list = []
         self.my_choice_rel = "" # for transmission data between the 2 windows
         self.my_choice_ref = "" # for transmission data between the 2 windows
 		
@@ -310,7 +311,7 @@ class ovalGui(QWidget):
                 copy_files(self)
         
             # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
-            coll_list = get_collection_list(self)
+            self.coll_list = get_collection_list(self)
 
             # work to execute
             if self.radio04.isChecked():     # publish
@@ -318,12 +319,12 @@ class ovalGui(QWidget):
                 if self.radio13.isChecked(): # FAST
                     print "Fast & publish"
                     for val_Fast in ['VsFull', 'VsFast']:
-                        for items in coll_list:
+                        for items in self.coll_list:
                             cmd = self.choix_interaction + self.choix_calcul + val_Fast + items + '_gedGsfE'
                             subprocess.call(cmd, shell = True)
                 else:                        # no FAST
                     print "no Fast & publish"
-                    for items in coll_list:
+                    for items in self.coll_list:
                         cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
                         subprocess.call(cmd, shell = True)
             
@@ -331,7 +332,7 @@ class ovalGui(QWidget):
                 clean_files(self)
             else:
                 print "no publish : general case"
-                for items in coll_list:
+                for items in self.coll_list:
                     cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
                     subprocess.call(cmd, shell = True)
 
@@ -574,8 +575,8 @@ class ovalGui(QWidget):
            
         self.getPublish.bouton_P.setText("Quit") # to be removed ?
 
-        for items in to_transmit:
-            print "Publish : ", items
+#        for items in to_transmit:
+#            print "Publish : ", items
         self.getPublish.to_transmit = to_transmit
 
         self.getPublish.transmit_rel = to_transmit[0][0]
@@ -607,8 +608,8 @@ class ovalGui(QWidget):
                     tag_startup = tag_startup[:-8]
                 if self.gccs == 'PU':
                     tag_startup = tag_startup[7:]
-                self.getPublish.tag_startup.setText('test new : ' + tag_startup) # pbm with fastsim_ pu PU25(50)ns_ get choix calcul
-                self.getPublish.data_version.setText('test ref : ' + data_version)
+                self.getPublish.tag_startup.setText('Tag Startup : ' + tag_startup) # pbm with fastsim_ pu PU25(50)ns_ get choix calcul -> done
+                self.getPublish.data_version.setText('Data Version : ' + data_version)
                 self.getPublish.lineEdit.setText('File to be created')
                 
                 # insert the web folder name            

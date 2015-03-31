@@ -1,7 +1,7 @@
 voir si pour la creation des repertoires GED PU25/50 et FAST on ne peut pas les mettre par défaut et changer le texte (textedit)
 verifier si on fait bien PU25(50) avec PU25(50), et idem pour les datasets
+voir comment telecharger aussi les FullSim pour les FastvsFull
 remettre les nvelles valeurs des releases/dataset apres le Choice
-enlever les TextEdit dans la fenetre Choice.
 
 mettre les langues sous forme de fichier txt.
 

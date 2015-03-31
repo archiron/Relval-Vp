@@ -588,7 +588,37 @@ def list_simplify(tablo):
     
     return temp
       
+def compare_datasets(t1, t2):
+    import re
+    temp = []
+    print "compare datasets"
+    i = 0
+    for it1 in t1:
+#        print "t1 ", it1
+        it1 = it1.replace('Startup', '')
+        t1[i] = it1
+#        print t1[i]
+        i += 1
+#    for it2 in t2:
+#        print it2
+
+    for it1 in t1:
+        it11 = it1.replace('_', '')
+        print "t1 ", it11
+        if ( it11 == 'QcdPt80Pt12013'):
+            for it2 in t2:
+                it21 = it2.replace('_', '')
+                if ( it21 == 'QCDPt8012013'):
+                    print "on sauve QCD"
+        else: # autre datasets
+            for it2 in t2:
+                it21 = it2.replace('_', '')
+                # to be continued avec re.search
+    
+    return temp
+
 def write_OvalFile(self, t_rel_default_text, to_transmit):
+    import os,sys,subprocess,glob,re,shutil
     (tag_startup, data_version) = to_transmit.split('-')
     if self.gccs == 'Fast':
         tag_startup = tag_startup[:-8]
@@ -600,12 +630,132 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
     file.write(tmp) # <var name="TEST_NEW" value="7_4_0_pre9_ROOT6_dev">
     tmp = '<var name="TEST_REF" value="' + self.lineedit3.text()[6:] + '">\n'
     file.write(tmp) # <var name="TEST_REF" value="7_4_0_pre8_std">
-    #<var name="TAG_STARTUP" value="MCRUN2_74_V7">
-    #<var name="DATA_VERSION" value="v1">
     tmp = '\n<var name="TAG_STARTUP" value="' + tag_startup + '">\n'
+    tmp += '<var name="DATA_VERSION" value="' + data_version + '">\n\n'
     file.write(tmp)
-    tmp = '<var name="DATA_VERSION" value="' + data_version + '">\n\n'
+    tmp = 'TAG for the REFERENCE DATA, USED ONLY FOR INFORMATION ON WEB PAGE\n'
     file.write(tmp)
+    tmp = '<var name="DD_COND_REF" value="' + tag_startup + '-' + data_version + '">\n\n'
+    file.write(tmp) # <var name="DD_COND_REF" value="MCRUN2_74_V7-v1">
+    tmp = '<var name="DD_RELEASE" value="${CMSSW_VERSION}">\n\n'
+    file.write(tmp)
+    tmp = '<var name="STORE_DIR" value="' + os.getcwd() + '">\n'
+    tmp += '<var name="STORE_REF" value="' + os.getcwd() + '">\n\n'
+    tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Dev">\n\n'
+    file.write(tmp)
+    tmp = 'The value of OVAL_ENVNAME is automatically set by Oval to the name\n'
+    tmp += 'of the current environment, before running any executable. Using it below,\n'
+    file.write(tmp)
+    tmp = 'we have an output file name which is unique for each execution.\n\n<var name="TEST_OUTPUT_LOGS" value="*.${OVAL_ENVNAME}.olog">\n\n'
+    file.write(tmp)
+    tmp = 'Oval is able to check the output channel of an execution and compare it with a reference output.\n'
+    tmp += 'The tags below are defining which are lines to be compared. The currently specification is a\n'
+    tmp += 'first draft, and we do not yet check the differences that Oval could raise.\n\n'
+    tmp += '<diffnumber expr="^dataset has (\d+) files:$" tolerance="1">\n<error expr="^dataset has 0 files:$">\n\n'
+    file.write(tmp)
+    tmp = '<diffline expr="^(TH1.Print Name = [a-zA-Z_]+, Entries= ).*$">\n'
+    tmp += '<diffnumber expr="^TH1.Print Name = [a-zA-Z_]+, Entries= (\d+),.*$" tolerance="20%">\n'
+    tmp += '<diffnumber expr="^TH1.Print Name = [a-zA-Z_]+, Entries= \d+, Total sum= (\S+)$" tolerance="10%">\n'
+    tmp += '<diffline expr="^(h_\S+ has )\d+ entries of mean value \S+$">\n'
+    tmp += '<diffnumber expr="^h_\S+ has (\d+) entries of mean value \S+$" tolerance="20%">\n'
+    tmp +='<diffnumber expr="^h_\S+ has \d+ entries of mean value (\S+)$" tolerance="10%">\n'
+    tmp += '<!diffvar name="HISTO" expr="^TH1.Print Name = [a-zA-Z_]+, Entries= \d+, Total sum= (\S+)$" tolerance="10%">\n\n'
+    file.write(tmp)
+    tmp = '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n'
+    tmp += '================================================================================\n'
+    if self.gccs == 'Fast':
+        tmp += 'FastSim\n'
+    else :
+        tmp += 'FullSim\n'
+    tmp += '================================================================================\n'
+    tmp += '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n'
+    file.write(tmp)
+    if self.gccs == 'Full':
+        tmp = '<environment name="FullStdStats">\n\n'
+    elif self.gccs == 'PU':
+        tmp = '<environment name="FullStdStats">\n\n'
+    else :
+        tmp = '<environment name="FastSim">\n\n'
+
+    tmp += '  This set of targets is currently used for the validation of electrons.\n\n'
+    tmp += '  Used if DD_source=/eos/...\n'
+    if self.gccs == 'Fast':
+        tmp += '  <var name="DD_TIER" value="GEN-SIM-DIGI-RECO">\n\n'
+    else :
+        tmp += '  <var name="DD_TIER" value="GEN-SIM-RECO">\n\n'
+    tmp += '  <var name="VAL_HISTOS" value="ElectronMcSignalHistos.txt">\n'
+    tmp += '  <var name="VAL_CONFIGURATION" value="ElectronMcSignalValidation_cfg">\n'
+    tmp += '  <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidation_gedGsfElectrons_cfg">\n'
+    tmp += '  <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidation_cfg">\n\n'
+    file.write(tmp)
+    # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
+    self.coll_list = get_collection_list(self)
+###### to be removed
+    print "self.my_choice_rel : ", self.my_choice_rel
+    # need to compare datasets from self.my_choice_rel and datasets selected in coll_list
+    for items in self.coll_list:
+        print "coll_list : ", items
+    for items in self.my_choice_rel[2]:
+        print "my_choice_rel : ", items
+        
+    dataset_resume = compare_datasets(self.coll_list, self.my_choice_rel[2])
+    print dataset_resume
+    
+###### to be removed
+    if self.gccs == 'Full': # FULLSIM
+        tmp = '  <environment name="ValFullgedvsged">\n\n'
+        file.write(tmp)
+        tmp = '    <var name="TEST_GLOBAL_TAG" value="${TAG_STARTUP}">\n'
+        tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
+        tmp += '    <var name="DD_COND" value="${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
+        file.write(tmp)
+        for items in self.coll_list:
+            tmp = ''
+            tmp += '      <environment name="ValgedvsgedFull' + items + '_gedGsfE">\n'
+            tmp += '      </environment>\n\n'
+            file.write(tmp)
+    elif self.gccs == 'PU': # PU
+        tmp = '  <environment name="ValPileUpStartup">\n\n'
+        tmp += '    <var name="TAG_STARTUP" value="${TAG_STARTUP}">\n'
+        file.write(tmp)
+        tmp = '    <var name="TEST_GLOBAL_TAG" value="${TAG_STARTUP}">\n'
+        tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
+        tmp += '    <var name="DD_COND" value="PU50ns_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
+        file.write(tmp)
+        for items in self.coll_list:
+            tmp = ''
+            tmp += '      <environment name="ValPileUp' + items + '_gedGsfE">\n'
+            tmp += '      </environment>\n\n'
+            file.write(tmp)
+    else : # FASTSIM
+        tmp = '  <environment name="ValFastVsFast">\n\n'
+        tmp += '    <environment name="ValFastVsFastStartup">\n\n'
+        file.write(tmp)
+        tmp = '      <var name="TEST_GLOBAL_TAG" value="${TAG_STARTUP}">\n'
+        tmp += '      <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
+        tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}*FastSim*-${DATA_VERSION}">\n\n'
+        file.write(tmp)
+        for items in self.coll_list:
+#            print "fast : ", items
+            tmp = ''
+            tmp += '      <environment name="ValFastVsFast' + items + '_gedGsfE">\n'
+            tmp += '      </environment>\n\n'
+            file.write(tmp)
+        tmp = '  <environment name="ValFastVsFull">\n\n'
+        tmp += '    <environment name="ValFastVsFullStartup">\n\n'
+        file.write(tmp)
+        tmp = '      <var name="TEST_GLOBAL_TAG" value="${TAG_STARTUP}">\n'
+        tmp += '      <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
+        tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
+        file.write(tmp)
+        for items in self.coll_list:
+#            print "fast : ", items
+            tmp = ''
+            tmp += '      <environment name="ValFastVsFull' + items + '_gedGsfE">\n'
+            tmp += '      </environment>\n\n'
+            file.write(tmp)
+
+        
     file.close()
     
     return True
