@@ -9,7 +9,7 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_test, liste, cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files, cmd_fetch, cmd_relval, cmd_listeRECO, cmd_listeDQM, list_search, explode_item
-from fonctions import list_simplify
+from fonctions import list_simplify, write_OvalFile
 from getChoice import *
 from getPublish import *
 		
@@ -582,26 +582,58 @@ class ovalGui(QWidget):
         self.getPublish.transmit_ref = to_transmit[1][0]
         print self.getPublish.transmit_rel
         
-        self.getPublish.t_rel.setText('release : ' + to_transmit[0][0])
-        self.getPublish.t_ref.setText('reference : ' + to_transmit[1][0])
-        self.getPublish.test_new.setText('test new : ' + self.getPublish.transmit_rel[6:])
-        self.getPublish.test_ref.setText('test ref : ' + self.getPublish.transmit_ref[6:])
+        if ( to_transmit[0][1] == "" ): # release globaltag empty
+            BoiteMessage = QMessageBox()
+            BoiteMessage.setText("There is no data release to make for OvalFile.")
+            BoiteMessage.setWindowTitle("WARNING !")
+            BoiteMessage.exec_()
+        else: # data release OK
+            if ( to_transmit[1][1] == "" ): # reference globaltag empty
+                BoiteMessage = QMessageBox()
+                BoiteMessage.setText("There is no data reference to make for OvalFile.")
+                BoiteMessage.setWindowTitle("WARNING !")
+                BoiteMessage.exec_()
+            else:  # release and reference globaltag OK
+                self.getPublish.t_rel.setText('release : ' + to_transmit[0][0])
+                self.getPublish.t_ref.setText('reference : ' + to_transmit[1][0])
+                self.getPublish.test_new.setText('test new : ' + self.getPublish.transmit_rel[6:])
+                self.getPublish.test_ref.setText('test ref : ' + self.getPublish.transmit_ref[6:])
+                
+                (tag_startup, data_version) = to_transmit[0][1].split('-')
+                print "tag_startup : ",tag_startup
+                print "data_version : ", data_version
+                print self.gccs
+                if self.gccs == 'Fast':
+                    tag_startup = tag_startup[:-8]
+                if self.gccs == 'PU':
+                    tag_startup = tag_startup[7:]
+                self.getPublish.tag_startup.setText('test new : ' + tag_startup) # pbm with fastsim_ pu PU25(50)ns_ get choix calcul
+                self.getPublish.data_version.setText('test ref : ' + data_version)
+                self.getPublish.lineEdit.setText('File to be created')
+                
+                # insert the web folder name            
+                t_rel_default_text = to_transmit[0][0][6:] + self.getPublish.text_ext
+                self.getPublish.t_rel_default.setText("Default web folder name : " + t_rel_default_text)
         
-        # insert the web folder name            
-        t_rel_default_text = to_transmit[0][0][6:] + self.getPublish.text_ext 
-        self.getPublish.t_rel_default.setText("Default web folder name : " + t_rel_default_text)
+                self.Oval_OK = False
+                self.Oval_OK = write_OvalFile(self, t_rel_default_text, to_transmit[0][1])
+
         
-        # en cas de signal "fermeturegetPublish()" reçu de self.getPublish => exécutera clienchoisi 
-        self.connect(self.getPublish, SIGNAL("fermeturegetPublish(PyQt_PyObject)"), self.clientpublish) 
-        # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
-        self.getPublish.setWindowModality(QtCore.Qt.ApplicationModal)
-        # appel de la deuxième fenêtre
-        self.getPublish.show()
+                # en cas de signal "fermeturegetPublish()" reçu de self.getPublish => exécutera clienchoisi 
+                self.connect(self.getPublish, SIGNAL("fermeturegetPublish(PyQt_PyObject)"), self.clientpublish) 
+                # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
+                self.getPublish.setWindowModality(QtCore.Qt.ApplicationModal)
+                # appel de la deuxième fenêtre
+                self.getPublish.show()
 
     def clientpublish(self, x):
         """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
+        if self.Oval_OK:
+            print "True"
+        else:
+            print "False"
         tmp = self.labelResume.text()
-        tmp += "<br /><strong>A que coucou</strong>"
+        tmp += "<br /><strong>OvalFile created</strong>"
         self.labelResume.setText(tmp)
         QtCore.QCoreApplication.processEvents()
         print "recup2 = ", x # to be removed

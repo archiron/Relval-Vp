@@ -587,4 +587,25 @@ def list_simplify(tablo):
         print "temp : ", items  
     
     return temp
-        
+      
+def write_OvalFile(self, t_rel_default_text, to_transmit):
+    (tag_startup, data_version) = to_transmit.split('-')
+    if self.gccs == 'Fast':
+        tag_startup = tag_startup[:-8]
+    if self.gccs == 'PU':
+        tag_startup = tag_startup[7:]
+    file = open("newfile.txt", "w+")
+    file.write('<var name="TEST_COMMENT" value="">\n')
+    tmp = '<var name="TEST_NEW" value="' + t_rel_default_text + '">\n'
+    file.write(tmp) # <var name="TEST_NEW" value="7_4_0_pre9_ROOT6_dev">
+    tmp = '<var name="TEST_REF" value="' + self.lineedit3.text()[6:] + '">\n'
+    file.write(tmp) # <var name="TEST_REF" value="7_4_0_pre8_std">
+    #<var name="TAG_STARTUP" value="MCRUN2_74_V7">
+    #<var name="DATA_VERSION" value="v1">
+    tmp = '\n<var name="TAG_STARTUP" value="' + tag_startup + '">\n'
+    file.write(tmp)
+    tmp = '<var name="DATA_VERSION" value="' + data_version + '">\n\n'
+    file.write(tmp)
+    file.close()
+    
+    return True

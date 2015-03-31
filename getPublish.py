@@ -88,6 +88,10 @@ class GetPublish(QWidget):
         self.vbox3_P = QVBoxLayout()
         self.t_rel_default = QLabel("Default web folder name : " )
         self.vbox3_P.addWidget(self.t_rel_default)
+        self.tag_startup = QLabel("Tag Startup : " )
+        self.vbox3_P.addWidget(self.tag_startup)
+        self.data_version = QLabel("Data Version : " )
+        self.vbox3_P.addWidget(self.data_version)
         self.vbox3_P.addStretch(1)
         self.QGBox3_P.setLayout(self.vbox3_P)
 
