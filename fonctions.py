@@ -216,7 +216,7 @@ def get_collection_list(self):
         if self.check33.isChecked():
             collection_list.append('Pt1000Startup_UP15')
         if self.check34.isChecked():
-            collection_list.append('QcdPt80Pt120Startup_13')
+            collection_list.append('QcdPt80120Startup_13') # QcdPt80Pt120Startup_13
         if self.check35.isChecked():
             collection_list.append('TTbarStartup_13')
         if self.check36.isChecked():
@@ -593,27 +593,21 @@ def compare_datasets(t1, t2):
     temp = []
     print "compare datasets"
     i = 0
-    for it1 in t1:
-#        print "t1 ", it1
-        it1 = it1.replace('Startup', '')
-        t1[i] = it1
-#        print t1[i]
-        i += 1
-#    for it2 in t2:
-#        print it2
 
     for it1 in t1:
-        it11 = it1.replace('_', '')
-        print "t1 ", it11
-        if ( it11 == 'QcdPt80Pt12013'):
-            for it2 in t2:
-                it21 = it2.replace('_', '')
-                if ( it21 == 'QCDPt8012013'):
-                    print "on sauve QCD"
-        else: # autre datasets
-            for it2 in t2:
-                it21 = it2.replace('_', '')
-                # to be continued avec re.search
+        it11 = it1.replace('Startup', '')
+        it11 = (it11.replace('_', '')).upper()
+        for it2 in t2:
+            it21 = (it2.replace('_', '')).upper()
+            # to be continued avec re.search
+            if ( re.search(it11, it21) ):
+                print "search : ", it11, " ", it21
+                it22 = it21[-2:]
+                if ( ( it22 == '13' ) or ( it22 == '15' ) ):
+                    print "OK"
+                    temp.append([it1, it2])
+                else:
+                    print "KO : ", it22, it2, it1
     
     return temp
 
