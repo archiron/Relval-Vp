@@ -591,7 +591,7 @@ def list_simplify(tablo):
 def compare_datasets(t1, t2):
     import re
     temp = []
-    print "compare datasets"
+#    print "compare datasets"
     i = 0
 
     for it1 in t1:
@@ -601,7 +601,7 @@ def compare_datasets(t1, t2):
             it21 = (it2.replace('_', '')).upper()
             # to be continued avec re.search
             if ( re.search(it11, it21) ):
-                print "search : ", it11, " ", it21
+#                print "search : ", it11, " ", it21
                 it22 = it21[-2:]
                 if ( ( it22 == '13' ) or ( it22 == '15' ) ):
                     print "OK"
@@ -609,6 +609,43 @@ def compare_datasets(t1, t2):
                 else:
                     print "KO : ", it22, it2, it1
     
+    return temp
+
+def create_file_list(tablo):
+    temp = []
+    print "create_file_list"
+    part_1 = tablo[0]
+    part_2 = tablo[1]
+    itl2 = tablo[2]
+    name_base = "DQM_V0001_R000000001__RelVal" 
+    name_suffix = "__" + part_1 + "-" + part_2 + "__DQMIO.root"
+    for part_3 in itl2:
+        name_rel = name_base + part_3 + name_suffix
+        temp.append([part_3, name_rel])
+    return temp
+
+def create_commonfile_list(t1, t2):
+    import re
+    temp = []
+    print "create commonfile list"
+    for it1 in t1:
+        for it2 in t2:
+            if (it1[0] == it2[0]):
+                print it1, it2
+                temp.append([it1[0], it1[1], it2[1]])
+    
+    return temp
+
+def clean_files_list(t1, t2):
+    temp = []
+    print "clean_files_list"
+    for it1 in t1:
+#        print it1[0], it1[1]
+        for it2 in t2:
+            print "clean : ",it2, it1[1], it2[0]
+            if ( it1[1] == it2[0]):
+#                print 'ok'
+                temp.append(it2)
     return temp
 
 def write_OvalFile(self, t_rel_default_text, to_transmit):
@@ -694,8 +731,20 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         
     dataset_resume = compare_datasets(self.coll_list, self.my_choice_rel[2])
     print dataset_resume
+    if ( self.files_list ):
+        self.files_list = clean_files_list(dataset_resume, self.files_list)
+    else:
+        itl2 = create_file_list(self.choice_rel)
+        itf2 = create_file_list(self.choice_ref)
+        self.files_list = create_commonfile_list(itl2, itf2) # attention on ne compare pas la longueur des tableaux
+        self.files_list = clean_files_list(dataset_resume, self.files_list)
     
+    print "len dataset_resume : ", len(dataset_resume)
+    print "len self.files_list : ", len(self.files_list)
+    for items in self.files_list:
+        print "--", items    
 ###### to be removed
+
     if self.gccs == 'Full': # FULLSIM
         tmp = '  <environment name="ValFullgedvsged">\n\n'
         file.write(tmp)
@@ -703,9 +752,10 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '    <var name="DD_COND" value="${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
-        for items in self.coll_list:
+        for items in dataset_resume:
             tmp = ''
-            tmp += '      <environment name="ValgedvsgedFull' + items + '_gedGsfE">\n'
+            tmp += '      <environment name="ValgedvsgedFull' + items[0] + '_gedGsfE">\n\n'
+            tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
     elif self.gccs == 'PU': # PU
@@ -716,9 +766,12 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '    <var name="DD_COND" value="PU50ns_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
-        for items in self.coll_list:
+        for items in dataset_resume:
             tmp = ''
-            tmp += '      <environment name="ValPileUp' + items + '_gedGsfE">\n'
+            tmp += '      <environment name="ValPileUp' + items[0] + '_gedGsfE">\n\n'
+            tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
+#            tmp += '      <var name="RED_FILE" value="' + self.files_list[1] + '">\n\n'
+#            tmp += '      <var name="BLUE_FILE" value="' + self.files_list[2] + '">\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
     else : # FASTSIM
@@ -729,10 +782,11 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '      <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}*FastSim*-${DATA_VERSION}">\n\n'
         file.write(tmp)
-        for items in self.coll_list:
+        for items in dataset_resume:
 #            print "fast : ", items
             tmp = ''
-            tmp += '      <environment name="ValFastVsFast' + items + '_gedGsfE">\n'
+            tmp += '      <environment name="ValFastVsFast' + items[0] + '_gedGsfE">\n\n'
+            tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
         tmp = '  <environment name="ValFastVsFull">\n\n'
@@ -742,10 +796,11 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '      <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
-        for items in self.coll_list:
+        for items in dataset_resume:
 #            print "fast : ", items
             tmp = ''
-            tmp += '      <environment name="ValFastVsFull' + items + '_gedGsfE">\n'
+            tmp += '      <environment name="ValFastVsFull' + items[0] + '_gedGsfE">\n\n'
+            tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
 

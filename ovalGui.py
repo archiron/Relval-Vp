@@ -9,7 +9,7 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_test, liste, cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files, cmd_fetch, cmd_relval, cmd_listeRECO, cmd_listeDQM, list_search, explode_item
-from fonctions import list_simplify, write_OvalFile
+from fonctions import list_simplify, write_OvalFile, create_file_list, create_commonfile_list
 from getChoice import *
 from getPublish import *
 		
@@ -27,6 +27,7 @@ class ovalGui(QWidget):
         self.choice_rel = ""
         self.choice_ref = ""
         self.coll_list = []
+        self.files_list = []
         self.my_choice_rel = "" # for transmission data between the 2 windows
         self.my_choice_ref = "" # for transmission data between the 2 windows
 		
@@ -358,34 +359,28 @@ class ovalGui(QWidget):
             if ( self.my_choice_ref ) :
                 print "self.choice_ref : ", self.choice_ref 
                 # Normalement ce double test est déjà fait
+                # il faudrait vérifier si les cochés correspondent aux fichiers
                 # step 1 : done
                 option_is_from_data = "mc" # mc ou data
                 option_mthreads = 3
                 option_dry_run = False # False telecharge , True liste
-                # step 2 : to be modified as a function
-                part_rel_1 = self.choice_rel[0]
-                part_rel_2 = self.choice_rel[1]
-                itl2 = self.choice_rel[2]
-                name_rel_base = "DQM_V0001_R000000001__RelVal" 
-                name_rel_suffix = "__" + part_rel_1 + "-" + part_rel_2 + "__DQMIO.root"
-                option_release_rel = str(part_rel_1) 
-                for part_rel_3 in itl2:
-                    name_rel = name_rel_base + part_rel_3 + name_rel_suffix
-                    print "name_rel : ", name_rel
-                    option_regexp_rel = str( name_rel ) 
-                    cmd_fetch(option_is_from_data, option_release_rel, option_regexp_rel, option_mthreads, option_dry_run)
-                part_ref_1 = self.choice_ref[0]
-                part_ref_2 = self.choice_ref[1]
-                itf2 = self.choice_ref[2]
-                name_ref_base = "DQM_V0001_R000000001__RelVal" 
-                name_ref_suffix = "__" + part_ref_1 + "-" + part_ref_2 + "__DQMIO.root"
-                option_release_ref = str(part_ref_1) 
-                for part_ref_3 in itf2:
-                    name_ref = name_ref_base + part_ref_3 + name_ref_suffix
-                    print "name_ref : ", name_ref
-                    option_regexp_ref = str( name_ref ) 
-                    cmd_fetch(option_is_from_data, option_release_ref, option_regexp_ref, option_mthreads, option_dry_run)
+
+                itl2 = create_file_list(self.choice_rel)
+                itf2 = create_file_list(self.choice_ref)
+                
+                self.files_list = create_commonfile_list(itl2, itf2) # attention on ne compare pas la longueur des tableaux
+                print self.files_list
+                
                 # step 2 : done
+                option_release_rel = str(self.choice_rel[0]) 
+                for part_rel_3 in itl2:
+                    option_regexp_rel = str( part_rel_3[1] ) 
+                    cmd_fetch(option_is_from_data, option_release_rel, option_regexp_rel, option_mthreads, option_dry_run)
+
+                option_release_ref = str(self.choice_ref[0]) 
+                for part_ref_3 in itf2:
+                    option_regexp_ref = str( part_ref_3[1] ) 
+                    cmd_fetch(option_is_from_data, option_release_ref, option_regexp_ref, option_mthreads, option_dry_run)
                 # step 3 : done
                 tmp = self.labelResume.text()
                 tmp += "<br /><strong>All files loaded.</strong>"
