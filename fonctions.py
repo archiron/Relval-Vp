@@ -40,20 +40,20 @@ def cmd_eos(choix_gedGsf, choix_simus, choix_reco):
 	
     list_cmdes_eos = []
     list_cmdes_eos_tmp = []
-    print "methode par", cmsenv.eosText()
+#    print "methode par", cmsenv.eosText()
     for type in liste_reco: # liste par DQM ou GEN-SIM-RECO, GEN-SIM-DIGI-RECO
         list_cmdes_eos.append("\n===========") 
         list_cmdes_eos.append(type) # ajoute type a la liste des elements 
         list_cmdes_eos.append("===========") 
-        print "==========="
-        print "++", type, "++"
-        print "==========="
+#        print "==========="
+#        print "++", type, "++"
+#        print "==========="
         liste_coll = cmsenv.liste_ged()
         if choix_gedGsf != 'gedGsf':
             liste_coll = cmsenv.liste_Gsf()
         for name in liste_coll: # liste par TTbar, ZEE, SingleElectronPtXX, ...
-            print "++", name, " :"
-            print "----------"
+#            print "++", name, " :"
+#            print "----------"
             a = cmsenv.eosText() + '/' + name + '/' + type
             proc = subprocess.Popen([a], stdout=subprocess.PIPE, shell=True) # séparer la commande des arguments
             (out, err) = proc.communicate()
@@ -63,7 +63,7 @@ def cmd_eos(choix_gedGsf, choix_simus, choix_reco):
                 list_cmdes_eos_tmp = out.split('\n')
                 #print list_cmdes_eos_tmp
                 for elem in list_cmdes_eos_tmp:
-                    print elem		
+#                    print elem		
                     list_cmdes_eos.append(elem)	
     return list_cmdes_eos
 
@@ -73,11 +73,11 @@ def cmd_relval(choix_gedGsf, choix_reco):
     # choix_simus : Gsf or gedGsf choice (default : gedGsf)
     # choix_reco : RECO (root) files or DQM files (default : RECO)
     cmsenv = env()
-    print "fichiers txt pour la release : ", cmsenv.CMSSWBASECMSSWVERSION
-    print "autre methode par", cmsenv.eosFind()
+#    print "fichiers txt pour la release : ", cmsenv.CMSSWBASECMSSWVERSION
+#    print "autre methode par", cmsenv.eosFind()
     base = '<img src="/icons/text.gif" alt="[TXT]">' #pas beau, a revoir
     liste_fichiers = (urllib2.urlopen(cmsenv.eosFind()).read()).split('\n')
-    print choix_reco
+#    print choix_reco
     (av2, ap2) = choix_gedGsf.split(' : ')
     choix_gedGsf = ap2
     (av1, ap1) = choix_reco.split(' : ')
@@ -101,7 +101,7 @@ def cmd_relval(choix_gedGsf, choix_reco):
             pos2 = elem.find('>') 
             fileName = elem[pos1+6:pos2-1]
             fichier = cmsenv.eosFind() + fileName # adresse web du fichier
-            print "fichier : ", fichier
+#            print "fichier : ", fichier
             liste_glob = (urllib2.urlopen(fichier).read()).split('\n') # liste globale de ts les elements du fichier
             for elems in liste_glob:
                 for type in liste_reco:
@@ -113,12 +113,12 @@ def cmd_relval(choix_gedGsf, choix_reco):
                             if re.search(item2 + '/', elems):
                                 chaine = cmsenv.CMSSWBASECMSSWVERSION + '-' # cherche des chaines comme CMSSW_7_0_0_pre4- et pas CMSSW_7_0_0_pre4_GEANT10-
                                 if re.search(chaine, elems):
-                                    print "--- OK", elems, " :: ", item2 #, " :: ", item
+#                                    print "--- OK", elems, " :: ", item2 #, " :: ", item
                                     fichier_false = True
                                     list_elements_txt.append(elems) # ajoute a la liste des elements 
                                 if fichier_false:
                                     list_fichiers_txt.append(fileName) # ajoute a la liste des fichiers presentant CMSSWBASECMSSWVERSION dans leur titre
-    print "il y a %s fichiers" % j
+#    print "il y a %s fichiers" % j
 	
     return list_fichiers_txt, list_elements_txt
 
@@ -126,8 +126,8 @@ def cmd_listeRECO():
     import subprocess
     cmsenv = env()
     liste_fichiersRECO = []
-    print "liste RECO"
-    print "methode par", cmsenv.eosStore()
+#    print "liste RECO"
+#    print "methode par", cmsenv.eosStore()
     liste_temp = (urllib2.urlopen(cmsenv.eosStore()).read()).split('\n')
     i = 0
     for j in range(9):
@@ -140,7 +140,7 @@ def cmd_listeRECO():
         pos2 = elem.find('/">') 
         fileName = elem[pos1+6:pos2-0]
         i += 1
-        print "fichier ", i, " : ", fileName
+#        print "fichier ", i, " : ", fileName
         liste_fichiersRECO.append(fileName)	
 
     return liste_fichiersRECO
@@ -149,8 +149,8 @@ def cmd_listeDQM():
     import subprocess
     cmsenv = env()
     liste_fichiersDQM = []
-    print "liste DQM"
-    print "methode par", cmsenv.eosFind()
+#    print "liste DQM"
+#    print "methode par", cmsenv.eosFind()
     base = '<img src="/icons/text.gif" alt="[TXT]">' #pas beau, a revoir
     liste_temp = (urllib2.urlopen(cmsenv.eosFind()).read()).split('\n')
     i = 0
@@ -163,7 +163,7 @@ def cmd_listeDQM():
             if fileName != '':
                 i += 1
 #                fileName = fileName.replace('.txt', '')
-                print "fichier ", i, " : ", fileName
+#                print "fichier ", i, " : ", fileName
                 liste_fichiersDQM.append(fileName)	
     
     return liste_fichiersDQM
@@ -171,11 +171,11 @@ def cmd_listeDQM():
 def cmd_test():
     # fct test retourne 2 nb
     cmsenv = env()
-    print "fichiers txt pour la release : ", cmsenv.CMSSWBASECMSSWVERSION
+#    print "fichiers txt pour la release : ", cmsenv.CMSSWBASECMSSWVERSION
     toto = "fichiers txt pour la release : "
     titi = cmsenv.CMSSWBASECMSSWVERSION
-    print toto, titi
-    return toto, titi
+#    print toto, titi
+#    return toto, titi
 
 def cmd_folder_creation(choix_calcul):
     import subprocess, os
@@ -342,7 +342,7 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
     from optparse import OptionParser
     from urllib2 import build_opener, Request
     
-    print "\n CMD_FETCH : "
+#    print "\n CMD_FETCH : "
     cmsenv = env()
    
     ## Define options
@@ -378,7 +378,7 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
         file_id = selected_files.index(filename)
 
         if isfile("./%s" % filename):
-            print '%d. Exsits on disk. Skipping.' % (file_id +1)
+            print '%d. Exists on disk. Skipping.' % (file_id +1)
             return
 
         print '%d. Downloading...' % (file_id +1)
@@ -460,8 +460,8 @@ def clean_collections(collection, gccs):
 def list_search(self):
     texte_release1 = self.lineedit1.text()
     texte_release3 = self.lineedit3.text()
-    print "texte 1 : ", texte_release1
-    print "texte 3 : ", texte_release3
+#    print "texte 1 : ", texte_release1
+#    print "texte 3 : ", texte_release3
         
     # on fera la fonction par un appel a cmd_fetchall(options)
     # ou options regroupera option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run
@@ -474,7 +474,7 @@ def list_search(self):
     option_mthreads = 3
     option_dry_run = True # False for loading files
     self.gccs = get_choix_calcul_search(self) 
-    print "**********", "choix calcul : ", self.choix_calcul, self.gccs # to be removed
+#    print "**********", "choix calcul : ", self.choix_calcul, self.gccs # to be removed
     
     # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
     coll_list = get_collection_list_search(self)
@@ -487,17 +487,17 @@ def list_search(self):
         option_regexp = str( items )
         if ( self.gccs != 'Full' ):
             option_regexp += ',' + str(self.gccs)
-        print "**********", items, "- ", option_release_1 # to be removed
+#        print "**********", items, "- ", option_release_1 # to be removed
         (liste_fichiers_1) = cmd_fetch(option_is_from_data, option_release_1, option_regexp, option_mthreads, option_dry_run)
         self.rel_list += liste_fichiers_1
-        print "**********", items, "- ", option_release_3 # to be removed
+#        print "**********", items, "- ", option_release_3 # to be removed
         (liste_fichiers_3) = cmd_fetch(option_is_from_data, option_release_3, option_regexp, option_mthreads, option_dry_run)
         self.ref_list += liste_fichiers_3
         
-    print "\n****** cleaning ******"
+#    print "\n****** cleaning ******"
     self.rel_list = clean_collections(self.rel_list, self.gccs)
     self.ref_list = clean_collections(self.ref_list, self.gccs)
-    print "****** done ******"
+#    print "****** done ******"
     
     # si on veut comparer deux releases par fichiers DQM
     # self.listeReference.currentText() pour la reference
@@ -506,13 +506,13 @@ def list_search(self):
     #cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run)
 
     #affichage des fichiers (n'affiche que la derniere recherche)
-    print '\n-----'
-    for items in self.rel_list:
-        print items
+#    print '\n-----'
+#    for items in self.rel_list:
+#        print items
 #        print explode_item(items)
-    print '-----'
-    for items in self.ref_list:
-        print items
+#    print '-----'
+#    for items in self.ref_list:
+#        print items
 
     return 
 
@@ -547,15 +547,15 @@ def list_simplify(tablo):
     
     item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ] )
 
-    print "list simplify : longueur tablo : ", len(tablo)
+#    print "list simplify : longueur tablo : ", len(tablo)
     if ( len(tablo) == 1 ):
         item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ] )
-        print "item_line : ", item_line
+#        print "item_line : ", item_line
         
-    for items in tablo:
-        print "tablo : ", items  
+#    for items in tablo:
+#        print "tablo : ", items  
     for i in range(1, len(tablo)-0):
-        print "i = ", i
+#        print "i = ", i
         (t, u, v) = tablo[i]
         if ( t == item_line[0]):
             if (u == item_line[1]):
@@ -568,23 +568,23 @@ def list_simplify(tablo):
                 temp.append(item_line)
                 item_line = ( tablo[i][0], tablo[i][1], [ tablo[i][2] ] )
                 temp2 = item_line[2]
-                print "new item_line a : ", item_line
+#                print "new item_line a : ", item_line
                 if ( i == len(tablo)-1 ):
                     temp.append(item_line)
         else:
             temp.append(item_line)
             item_line = ( tablo[i][0], tablo[i][1],  [ tablo[i][2] ]  )
             temp2 = item_line[2]
-            print "new item_line a : ", item_line
+#            print "new item_line a : ", item_line
             if ( i == len(tablo)-1 ):
                 temp.append(item_line)
     
-    print "longueur tablo : ", len(temp)
+#    print "longueur tablo : ", len(temp)
     if ( len(temp) == 0):
         temp.append(item_line)
 
-    for items in temp:
-        print "temp : ", items  
+#    for items in temp:
+#        print "temp : ", items  
     
     return temp
       
@@ -604,7 +604,7 @@ def compare_datasets(t1, t2):
 #                print "search : ", it11, " ", it21
                 it22 = it21[-2:]
                 if ( ( it22 == '13' ) or ( it22 == '15' ) ):
-                    print "OK"
+#                    print "OK"
                     temp.append([it1, it2])
                 else:
                     print "KO : ", it22, it2, it1
@@ -613,7 +613,7 @@ def compare_datasets(t1, t2):
 
 def create_file_list(tablo):
     temp = []
-    print "create_file_list"
+#    print "create_file_list"
     part_1 = tablo[0]
     part_2 = tablo[1]
     itl2 = tablo[2]
@@ -627,25 +627,26 @@ def create_file_list(tablo):
 def create_commonfile_list(t1, t2):
     import re
     temp = []
-    print "create commonfile list"
+#    print "create commonfile list"
     for it1 in t1:
         for it2 in t2:
             if (it1[0] == it2[0]):
-                print it1, it2
+#                print it1, it2
                 temp.append([it1[0], it1[1], it2[1]])
     
     return temp
 
 def clean_files_list(t1, t2):
     temp = []
-    print "clean_files_list"
+#    print "clean_files_list"
     for it1 in t1:
 #        print it1[0], it1[1]
         for it2 in t2:
             print "clean : ",it2, it1[1], it2[0]
-            if ( it1[1] == it2[0]):
+            if ( it1[1] == it2[0] ):
 #                print 'ok'
-                temp.append(it2)
+                tmp = [it1[0], it1[1], it2[1], it2[2]]
+                temp.append(tmp)
     return temp
 
 def write_OvalFile(self, t_rel_default_text, to_transmit):
@@ -721,16 +722,17 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
     file.write(tmp)
     # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
     self.coll_list = get_collection_list(self)
+
 ###### to be removed
-    print "self.my_choice_rel : ", self.my_choice_rel
+#    print "self.my_choice_rel : ", self.my_choice_rel
     # need to compare datasets from self.my_choice_rel and datasets selected in coll_list
-    for items in self.coll_list:
-        print "coll_list : ", items
-    for items in self.my_choice_rel[2]:
-        print "my_choice_rel : ", items
+#    for items in self.coll_list:
+#        print "coll_list : ", items
+#    for items in self.my_choice_rel[2]:
+#        print "my_choice_rel : ", items
         
     dataset_resume = compare_datasets(self.coll_list, self.my_choice_rel[2])
-    print dataset_resume
+#    print dataset_resume
     if ( self.files_list ):
         self.files_list = clean_files_list(dataset_resume, self.files_list)
     else:
@@ -739,10 +741,10 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         self.files_list = create_commonfile_list(itl2, itf2) # attention on ne compare pas la longueur des tableaux
         self.files_list = clean_files_list(dataset_resume, self.files_list)
     
-    print "len dataset_resume : ", len(dataset_resume)
-    print "len self.files_list : ", len(self.files_list)
     for items in self.files_list:
-        print "--", items    
+#        print "--", items, len(items)
+        for it in items:
+            print "--", it
 ###### to be removed
 
     if self.gccs == 'Full': # FULLSIM
@@ -752,12 +754,20 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '    <var name="DD_COND" value="${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
-        for items in dataset_resume:
+        for items in self.files_list:
             tmp = ''
             tmp += '      <environment name="ValgedvsgedFull' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
+            tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
+            tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n'
+            tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
+            tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
+            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
+        tmp += '  </environment>\n\n' 
+        tmp += '</environment>\n'
+        file.write(tmp)
     elif self.gccs == 'PU': # PU
         tmp = '  <environment name="ValPileUpStartup">\n\n'
         tmp += '    <var name="TAG_STARTUP" value="${TAG_STARTUP}">\n'
@@ -766,14 +776,21 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '    <var name="DD_COND" value="PU50ns_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
-        for items in dataset_resume:
+        for items in self.files_list:
+            print items[0]
             tmp = ''
             tmp += '      <environment name="ValPileUp' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
-#            tmp += '      <var name="RED_FILE" value="' + self.files_list[1] + '">\n\n'
-#            tmp += '      <var name="BLUE_FILE" value="' + self.files_list[2] + '">\n'
+            tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
+            tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n\n'
+            tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
+            tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
+            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
+        tmp = '  </environment>\n\n' 
+        tmp += '</environment>\n'
+        file.write(tmp)
     else : # FASTSIM
         tmp = '  <environment name="ValFastVsFast">\n\n'
         tmp += '    <environment name="ValFastVsFastStartup">\n\n'
@@ -782,11 +799,16 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '      <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}*FastSim*-${DATA_VERSION}">\n\n'
         file.write(tmp)
-        for items in dataset_resume:
+        for items in self.files_list:
 #            print "fast : ", items
             tmp = ''
             tmp += '      <environment name="ValFastVsFast' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
+            tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
+            tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n'
+            tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
+            tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
+            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
         tmp = '  <environment name="ValFastVsFull">\n\n'
@@ -796,14 +818,21 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '      <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
-        for items in dataset_resume:
+        for items in self.files_list:
 #            print "fast : ", items
             tmp = ''
             tmp += '      <environment name="ValFastVsFull' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
+            tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
+            tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n'
+            tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
+            tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
+            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
-
+        tmp += '  </environment>\n\n' 
+        tmp += '</environment>\n'
+        file.write(tmp)
         
     file.close()
     

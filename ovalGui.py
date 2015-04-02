@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v0.7.5')
+        self.setWindowTitle('DQMGui publish v0.8.0')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -284,15 +284,15 @@ class ovalGui(QWidget):
         # step 1 : test if arborescence is OK Validation/RecoEgamma/test
         my_folder = os.getcwd()
         f_test = 'Validation/RecoEgamma/test'
-        print "my folder : ", my_folder
+#        print "my folder : ", my_folder
         if not f_test in my_folder:
-            print "pas bon"
+#            print "pas bon"
             BoiteMessage = QMessageBox()
             BoiteMessage.setText("You must be in the Validation/RecoEgamma/test of the release to work.")
             BoiteMessage.setWindowTitle("WARNING !")
             BoiteMessage.exec_()
         else:
-            print "Validation/RecoEgamma/test OK"
+#            print "Validation/RecoEgamma/test OK"
             # step 2 : create the OvalFile for the calcul (Full, Fast, PU) choice
         
             # choix interaction
@@ -302,7 +302,7 @@ class ovalGui(QWidget):
                 self.choix_interaction = '/afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
         
             get_choix_calcul(self)        
-            print "choix_calcul : ", self.choix_calcul
+#            print "choix_calcul : ", self.choix_calcul
         
             # creation des repertoires
             cmd_folder_creation(self.choix_calcul)
@@ -316,7 +316,7 @@ class ovalGui(QWidget):
 
             # work to execute
             if self.radio04.isChecked():     # publish
-                print "publish to be done"
+#                print "publish to be done"
                 if self.radio13.isChecked(): # FAST
                     print "Fast & publish"
                     for val_Fast in ['VsFull', 'VsFast']:
@@ -340,24 +340,24 @@ class ovalGui(QWidget):
         print "fin"
 
     def liste4(self):
-        print "liste 4"
+#        print "liste 4"
         # mettre la fonction liste3 du ovalGui de Projet_DQM-V2
         list_search(self)
         to_transmit = [str(self.lineedit1.text()), str(self.lineedit3.text()), self.rel_list, self.ref_list]
         self.getChoice_update(to_transmit)
         
     def liste5(self):
-        print "liste 5"
+#        print "liste 5"
         # pour recuperer les fichiers DQM*.root
         # step 1 : si pas de release et/ou de reference : ne rien faire
         # step 2 : refaire une liste des fichiers a recuperer
         # step 3 : charger les fichiers (on passe le nom du fichier comme option -e="nom_fichier")
         # (liste_fichiers_3) = cmd_fetch(option_is_from_data, option_release_3, option_regexp, option_mthreads, option_dry_run)
-        print "liste 5 : coucou"
+#        print "liste 5 : coucou"
         if ( self.my_choice_rel ) :
-            print "self.choice_rel : ", self.choice_rel
+#            print "self.choice_rel : ", self.choice_rel
             if ( self.my_choice_ref ) :
-                print "self.choice_ref : ", self.choice_ref 
+#                print "self.choice_ref : ", self.choice_ref 
                 # Normalement ce double test est déjà fait
                 # il faudrait vérifier si les cochés correspondent aux fichiers
                 # step 1 : done
@@ -369,7 +369,7 @@ class ovalGui(QWidget):
                 itf2 = create_file_list(self.choice_ref)
                 
                 self.files_list = create_commonfile_list(itl2, itf2) # attention on ne compare pas la longueur des tableaux
-                print self.files_list
+#                print self.files_list
                 
                 # step 2 : done
                 option_release_rel = str(self.choice_rel[0]) 
@@ -393,14 +393,14 @@ class ovalGui(QWidget):
             print "no release choosed. Nothing to do."
          
     def liste6(self):
-        print "liste 6"
+#        print "liste 6"
 
         name_rel_p = ( self.lineedit1.text(), '', '' ) # default
         name_ref_p = ( self.lineedit3.text(), '', '' ) # default
         if ( self.my_choice_rel ) :
-            print "self.choice_rel : ", self.choice_rel
+#            print "self.choice_rel : ", self.choice_rel
             if ( self.my_choice_ref ) :
-                print "self.choice_ref : ", self.choice_ref
+#                print "self.choice_ref : ", self.choice_ref
                 name_rel_p = self.choice_rel
                 name_ref_p = self.choice_ref
         to_transmit = [name_rel_p, name_ref_p]
@@ -416,10 +416,10 @@ class ovalGui(QWidget):
         self.rel_list_mod2 = []
         self.ref_list_mod2 = []
     
-        print "longueur tablo to_transmit[2] : ", len(to_transmit[2])
-        print "longueur tablo to_transmit[3] : ", len(to_transmit[3])
+#        print "longueur tablo to_transmit[2] : ", len(to_transmit[2])
+#        print "longueur tablo to_transmit[3] : ", len(to_transmit[3])
         if ( len(to_transmit[2]) == 0): # release empty
-            print "pas bon"
+#            print "pas bon"
             BoiteMessage = QMessageBox()
             BoiteMessage.setText("There is no data release.")
             BoiteMessage.setWindowTitle("WARNING !")
@@ -446,14 +446,14 @@ class ovalGui(QWidget):
                 list_tmp = sorted(self.ref_list_mod, key=itemgetter(0,1), reverse=True)
                 self.ref_list_mod = list_tmp
         
-                print "release tablo avant : ", self.rel_list_mod
-                print "longueur tablo : ", len(self.rel_list_mod)
+#                print "release tablo avant : ", self.rel_list_mod
+#                print "longueur tablo : ", len(self.rel_list_mod)
                 self.rel_list_mod2 = list_simplify(self.rel_list_mod)
-                print "release retour tablo : ", self.rel_list_mod2
-                print "reference tablo avant : ", self.ref_list_mod
-                print "longueur tablo : ", len(self.ref_list_mod)
+#                print "release retour tablo : ", self.rel_list_mod2
+#                print "reference tablo avant : ", self.ref_list_mod
+#                print "longueur tablo : ", len(self.ref_list_mod)
                 self.ref_list_mod2 = list_simplify(self.ref_list_mod)
-                print "reference retour tablo : ", self.ref_list_mod2
+#                print "reference retour tablo : ", self.ref_list_mod2
 
                 i = 0
                 k = 0
@@ -462,7 +462,7 @@ class ovalGui(QWidget):
                     it1 = ''
                     it2 = items[2]
                     for it in it2:
-                        print "+-+-+-", it
+#                        print "+-+-+-", it
                         it1 += it + ', '
                     it1 = it1[0:len(it1)-2]
                     items = (items[0], items[1], it1)
@@ -524,9 +524,9 @@ class ovalGui(QWidget):
         print "recup = ", x # to be removed
         self.bouton5.setEnabled(False)
         if ( self.my_choice_rel ) :
-            print "self.choice_rel : ", self.choice_rel
+#            print "self.choice_rel : ", self.choice_rel
             if ( self.my_choice_ref ) :
-                print "self.choice_ref : ", self.choice_ref 
+#                print "self.choice_ref : ", self.choice_ref 
                 self.bouton5.setEnabled(True)
 
     def buttons_relClicked(self):
@@ -539,8 +539,8 @@ class ovalGui(QWidget):
                     if self.buttons_rel[i].isChecked():
                         self.my_choice_rel = self.rel_list_mod2[k]
                         self.choice_rel = self.rel_list_mod2[k]
-                        print self.buttons_rel[i].text(), " checked with (%i, %i, %i)", i, j, k
-                        print self.buttons_rel[i].text(), " checked with ", self.rel_list_mod2[k]
+#                        print self.buttons_rel[i].text(), " checked with (%i, %i, %i)", i, j, k
+#                        print self.buttons_rel[i].text(), " checked with ", self.rel_list_mod2[k]
                 j += 1
                 i += 1
             k += 1
@@ -556,8 +556,8 @@ class ovalGui(QWidget):
                     if self.buttons_ref[i].isChecked():
                         self.my_choice_ref = self.ref_list_mod2[k]
                         self.choice_ref = self.ref_list_mod2[k]
-                        print self.buttons_ref[i].text(), " checked with (%s, %s, %s)", i, j, k
-                        print self.buttons_ref[i].text(), " checked with ", self.ref_list_mod2[k]
+#                        print self.buttons_ref[i].text(), " checked with (%s, %s, %s)", i, j, k
+#                        print self.buttons_ref[i].text(), " checked with ", self.ref_list_mod2[k]
                 j += 1
                 i += 1
             k += 1
@@ -576,7 +576,7 @@ class ovalGui(QWidget):
 
         self.getPublish.transmit_rel = to_transmit[0][0]
         self.getPublish.transmit_ref = to_transmit[1][0]
-        print self.getPublish.transmit_rel
+#        print self.getPublish.transmit_rel
         
         if ( to_transmit[0][1] == "" ): # release globaltag empty
             BoiteMessage = QMessageBox()
@@ -596,9 +596,9 @@ class ovalGui(QWidget):
                 self.getPublish.test_ref.setText('test ref : ' + self.getPublish.transmit_ref[6:])
                 
                 (tag_startup, data_version) = to_transmit[0][1].split('-')
-                print "tag_startup : ",tag_startup
-                print "data_version : ", data_version
-                print self.gccs
+#                print "tag_startup : ",tag_startup
+#                print "data_version : ", data_version
+#                print self.gccs
                 if self.gccs == 'Fast':
                     tag_startup = tag_startup[:-8]
                 if self.gccs == 'PU':
@@ -729,7 +729,7 @@ class ovalGui(QWidget):
 
     def checkAllNone1Clicked(self):
         if self.checkAllNone1.isChecked():
-            print "All"
+#            print "All"
             self.check31.setChecked(True)
             self.check32.setChecked(True)
             self.check33.setChecked(True)
@@ -742,7 +742,7 @@ class ovalGui(QWidget):
 
     def checkAllNone2Clicked(self):
         if self.checkAllNone2.isChecked():
-            print "None"
+#            print "None"
             self.check31.setChecked(False)
             self.check32.setChecked(False)
             self.check33.setChecked(False)
