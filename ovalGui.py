@@ -107,24 +107,7 @@ class ovalGui(QWidget):
         vboxAllNone.addWidget(self.checkAllNone2)
         vboxAllNone.addStretch(1)
         self.QGBoxAllNone.setLayout(vboxAllNone)
-        
-		# creation du grpe store/force
-        self.QGBox4 = QGroupBox("batch/interactif")
-        self.QGBox4.setMaximumHeight(150)
-        self.QGBox4.setMinimumHeight(150)
-        self.QGBox4.setMaximumWidth(100)		
-#        self.radio41 = QRadioButton("batch") # par defaut
-#        self.radio41.setEnabled(False) # non active, always interative
-#        self.radio42 = QRadioButton("interactif")
-#        self.radio42.setChecked(True)
-#        self.connect(self.radio41, SIGNAL("clicked()"), self.radio41Clicked)
-#        self.connect(self.radio42, SIGNAL("clicked()"), self.radio42Clicked)
-        vbox4 = QVBoxLayout()
-#        vbox4.addWidget(self.radio41)
-#        vbox4.addWidget(self.radio42)
-        vbox4.addStretch(1)
-        self.QGBox4.setLayout(vbox4)
-        
+                
 		# creation du grpe choix job
         self.QGBox5 = QGroupBox("Choix job")
         self.QGBox5.setMaximumHeight(150)
@@ -170,7 +153,7 @@ class ovalGui(QWidget):
 
         #Layout intermédiaire : création et peuplement des gpes radios
         self.layoutH_radio = QHBoxLayout()
-        self.layoutH_radio.addWidget(self.QGBox4)
+#        self.layoutH_radio.addWidget(self.QGBox4)
         self.layoutH_radio.addWidget(self.QGBox0)
         self.layoutH_radio.addWidget(self.QGBox1)
         self.layoutH_radio.addWidget(self.QGBox31)
@@ -261,13 +244,9 @@ class ovalGui(QWidget):
             BoiteMessage.setWindowTitle("WARNING !")
             BoiteMessage.exec_()
         else:
-#            print "Validation/RecoEgamma/test OK"
             # step 2 : create the OvalFile for the calcul (Full, Fast, PU) choice
         
             # choix interaction
-#            if self.radio41.isChecked():
-#                self.choix_interaction = './electronBsub ' + self.choix_job + ' /afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
-#            if self.radio42.isChecked():
             self.choix_interaction = '/afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
         
             get_choix_calcul(self)        
@@ -625,19 +604,7 @@ class ovalGui(QWidget):
             self.QGBox32.setVisible(True)
             self.choix_calcul = 'Fast'
         QtCore.QCoreApplication.processEvents()
-                
-#    def radio41Clicked(self):
-#        if self.radio41.isChecked():
-#            self.QGBox5.setEnabled(True)
-#            self.QGBox5.setVisible(True)
-#        QtCore.QCoreApplication.processEvents()
-
-#    def radio42Clicked(self):
-#        if self.radio42.isChecked():
-#            self.QGBox5.setEnabled(False)
-#            self.QGBox5.setVisible(False)
-#        QtCore.QCoreApplication.processEvents()
-        
+                        
     def radio51Clicked(self):
         if self.radio51.isChecked():
             self.choix_job = '8nh'
