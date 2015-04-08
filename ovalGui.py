@@ -113,15 +113,15 @@ class ovalGui(QWidget):
         self.QGBox4.setMaximumHeight(150)
         self.QGBox4.setMinimumHeight(150)
         self.QGBox4.setMaximumWidth(100)		
-        self.radio41 = QRadioButton("batch") # par defaut
-        self.radio41.setEnabled(False) # non active, always interative
-        self.radio42 = QRadioButton("interactif")
-        self.radio42.setChecked(True)
-        self.connect(self.radio41, SIGNAL("clicked()"), self.radio41Clicked)
-        self.connect(self.radio42, SIGNAL("clicked()"), self.radio42Clicked)
+#        self.radio41 = QRadioButton("batch") # par defaut
+#        self.radio41.setEnabled(False) # non active, always interative
+#        self.radio42 = QRadioButton("interactif")
+#        self.radio42.setChecked(True)
+#        self.connect(self.radio41, SIGNAL("clicked()"), self.radio41Clicked)
+#        self.connect(self.radio42, SIGNAL("clicked()"), self.radio42Clicked)
         vbox4 = QVBoxLayout()
-        vbox4.addWidget(self.radio41)
-        vbox4.addWidget(self.radio42)
+#        vbox4.addWidget(self.radio41)
+#        vbox4.addWidget(self.radio42)
         vbox4.addStretch(1)
         self.QGBox4.setLayout(vbox4)
         
@@ -265,10 +265,10 @@ class ovalGui(QWidget):
             # step 2 : create the OvalFile for the calcul (Full, Fast, PU) choice
         
             # choix interaction
-            if self.radio41.isChecked():
-                self.choix_interaction = './electronBsub ' + self.choix_job + ' /afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
-            if self.radio42.isChecked():
-                self.choix_interaction = '/afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
+#            if self.radio41.isChecked():
+#                self.choix_interaction = './electronBsub ' + self.choix_job + ' /afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
+#            if self.radio42.isChecked():
+            self.choix_interaction = '/afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
         
             get_choix_calcul(self)        
 #            print "choix_calcul : ", self.choix_calcul
@@ -626,17 +626,17 @@ class ovalGui(QWidget):
             self.choix_calcul = 'Fast'
         QtCore.QCoreApplication.processEvents()
                 
-    def radio41Clicked(self):
-        if self.radio41.isChecked():
-            self.QGBox5.setEnabled(True)
-            self.QGBox5.setVisible(True)
-        QtCore.QCoreApplication.processEvents()
+#    def radio41Clicked(self):
+#        if self.radio41.isChecked():
+#            self.QGBox5.setEnabled(True)
+#            self.QGBox5.setVisible(True)
+#        QtCore.QCoreApplication.processEvents()
 
-    def radio42Clicked(self):
-        if self.radio42.isChecked():
-            self.QGBox5.setEnabled(False)
-            self.QGBox5.setVisible(False)
-        QtCore.QCoreApplication.processEvents()
+#    def radio42Clicked(self):
+#        if self.radio42.isChecked():
+#            self.QGBox5.setEnabled(False)
+#            self.QGBox5.setVisible(False)
+#        QtCore.QCoreApplication.processEvents()
         
     def radio51Clicked(self):
         if self.radio51.isChecked():
