@@ -21,9 +21,9 @@ class ovalGui(QWidget):
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
-        self.choix_calcul = 'Full'   # default
+        self.choix_calcul = 'gedvsgedFull'   # default
         self.choix_job = '8nh'       # default
-        self.choix_etape = 'analyze' # default
+        self.choix_etape = 'publish' # default
         self.choice_rel = ""
         self.choice_ref = ""
         self.coll_list = []
@@ -32,16 +32,16 @@ class ovalGui(QWidget):
         self.my_choice_ref = "" # for transmission data between the 2 windows
 		
 		# creation du grpe Etapes
-        self.QGBox0 = QGroupBox("Etapes")
-        self.QGBox0.setMaximumHeight(150)
-        self.QGBox0.setMaximumWidth(100)
-        self.radio04 = QRadioButton("publish")
-        self.radio04.setChecked(True)
-        self.connect(self.radio04, SIGNAL("clicked()"), self.radio04Clicked)
-        vbox0 = QVBoxLayout()
-        vbox0.addWidget(self.radio04)
-        vbox0.addStretch(1)
-        self.QGBox0.setLayout(vbox0)
+#        self.QGBox0 = QGroupBox("Etapes")
+#        self.QGBox0.setMaximumHeight(150)
+#        self.QGBox0.setMaximumWidth(100)
+#        self.radio04 = QRadioButton("publish")
+#        self.radio04.setChecked(True)
+#        self.connect(self.radio04, SIGNAL("clicked()"), self.radio04Clicked)
+#        vbox0 = QVBoxLayout()
+#        vbox0.addWidget(self.radio04)
+#        vbox0.addStretch(1)
+#        self.QGBox0.setLayout(vbox0)
 				
 		# creation du grpe Calcul
         self.QGBox1 = QGroupBox("Calcul")
@@ -153,14 +153,13 @@ class ovalGui(QWidget):
 
         #Layout intermédiaire : création et peuplement des gpes radios
         self.layoutH_radio = QHBoxLayout()
-#        self.layoutH_radio.addWidget(self.QGBox4)
-        self.layoutH_radio.addWidget(self.QGBox0)
+#        self.layoutH_radio.addWidget(self.QGBox0)
         self.layoutH_radio.addWidget(self.QGBox1)
         self.layoutH_radio.addWidget(self.QGBox31)
         self.layoutH_radio.addWidget(self.QGBox32)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addStretch(1)
-        self.layoutH_radio.addWidget(self.QGBox5)
+#        self.layoutH_radio.addWidget(self.QGBox5)
         self.layoutH_radio.addWidget(self.QGBox6)
 
 		# creation du label resumé
@@ -259,27 +258,20 @@ class ovalGui(QWidget):
             self.coll_list = get_collection_list(self)
 
             # work to execute
-            if self.radio04.isChecked():     # publish
-#                print "publish to be done"
-                if self.radio13.isChecked(): # FAST
-                    print "Fast & publish"
-                    for val_Fast in ['VsFull', 'VsFast']:
-                        for items in self.coll_list:
-                            cmd = self.choix_interaction + self.choix_calcul + val_Fast + items + '_gedGsfE'
-                            subprocess.call(cmd, shell = True)
-                else:                        # no FAST
-                    print "no Fast & publish"
+#            if self.radio04.isChecked():     # publish
+            if self.radio13.isChecked(): # FAST
+                print "Fast & publish"
+                for val_Fast in ['VsFull', 'VsFast']:
                     for items in self.coll_list:
-                        cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
+                        cmd = self.choix_interaction + self.choix_calcul + val_Fast + items + '_gedGsfE'
                         subprocess.call(cmd, shell = True)
-            
-                # rm dd*.olog dqm*.root 
-                clean_files(self)
-            else:
-                print "no publish : general case"
+            else:                        # no FAST
+                print "no Fast & publish"
                 for items in self.coll_list:
                     cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
                     subprocess.call(cmd, shell = True)
+            
+            clean_files(self)
 
         print "fin"
 
@@ -578,11 +570,11 @@ class ovalGui(QWidget):
         QtCore.QCoreApplication.processEvents()
         print "recup2 = ", x # to be removed
 
-    def radio04Clicked(self):
-        if self.radio04.isChecked():
-            self.choix_etape = 'publish' # default
-            self.choix_calcul = 'gedvsgedFull'
-        QtCore.QCoreApplication.processEvents()
+#    def radio04Clicked(self):
+#        if self.radio04.isChecked():
+#            self.choix_etape = 'publish' # default
+#            self.choix_calcul = 'gedvsgedFull'
+#        QtCore.QCoreApplication.processEvents()
         
     def radio11Clicked(self):
         if self.radio11.isChecked():
