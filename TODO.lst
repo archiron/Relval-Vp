@@ -2,10 +2,12 @@ voir si pour la creation des repertoires GED PU25/50 et FAST on ne peut pas les 
 verifier si on fait bien PU25(50) avec PU25(50), et idem pour les datasets
 voir comment telecharger aussi les FullSim pour les FastvsFull
 remettre les nvelles valeurs des releases/dataset apres le Choice
-pbm du Pt1000 avant et apres la PR8202
+pbm du Pt1000 avant et apres la PR8202 (voir avec le electronCompare.C (dans Validation\RecoEgamma\test ) et le electronCompare.py (dans DQMOffline\EGamma\scripts )
 pbm du FastvsFull
-local vs non local
-PU : dans l'criture du publish, remetre PU50ns_ ou PU25ns_ (et pmx)
+local vs non local (voir avec le electronCompare.py (dans DQMOffline\EGamma\scripts )
+
+PU : dans l'ecriture du publish, remettre PU50ns_ ou PU25ns_ (et pmx)
+nettoyer groupe Etapes et groupe Store/force et groupe interactif/batch
 
 <target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} -t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" ${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup'>
 <target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} -t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" ${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/PileUp50ns_${DD_SAMPLE}_gedGsfE_Startup'>

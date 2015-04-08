@@ -35,22 +35,22 @@ class ovalGui(QWidget):
         self.QGBox0 = QGroupBox("Etapes")
         self.QGBox0.setMaximumHeight(150)
         self.QGBox0.setMaximumWidth(100)
-        self.radio01 = QRadioButton("analyze") # Liste par defaut
-        self.radio02 = QRadioButton("finalize")
-        self.radio03 = QRadioButton("store")
+#        self.radio01 = QRadioButton("analyze") # Liste par defaut
+#        self.radio02 = QRadioButton("finalize")
+#        self.radio03 = QRadioButton("store")
         self.radio04 = QRadioButton("publish")
-        self.radio01.setEnabled(False) # non active
-        self.radio02.setEnabled(False) # non active
-        self.radio03.setEnabled(False) # non active
+#        self.radio01.setEnabled(False) # non active
+#        self.radio02.setEnabled(False) # non active
+#        self.radio03.setEnabled(False) # non active
         self.radio04.setChecked(True)
-        self.connect(self.radio01, SIGNAL("clicked()"), self.radio01Clicked) 
-        self.connect(self.radio02, SIGNAL("clicked()"), self.radio02Clicked) 
-        self.connect(self.radio03, SIGNAL("clicked()"), self.radio03Clicked) 
+#        self.connect(self.radio01, SIGNAL("clicked()"), self.radio01Clicked) 
+#        self.connect(self.radio02, SIGNAL("clicked()"), self.radio02Clicked) 
+#        self.connect(self.radio03, SIGNAL("clicked()"), self.radio03Clicked) 
         self.connect(self.radio04, SIGNAL("clicked()"), self.radio04Clicked)
         vbox0 = QVBoxLayout()
-        vbox0.addWidget(self.radio01)
-        vbox0.addWidget(self.radio02)
-        vbox0.addWidget(self.radio03)
+#        vbox0.addWidget(self.radio01)
+#        vbox0.addWidget(self.radio02)
+#        vbox0.addWidget(self.radio03)
         vbox0.addWidget(self.radio04)
         vbox0.addStretch(1)
         self.QGBox0.setLayout(vbox0)
@@ -634,35 +634,29 @@ class ovalGui(QWidget):
         QtCore.QCoreApplication.processEvents()
         print "recup2 = ", x # to be removed
 
-    def radio01Clicked(self):
-        if self.radio01.isChecked():
-            self.QGBox2.setEnabled(False)
-            self.QGBox2.setVisible(False)
-#            self.label62.setVisible(False) # new
-#            self.lineedit3.setVisible(False) # new
-            self.choix_etape = 'analyze' # default
-            self.choix_calcul = 'Full'
-        QtCore.QCoreApplication.processEvents()
+#    def radio01Clicked(self):
+#        if self.radio01.isChecked():
+#            self.QGBox2.setEnabled(False)
+#            self.QGBox2.setVisible(False)
+#            self.choix_etape = 'analyze' # default
+#            self.choix_calcul = 'Full'
+#        QtCore.QCoreApplication.processEvents()
 
-    def radio02Clicked(self):
-        if self.radio02.isChecked():
-            self.QGBox2.setEnabled(False)
-            self.QGBox2.setVisible(False)
-#            self.label62.setVisible(False) # new
-#            self.lineedit3.setVisible(False) # new
-            self.choix_etape = 'finalize' # default
-            self.choix_calcul = 'Full'
-        QtCore.QCoreApplication.processEvents()
+#    def radio02Clicked(self):
+#        if self.radio02.isChecked():
+#            self.QGBox2.setEnabled(False)
+#            self.QGBox2.setVisible(False)
+#            self.choix_etape = 'finalize' # default
+#            self.choix_calcul = 'Full'
+#        QtCore.QCoreApplication.processEvents()
         
-    def radio03Clicked(self):
-        if self.radio03.isChecked():
-            self.QGBox2.setEnabled(True)
-            self.QGBox2.setVisible(True)
-#            self.label62.setVisible(False) # new
-#            self.lineedit3.setVisible(False) # new
-            self.choix_etape = 'store' # default
-            self.choix_calcul = 'Full'
-        QtCore.QCoreApplication.processEvents()
+#    def radio03Clicked(self):
+#        if self.radio03.isChecked():
+#            self.QGBox2.setEnabled(True)
+#            self.QGBox2.setVisible(True)
+#            self.choix_etape = 'store' # default
+#        QtCore.QCoreApplication.processEvents()
+#            self.choix_calcul = 'Full'
 
     def radio04Clicked(self):
         if self.radio04.isChecked():
