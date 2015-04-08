@@ -21,28 +21,14 @@ class ovalGui(QWidget):
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
-        self.choix_calcul = 'gedvsgedFull'   # default
-        self.choix_job = '8nh'       # default
-        self.choix_etape = 'publish' # default
+        self.choix_calcul = 'Full'   # default
         self.choice_rel = ""
         self.choice_ref = ""
         self.coll_list = []
         self.files_list = []
         self.my_choice_rel = "" # for transmission data between the 2 windows
         self.my_choice_ref = "" # for transmission data between the 2 windows
-		
-		# creation du grpe Etapes
-#        self.QGBox0 = QGroupBox("Etapes")
-#        self.QGBox0.setMaximumHeight(150)
-#        self.QGBox0.setMaximumWidth(100)
-#        self.radio04 = QRadioButton("publish")
-#        self.radio04.setChecked(True)
-#        self.connect(self.radio04, SIGNAL("clicked()"), self.radio04Clicked)
-#        vbox0 = QVBoxLayout()
-#        vbox0.addWidget(self.radio04)
-#        vbox0.addStretch(1)
-#        self.QGBox0.setLayout(vbox0)
-				
+						
 		# creation du grpe Calcul
         self.QGBox1 = QGroupBox("Calcul")
         self.QGBox1.setMaximumHeight(150)
@@ -107,24 +93,7 @@ class ovalGui(QWidget):
         vboxAllNone.addWidget(self.checkAllNone2)
         vboxAllNone.addStretch(1)
         self.QGBoxAllNone.setLayout(vboxAllNone)
-                
-		# creation du grpe choix job
-        self.QGBox5 = QGroupBox("Choix job")
-        self.QGBox5.setMaximumHeight(150)
-        self.QGBox5.setMinimumHeight(150)
-        self.QGBox5.setMaximumWidth(100)		
-        self.radio51 = QRadioButton("8nh") # par defaut
-        self.radio52 = QRadioButton("1nh")
-        self.radio51.setChecked(True)
-        self.connect(self.radio51, SIGNAL("clicked()"), self.radio51Clicked)
-        self.connect(self.radio52, SIGNAL("clicked()"), self.radio52Clicked)
-        vbox5 = QVBoxLayout()
-        vbox5.addWidget(self.radio51)
-        vbox5.addWidget(self.radio52)
-        vbox5.addStretch(1)
-        self.QGBox5.setLayout(vbox5)
-        self.QGBox5.setVisible(False)
-				
+                				
 		# creation du texEdit pour release/reference
         self.QGBox6 = QGroupBox("release")
         self.lineedit1 = QLineEdit(self)
@@ -153,13 +122,11 @@ class ovalGui(QWidget):
 
         #Layout intermédiaire : création et peuplement des gpes radios
         self.layoutH_radio = QHBoxLayout()
-#        self.layoutH_radio.addWidget(self.QGBox0)
         self.layoutH_radio.addWidget(self.QGBox1)
         self.layoutH_radio.addWidget(self.QGBox31)
         self.layoutH_radio.addWidget(self.QGBox32)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addStretch(1)
-#        self.layoutH_radio.addWidget(self.QGBox5)
         self.layoutH_radio.addWidget(self.QGBox6)
 
 		# creation du label resumé
@@ -246,7 +213,7 @@ class ovalGui(QWidget):
             # step 2 : create the OvalFile for the calcul (Full, Fast, PU) choice
         
             # choix interaction
-            self.choix_interaction = '/afs/cern.ch/cms/utils/oval run ' + self.choix_etape + '.Val'
+            self.choix_interaction = '/afs/cern.ch/cms/utils/oval run publish.Val'
         
             get_choix_calcul(self)        
 #            print "choix_calcul : ", self.choix_calcul
@@ -569,12 +536,6 @@ class ovalGui(QWidget):
         self.labelResume.setText(tmp)
         QtCore.QCoreApplication.processEvents()
         print "recup2 = ", x # to be removed
-
-#    def radio04Clicked(self):
-#        if self.radio04.isChecked():
-#            self.choix_etape = 'publish' # default
-#            self.choix_calcul = 'gedvsgedFull'
-#        QtCore.QCoreApplication.processEvents()
         
     def radio11Clicked(self):
         if self.radio11.isChecked():
@@ -597,16 +558,6 @@ class ovalGui(QWidget):
             self.choix_calcul = 'Fast'
         QtCore.QCoreApplication.processEvents()
                         
-    def radio51Clicked(self):
-        if self.radio51.isChecked():
-            self.choix_job = '8nh'
-        QtCore.QCoreApplication.processEvents()
-
-    def radio52Clicked(self):
-        if self.radio52.isChecked():
-            self.choix_job = '1nh'
-        QtCore.QCoreApplication.processEvents()
-
     def checkAllNone1Clicked(self):
         if self.checkAllNone1.isChecked():
 #            print "All"

@@ -254,8 +254,7 @@ def get_collection_list_search(self):
 def get_choix_calcul(self):
     if self.radio11.isChecked(): # FULL
         self.choix_calcul = 'Full'
-        if self.radio04.isChecked():
-            self.choix_calcul = 'gedvsgedFull'
+        self.choix_calcul = 'gedvsgedFull' # because radio04 is always checked
     if self.radio12.isChecked(): # PU
         self.choix_calcul = 'PileUp'
     if self.radio13.isChecked(): # FAST
@@ -651,6 +650,7 @@ def clean_files_list(t1, t2):
 
 def write_OvalFile(self, t_rel_default_text, to_transmit):
     import os,sys,subprocess,glob,re,shutil
+    
     (tag_startup, data_version) = to_transmit.split('-')
     if self.gccs == 'Fast':
         tag_startup = tag_startup[:-8]
@@ -730,6 +730,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
 #        print "coll_list : ", items
 #    for items in self.my_choice_rel[2]:
 #        print "my_choice_rel : ", items
+###### to be removed
         
     dataset_resume = compare_datasets(self.coll_list, self.my_choice_rel[2])
 #    print dataset_resume
@@ -745,7 +746,6 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
 #        print "--", items, len(items)
         for it in items:
             print "--", it
-###### to be removed
 
     if self.gccs == 'Full': # FULLSIM
         tmp = '  <environment name="ValFullgedvsged">\n\n'
@@ -757,6 +757,8 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         for items in self.files_list:
             tmp = ''
             tmp += '      <environment name="ValgedvsgedFull' + items[0] + '_gedGsfE">\n\n'
+            if ( re.search('Pt1000', items[1]) ):
+                print 'Pt1000\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n'
@@ -765,7 +767,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
-        tmp += '  </environment>\n\n' 
+        tmp = '  </environment>\n\n' 
         tmp += '</environment>\n'
         file.write(tmp)
     elif self.gccs == 'PU': # PU
@@ -830,7 +832,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
-        tmp += '  </environment>\n\n' 
+        tmp = '  </environment>\n\n' 
         tmp += '</environment>\n'
         file.write(tmp)
         
