@@ -62,22 +62,22 @@ class ovalGui(QWidget):
         self.QGBox1.setLayout(vbox1)
         
 		# creation du grpe store/force
-        self.QGBox2 = QGroupBox("store/force")
-        self.QGBox2.setMaximumHeight(150)
-        self.QGBox2.setMinimumHeight(150)
-        self.QGBox2.setMaximumWidth(100)		
-        self.radio21 = QRadioButton("store") # par defaut
-        self.radio22 = QRadioButton("force")
-        self.radio21.setChecked(True)
-        self.connect(self.radio21, SIGNAL("clicked()"), self.radio21Clicked)
-        self.connect(self.radio22, SIGNAL("clicked()"), self.radio22Clicked)
-        vbox2 = QVBoxLayout()
-        vbox2.addWidget(self.radio21)
-        vbox2.addWidget(self.radio22)
-        vbox2.addStretch(1)
-        self.QGBox2.setLayout(vbox2)
-        self.QGBox2.setEnabled(False)
-        self.QGBox2.setVisible(False)
+#        self.QGBox2 = QGroupBox("store/force")
+#        self.QGBox2.setMaximumHeight(150)
+#        self.QGBox2.setMinimumHeight(150)
+#        self.QGBox2.setMaximumWidth(100)		
+#        self.radio21 = QRadioButton("store") # par defaut
+#        self.radio22 = QRadioButton("force")
+#        self.radio21.setChecked(True)
+#        self.connect(self.radio21, SIGNAL("clicked()"), self.radio21Clicked)
+#        self.connect(self.radio22, SIGNAL("clicked()"), self.radio22Clicked)
+#        vbox2 = QVBoxLayout()
+#        vbox2.addWidget(self.radio21)
+#        vbox2.addWidget(self.radio22)
+#        vbox2.addStretch(1)
+#        self.QGBox2.setLayout(vbox2)
+#        self.QGBox2.setEnabled(False)
+#        self.QGBox2.setVisible(False)
 				
 		# creation du grpe liste des collections
         self.QGBox31 = QGroupBox("Data Sets")
@@ -196,7 +196,7 @@ class ovalGui(QWidget):
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addStretch(1)
         self.layoutH_radio.addWidget(self.QGBox5)
-        self.layoutH_radio.addWidget(self.QGBox2)
+#        self.layoutH_radio.addWidget(self.QGBox2)
         self.layoutH_radio.addWidget(self.QGBox6)
 
 		# creation du label resumé
@@ -620,8 +620,8 @@ class ovalGui(QWidget):
 
     def radio04Clicked(self):
         if self.radio04.isChecked():
-            self.QGBox2.setEnabled(False)
-            self.QGBox2.setVisible(False)
+#            self.QGBox2.setEnabled(False)
+#            self.QGBox2.setVisible(False)
             self.choix_etape = 'publish' # default
             self.choix_calcul = 'gedvsgedFull'
         QtCore.QCoreApplication.processEvents()
@@ -647,15 +647,15 @@ class ovalGui(QWidget):
             self.choix_calcul = 'Fast'
         QtCore.QCoreApplication.processEvents()
         
-    def radio21Clicked(self):
-        if self.radio21.isChecked():
-            self.choix_etape = 'store'
-        QtCore.QCoreApplication.processEvents()
+#    def radio21Clicked(self):
+#        if self.radio21.isChecked():
+#            self.choix_etape = 'store'
+#        QtCore.QCoreApplication.processEvents()
 
-    def radio22Clicked(self):
-        if self.radio22.isChecked():
-            self.choix_etape = 'force'
-        QtCore.QCoreApplication.processEvents()
+#    def radio22Clicked(self):
+#        if self.radio22.isChecked():
+#            self.choix_etape = 'force'
+#        QtCore.QCoreApplication.processEvents()
         
     def radio41Clicked(self):
         if self.radio41.isChecked():
