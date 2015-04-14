@@ -219,8 +219,6 @@ class ovalGui(QWidget):
         
             # creation des repertoires
             self.folder_name = cmd_folder_creation(self.choix_calcul)
-            for it in self.folder_name:
-                print it
         
             # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
             self.coll_list = get_collection_list(self)

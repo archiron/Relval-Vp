@@ -186,41 +186,32 @@ def cmd_folder_creation(choix_calcul):
         if not os.path.exists("GED"):
             print "Creation of GED folder"
             os.makedirs("GED")
-            tmp = ['GED']
+            tmp = 'GED'
         else:
             print "GED folder already created"
             newDirName = 'GED_' + newDirName
             os.makedirs(newDirName)            
-            tmp = [newDirName]
+            tmp = newDirName
     elif ( choix_calcul == 'Fast' ):
         if not os.path.exists("FAST"):
             print "Creation of FAST folder"
             os.makedirs("FAST")
-            tmp = ['FAST']
+            tmp = 'FAST'
         else:
             print "FAST folder already created"
             newDirName = 'FAST_' + newDirName
             os.makedirs(newDirName)            
-            tmp = [newDirName]
+            tmp = newDirName
     elif ( choix_calcul == 'PileUp' ):
-        if not os.path.exists("PU25"):
-            print "Creation of PU25 folder"
-            os.makedirs("PU25")
-            tmp = ['PU25']
+        if not os.path.exists("PU"):
+            print "Creation of PU folder"
+            os.makedirs("PU")
+            tmp = 'PU'
         else:
-            print "PU25 folder already created"
-            newDirName25 = 'PU25_' + newDirName
-            os.makedirs(newDirName25)            
-            tmp = [newDirName25]
-        if not os.path.exists("PU50"):
-            print "Creation of PU50 folder"
-            os.makedirs("PU50")
-            tmp.append('PU50')
-        else:
-            print "PU50 folder already created"
-            newDirName50 = 'PU50_' + newDirName
-            os.makedirs(newDirName50) 
-            tmp.append(newDirName50)
+            print "PU folder already created"
+            newDirName = 'PU_' + newDirName
+            os.makedirs(newDirName)
+            tmp = newDirName
         
     return tmp
     
@@ -291,15 +282,16 @@ def get_choix_calcul_search(self):
     
 def clean_files(self):
     import os,sys,subprocess,glob
-    print self.folder_name, self.choix_calcul
-#    print glob.glob('dd*.olog')
-#    print glob.glob('dqm*.root')
+#    print self.folder_name
     for items in glob.glob('dd*.olog'): 
         os.remove(items)
     for items in glob.glob('dqm*.root'): 
         os.remove(items)
-#    print glob.glob('dd*.olog')
-#    print glob.glob('dqm*.root')
+    for items in glob.glob('*.olog'): 
+        shutil.move(items, self.folder_name)
+    for items in glob.glob('*.root'): 
+        shutil.move(items, self.folder_name)
+    shutil.copy('OvalFile', self.folder_name)
     return
     
 def copy_files(self):
