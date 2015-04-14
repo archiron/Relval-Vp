@@ -1,5 +1,6 @@
 voir si on a tjs la bonne valeur pour choix calcul (a priori oui)
 
+Dans release reference il manque le _std
 voir si pour la creation des repertoires GED PU25/50 et FAST on ne peut pas les mettre par défaut et changer le texte (textedit)
 verifier si on fait bien PU25(50) avec PU25(50), et idem pour les datasets
 voir comment telecharger aussi les FullSim pour les FastvsFull
@@ -14,7 +15,6 @@ PU : dans l'ecriture du publish, remettre PU50ns_ ou PU25ns_ (et pmx)
 <target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} -t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" ${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/PileUp50ns_${DD_SAMPLE}_gedGsfE_Startup'>
 <target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${TEST_NEW} -b ${TEST_REF} -t "${TEST_NEW} / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / ${DD_SAMPLE} / ${DD_COND_REF}" ${STORE_DIR}/${TEST_HISTOS_FILE} ${STORE_REF}/${TEST_HISTOS_FILE} ${WEB_DIR}/${TEST_NEW}/vs${TEST_REF}/Fast_${DD_SAMPLE}_Startup'>
 <target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${TEST_NEW} -b ${TEST_NEW} -t "Fast vs Full / ${DD_SAMPLE} / ${DD_COND}" ${STORE_DIR}/${RED_FILE} ${STORE_DIR}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFull/${DD_SAMPLE}_Startup'>
-
 
 mettre les langues sous forme de fichier txt.
 

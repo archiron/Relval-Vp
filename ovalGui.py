@@ -94,7 +94,7 @@ class ovalGui(QWidget):
         vboxAllNone.addStretch(1)
         self.QGBoxAllNone.setLayout(vboxAllNone)
                 				
-		# creation du texEdit pour release/reference
+		# creation des texEdit pour release/reference
         self.QGBox6 = QGroupBox("release")
         self.lineedit1 = QLineEdit(self)
         self.lineedit1.setText(self.cmsenv.getCMSSWBASECMSSWVERSION()) # default
@@ -129,21 +129,6 @@ class ovalGui(QWidget):
         self.layoutH_radio.addStretch(1)
         self.layoutH_radio.addWidget(self.QGBox6)
 
-		# creation du label resumé
-        self.labelResume = QLabel(self.trUtf8(self.texte), self)
-		# creation du grpe Folders paths
-        self.QGBox8 = QGroupBox("Folders paths")
-        vbox8 = QVBoxLayout()
-        vbox8.addWidget(self.labelResume)
-        self.QGBox8.setLayout(vbox8)
-
-        # Création du bouton quitter, ayant pour parent la "fenetre"
-        self.boutonQ = QPushButton(self.trUtf8("Quitter ?"),self)
-        self.boutonQ.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
-        self.boutonQ.setIcon(QIcon("../images/smile.png"))
-        self.connect(self.boutonQ, SIGNAL("clicked()"), qApp, SLOT("quit()"))
-        
-
         # Création du bouton Get choice !, ayant pour parent la "fenetre"
         self.bouton3 = QPushButton(self.trUtf8("Get choice !"),self)
         self.bouton3.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
@@ -169,6 +154,12 @@ class ovalGui(QWidget):
         self.bouton4.setIcon(QIcon("../images/smile.png"))
         self.connect(self.bouton4, SIGNAL("clicked()"), self.liste3) 
 
+        # Création du bouton quitter, ayant pour parent la "fenetre"
+        self.boutonQ = QPushButton(self.trUtf8("Quitter ?"),self)
+        self.boutonQ.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
+        self.boutonQ.setIcon(QIcon("../images/smile.png"))
+        self.connect(self.boutonQ, SIGNAL("clicked()"), qApp, SLOT("quit()"))
+        
         #Layout intermédiaire : boutons
         self.layoutH_boutons = QHBoxLayout()
         self.layoutH_boutons.addWidget(self.bouton3)
@@ -177,6 +168,14 @@ class ovalGui(QWidget):
         self.layoutH_boutons.addWidget(self.bouton4)
         self.layoutH_boutons.addStretch(1)
         self.layoutH_boutons.addWidget(self.boutonQ)
+
+		# creation du label resumé
+        self.labelResume = QLabel(self.trUtf8(self.texte), self)
+		# creation du grpe Folders paths
+        self.QGBox8 = QGroupBox("Folders paths")
+        vbox8 = QVBoxLayout()
+        vbox8.addWidget(self.labelResume)
+        self.QGBox8.setLayout(vbox8)
 
         #Layout intermédiaire : ComboBox + labelcombo
         self.layoutV_combobox = QVBoxLayout()
@@ -219,7 +218,9 @@ class ovalGui(QWidget):
 #            print "choix_calcul : ", self.choix_calcul
         
             # creation des repertoires
-            cmd_folder_creation(self.choix_calcul)
+            self.folder_name = cmd_folder_creation(self.choix_calcul)
+            for it in self.folder_name:
+                print it
         
             # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
             self.coll_list = get_collection_list(self)

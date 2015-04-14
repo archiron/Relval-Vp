@@ -178,32 +178,51 @@ def cmd_test():
 #    return toto, titi
 
 def cmd_folder_creation(choix_calcul):
-    import subprocess, os
+    import subprocess, os, datetime
+    now = datetime.datetime.now()
+    newDirName = now.strftime("%Y_%m_%d-%H%M")
+#    print "Making directory " + newDirName
     if ( ( choix_calcul == 'Full' ) or ( choix_calcul == 'gedvsgedFull'  )):
-        if not os.path.exists("GED1"):
+        if not os.path.exists("GED"):
             print "Creation of GED folder"
-            os.makedirs("GED1")
+            os.makedirs("GED")
+            tmp = ['GED']
         else:
             print "GED folder already created"
+            newDirName = 'GED_' + newDirName
+            os.makedirs(newDirName)            
+            tmp = [newDirName]
     elif ( choix_calcul == 'Fast' ):
-        if not os.path.exists("FAST1"):
+        if not os.path.exists("FAST"):
             print "Creation of FAST folder"
-            os.makedirs("FAST1")
+            os.makedirs("FAST")
+            tmp = ['FAST']
         else:
             print "FAST folder already created"
+            newDirName = 'FAST_' + newDirName
+            os.makedirs(newDirName)            
+            tmp = [newDirName]
     elif ( choix_calcul == 'PileUp' ):
-        if not os.path.exists("PU251"):
-            print "Creation of PU251 folder"
-            os.makedirs("PU251")
+        if not os.path.exists("PU25"):
+            print "Creation of PU25 folder"
+            os.makedirs("PU25")
+            tmp = ['PU25']
         else:
-            print "PU251 folder already created"
-        if not os.path.exists("PU501"):
-            print "Creation of PU501 folder"
-            os.makedirs("PU501")
+            print "PU25 folder already created"
+            newDirName25 = 'PU25_' + newDirName
+            os.makedirs(newDirName25)            
+            tmp = [newDirName25]
+        if not os.path.exists("PU50"):
+            print "Creation of PU50 folder"
+            os.makedirs("PU50")
+            tmp.append('PU50')
         else:
-            print "PU501 folder already created"
+            print "PU50 folder already created"
+            newDirName50 = 'PU50_' + newDirName
+            os.makedirs(newDirName50) 
+            tmp.append(newDirName50)
         
-    return 
+    return tmp
     
 def get_collection_list(self):
     import subprocess, os
@@ -272,6 +291,7 @@ def get_choix_calcul_search(self):
     
 def clean_files(self):
     import os,sys,subprocess,glob
+    print self.folder_name, self.choix_calcul
 #    print glob.glob('dd*.olog')
 #    print glob.glob('dqm*.root')
     for items in glob.glob('dd*.olog'): 
