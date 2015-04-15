@@ -180,7 +180,7 @@ def cmd_test():
 def cmd_folder_creation(choix_calcul):
     import subprocess, os, datetime
     now = datetime.datetime.now()
-    newDirName = now.strftime("%Y_%m_%d-%H%M")
+    newDirName = now.strftime("%Y_%m_%d-%H%M%S")
 #    print "Making directory " + newDirName
     if ( ( choix_calcul == 'Full' ) or ( choix_calcul == 'gedvsgedFull'  )):
         if not os.path.exists("GED"):
@@ -281,8 +281,8 @@ def get_choix_calcul_search(self):
     return get_choix_calcul
     
 def clean_files(self):
-    import os,sys,subprocess,glob
-#    print self.folder_name
+    import os,sys,subprocess,glob,shutil
+#    print 'folder : ', self.folder_name
     for items in glob.glob('dd*.olog'): 
         os.remove(items)
     for items in glob.glob('dqm*.root'): 
@@ -668,7 +668,8 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tag_startup = tag_startup[:-8]
     if self.gccs == 'PU':
         tag_startup = tag_startup[7:]
-    file = open("newfile.txt", "w+")
+#    file = open("newfile.txt", "w+") # default : overwrite the OvalFile
+    file = open("OvalFile", "w+") # default : overwrite the OvalFile
     file.write('<var name="TEST_COMMENT" value="">\n')
     tmp = '<var name="TEST_NEW" value="' + t_rel_default_text + '">\n'
     file.write(tmp) # <var name="TEST_NEW" value="7_4_0_pre9_ROOT6_dev">
@@ -769,9 +770,14 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         for items in self.files_list:
             tmp = ''
             tmp += '      <environment name="ValgedvsgedFull' + items[0] + '_gedGsfE">\n\n'
+            tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             if ( re.search('Pt1000', items[1]) ):
                 print 'Pt1000\n'
-            tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
+#                tmp += '      <var name="VAL_HISTOS" value="ElectronMcSignalHistosPt1000.txt">\n'
+#                tmp += '      <var name="VAL_ANALYZER" value="ElectronMcSignalValidatorPt1000">\n'
+#                tmp += '      <var name="VAL_POST_ANALYZER" value="ElectronMcSignalPostValidatorPt1000">\n'
+#                tmp += '      <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidationPt1000_gedGsfElectrons_cfg">\n'
+#                tmp += '      <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidationPt1000_cfg">\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '

@@ -234,9 +234,12 @@ class ovalGui(QWidget):
             else:                        # no FAST
                 print "no Fast & publish"
                 for items in self.coll_list:
+                    print items
                     cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
+                    print cmd
                     subprocess.call(cmd, shell = True)
             
+            # clean dqm*.root and dd*.olog files. Copy other .root, .olog files and OvalFile into self.folder_name
             clean_files(self)
 
         print "fin"
@@ -505,7 +508,7 @@ class ovalGui(QWidget):
                     tag_startup = tag_startup[:-8]
                 if self.gccs == 'PU':
                     tag_startup = tag_startup[7:]
-                self.getPublish.tag_startup.setText('Tag Startup : ' + tag_startup) # pbm with fastsim_ pu PU25(50)ns_ get choix calcul -> done
+                self.getPublish.tag_startup.setText('Tag Startup : ' + tag_startup) # pbm with fastsim_ pu get choix calcul -> done
                 self.getPublish.data_version.setText('Data Version : ' + data_version)
                 self.getPublish.lineEdit.setText('File to be created')
                 
