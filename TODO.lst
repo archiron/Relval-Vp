@@ -1,7 +1,6 @@
 voir si on a tjs la bonne valeur pour choix calcul (a priori oui)
 voir le texte a afficher de la page web
 finir Pt1000, QCD
-BUG dans Oval : il ne passe pas un seul data set. il faut au moins 2 dans le OvalFile
 
 Dans release reference il manque le _std
 voir si pour la creation des repertoires GED PU25/50 et FAST on ne peut pas les mettre par défaut et changer le texte (textedit)

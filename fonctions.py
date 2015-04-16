@@ -767,6 +767,17 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '    <var name="DD_COND" value="${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
+        tmp = ''
+        tmp += '    <environment name="Valdummy">\n\n'
+        tmp += '      <var name="DD_SAMPLE" value="dummy">\n\n'
+        tmp += '        <var name="RED_FILE" value="DQM_DUMMY.root">\n'
+        tmp += ' <var name="BLUE_FILE" value="DQM_DUMMY.root">\n'
+        tmp += ' <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} \n'
+        tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" \n'
+        tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+        tmp += '    </environment>\n\n'
+        file.write(tmp)
+
         for items in self.files_list:
             tmp = ''
             tmp += '      <environment name="ValgedvsgedFull' + items[0] + '_gedGsfE">\n\n'
@@ -778,9 +789,9 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
 #                tmp += '      <var name="VAL_POST_ANALYZER" value="ElectronMcSignalPostValidatorPt1000">\n'
 #                tmp += '      <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidationPt1000_gedGsfElectrons_cfg">\n'
 #                tmp += '      <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidationPt1000_cfg">\n'
-            tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
-            tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n'
-            tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
+            tmp += '        <var name="RED_FILE" value="' + items[2] + '">\n'
+            tmp += '        <var name="BLUE_FILE" value="' + items[3] + '">\n'
+            tmp += '        <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
             tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
