@@ -287,9 +287,10 @@ def clean_files(self):
         os.remove(items)
     for items in glob.glob('dqm*.root'): 
         os.remove(items)
-    for items in glob.glob('*.olog'): 
+    for items in glob.glob(self.working_dir_base + '/*.olog'): 
         shutil.move(items, self.folder_name)
     for items in glob.glob('*.root'): 
+#        shutil.copy(items, self.folder_name)
         shutil.move(items, self.folder_name)
     shutil.copy('OvalFile', self.folder_name)
     return
@@ -772,8 +773,8 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '      <var name="DD_SAMPLE" value="dummy">\n\n'
         tmp += '        <var name="RED_FILE" value="DQM_DUMMY.root">\n'
         tmp += ' <var name="BLUE_FILE" value="DQM_DUMMY.root">\n'
-        tmp += ' <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} \n'
-        tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" \n'
+        tmp += ' <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
+        tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
         tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
         tmp += '    </environment>\n\n'
         file.write(tmp)
@@ -866,5 +867,6 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         file.write(tmp)
         
     file.close()
-    
+    shutil.copy('OvalFile', self.working_dir_base) # copy OvalFile for executing jobs
+
     return True

@@ -256,8 +256,8 @@ int electronCompare()
      <<", and the "<<CMP_BLUE_NAME<<" histograms are in blue." ;*/
     web_page
      <<"<p>In all plots below"
-     <<", the "<<CMP_RED_RELEASE<<" histograms are in red"
-     <<", and the "<<CMP_BLUE_RELEASE<<" histograms are in blue." ;
+     <<", the <b><font color='red'>"<<CMP_RED_RELEASE<<"</font></b> histograms are in red"
+     <<", and the <b><font color='blue'>"<<CMP_BLUE_RELEASE<<"</font></b> histograms are in blue." ;
 /*	std::cout <<"<p>In all plots below "
      <<", the "<<CMP_RED_RELEASE<<" histograms are in red"
      <<", and the "<<CMP_BLUE_RELEASE<<" histograms are in blue." << std::endl ;*/

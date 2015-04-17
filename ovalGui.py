@@ -28,6 +28,8 @@ class ovalGui(QWidget):
         self.files_list = []
         self.my_choice_rel = "" # for transmission data between the 2 windows
         self.my_choice_ref = "" # for transmission data between the 2 windows
+        self.working_dir_base = os.getcwd()
+        self.working_dir = os.getcwd()
 						
 		# creation du grpe Calcul
         self.QGBox1 = QGroupBox("Calcul")
@@ -197,11 +199,11 @@ class ovalGui(QWidget):
         self.setLayout(self.layout_general)
 
     def liste3(self):
-        
+        import os
         # step 1 : test if arborescence is OK Validation/RecoEgamma/test
         my_folder = os.getcwd()
         f_test = 'Validation/RecoEgamma/test'
-#        print "my folder : ", my_folder
+#        print "liste3 Publish"
         if not f_test in my_folder:
 #            print "pas bon"
             BoiteMessage = QMessageBox()
@@ -223,6 +225,12 @@ class ovalGui(QWidget):
             # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
             self.coll_list = get_collection_list(self)
 
+            # TEMPORAIRE TEST REVIENT DE TOTO POUR TRAVAIL
+            self.working_dir = self.working_dir_base + str(self.lineedit1.text()[6:])
+            print "current working directory : ", os.getcwd()      # Return the current working directory
+            os.chdir(self.working_dir_base)   # Change current working directory
+            print "current working directory : ", os.getcwd()      # Return the current working directory
+
             # work to execute
 #            if self.radio04.isChecked():     # publish
             if self.radio13.isChecked(): # FAST
@@ -239,14 +247,29 @@ class ovalGui(QWidget):
                     print cmd
                     subprocess.call(cmd, shell = True)
             
+            # TEMPORAIRE TEST REPASSE DANS TOTO
+            if not os.path.exists(str(self.lineedit1.text()[6:])):
+                print "Creation of %s folder", str(self.lineedit1.text()[6:])
+                os.makedirs(str(self.lineedit1.text()[6:]))
+            print "current working directory : ", os.getcwd()      # Return the current working directory
+            os.chdir(str(self.lineedit1.text()[6:]))   # Change current working directory
+            print "current working directory : ", os.getcwd()      # Return the current working directory
+
             # clean dqm*.root and dd*.olog files. Copy other .root, .olog files and OvalFile into self.folder_name
             clean_files(self)
 
         print "fin"
 
     def liste4(self):
-#        print "liste 4"
-        # mettre la fonction liste3 du ovalGui de Projet_DQM-V2
+#        print "liste 4 Get Choice"
+        # TEMPORAIRE TEST
+        self.working_dir = self.working_dir_base + str(self.lineedit1.text()[6:])
+        if not os.path.exists(str(self.lineedit1.text()[6:])):
+            print "Creation of %s folder", str(self.lineedit1.text()[6:])
+            os.makedirs(str(self.lineedit1.text()[6:]))
+        print "current working directory : ", os.getcwd()      # Return the current working directory
+        os.chdir(str(self.lineedit1.text()[6:]))   # Change current working directory
+        print "current working directory : ", os.getcwd()      # Return the current working directory
         list_search(self)
         to_transmit = [str(self.lineedit1.text()), str(self.lineedit3.text()), self.rel_list, self.ref_list]
         self.getChoice_update(to_transmit)

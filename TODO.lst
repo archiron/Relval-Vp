@@ -5,10 +5,11 @@ finir Pt1000, QCD
 Dans release reference il manque le _std
 voir si pour la creation des repertoires GED PU25/50 et FAST on ne peut pas les mettre par défaut et changer le texte (textedit)
 verifier si on fait bien PU25(50) avec PU25(50), et idem pour les datasets
+pbm du FastvsFull
 voir comment telecharger aussi les FullSim pour les FastvsFull
 remettre les nvelles valeurs des releases/dataset apres le Choice
 pbm du Pt1000 avant et apres la PR8202 (voir avec le electronCompare.C (dans Validation\RecoEgamma\test ) et le electronCompare.py (dans DQMOffline\EGamma\scripts )
-pbm du FastvsFull
+pbm du electronCompare.py qui ne donne pas la bonne release (red and blue) dans notre cas.
 local vs non local (voir avec le electronCompare.py (dans DQMOffline\EGamma\scripts )
 
 PU : dans l'ecriture du publish, remettre PU50ns_ ou PU25ns_ (et pmx)
