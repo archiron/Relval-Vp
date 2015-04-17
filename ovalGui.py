@@ -220,56 +220,62 @@ class ovalGui(QWidget):
 #            print "choix_calcul : ", self.choix_calcul
         
             # creation des repertoires
-            self.folder_name = cmd_folder_creation(self.choix_calcul)
+            self.working_dir = self.working_dir_base + '/' + str(self.lineedit1.text()[6:])
+            print "liste 3 - base dir : ", self.working_dir_base
+            print "liste 3 - working dir : ", self.working_dir
+            if not os.path.exists(self.working_dir):
+                print "working dir does not exist - END" # going to base folder
+            else :
+                self.folder_name = cmd_folder_creation(self.choix_calcul, self.working_dir )
         
-            # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
-            self.coll_list = get_collection_list(self)
+                # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
+                self.coll_list = get_collection_list(self)
 
-            # TEMPORAIRE TEST REVIENT DE TOTO POUR TRAVAIL
-            self.working_dir = self.working_dir_base + str(self.lineedit1.text()[6:])
-            print "current working directory : ", os.getcwd()      # Return the current working directory
-            os.chdir(self.working_dir_base)   # Change current working directory
-            print "current working directory : ", os.getcwd()      # Return the current working directory
+                # TEMPORAIRE TEST REVIENT DE RELEASE FOLDER POUR TRAVAIL
+                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
+                os.chdir(self.working_dir_base)   # Change current working directory
+                print "liste 3 - going to base path"
+                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
 
-            # work to execute
-#            if self.radio04.isChecked():     # publish
-            if self.radio13.isChecked(): # FAST
-                print "Fast & publish"
-                for val_Fast in ['VsFull', 'VsFast']:
+                # work to execute
+#                if self.radio04.isChecked():     # publish
+                if self.radio13.isChecked(): # FAST
+                    print "Fast & publish"
+                    for val_Fast in ['VsFull', 'VsFast']:
+                        for items in self.coll_list:
+                            cmd = self.choix_interaction + self.choix_calcul + val_Fast + items + '_gedGsfE'
+                            subprocess.call(cmd, shell = True)
+                else:                        # no FAST
+                    print "no Fast & publish"
                     for items in self.coll_list:
-                        cmd = self.choix_interaction + self.choix_calcul + val_Fast + items + '_gedGsfE'
+                        print items
+                        cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
+                        print cmd
                         subprocess.call(cmd, shell = True)
-            else:                        # no FAST
-                print "no Fast & publish"
-                for items in self.coll_list:
-                    print items
-                    cmd = self.choix_interaction + self.choix_calcul + items + '_gedGsfE'
-                    print cmd
-                    subprocess.call(cmd, shell = True)
             
-            # TEMPORAIRE TEST REPASSE DANS TOTO
-            if not os.path.exists(str(self.lineedit1.text()[6:])):
-                print "Creation of %s folder", str(self.lineedit1.text()[6:])
-                os.makedirs(str(self.lineedit1.text()[6:]))
-            print "current working directory : ", os.getcwd()      # Return the current working directory
-            os.chdir(str(self.lineedit1.text()[6:]))   # Change current working directory
-            print "current working directory : ", os.getcwd()      # Return the current working directory
+                # TEMPORAIRE TEST REPASSE DANS RELEASE FOLDER
+                if not os.path.exists(str(self.lineedit1.text()[6:])):
+                    print "liste 3 - Creation of %s folder" % (str(self.lineedit1.text()[6:]))
+                    os.makedirs(str(self.lineedit1.text()[6:]))
+                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
+                os.chdir(str(self.lineedit1.text()[6:]))   # Change current working directory
+                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
 
-            # clean dqm*.root and dd*.olog files. Copy other .root, .olog files and OvalFile into self.folder_name
-            clean_files(self)
+                # clean dqm*.root and dd*.olog files. Copy other .root, .olog files and OvalFile into self.folder_name
+                clean_files(self)
 
         print "fin"
 
     def liste4(self):
 #        print "liste 4 Get Choice"
-        # TEMPORAIRE TEST
-        self.working_dir = self.working_dir_base + str(self.lineedit1.text()[6:])
-        if not os.path.exists(str(self.lineedit1.text()[6:])):
-            print "Creation of %s folder", str(self.lineedit1.text()[6:])
+        self.working_dir = self.working_dir_base + '/' + str(self.lineedit1.text()[6:])
+        if not os.path.exists(self.working_dir):
+            os.chdir(self.working_dir_base) # going to base folder
+            print "liste 4 - Creation of %s folder", str(self.lineedit1.text()[6:])
             os.makedirs(str(self.lineedit1.text()[6:]))
-        print "current working directory : ", os.getcwd()      # Return the current working directory
-        os.chdir(str(self.lineedit1.text()[6:]))   # Change current working directory
-        print "current working directory : ", os.getcwd()      # Return the current working directory
+        print "liste 4 - current working directory : ", os.getcwd()      # Return the current working directory, = base
+        os.chdir(self.working_dir)   # Change current working directory
+        print "liste 4 - current working directory : ", os.getcwd()      # Return the current working directory = base/str(self.lineedit1.text()[6:])
         list_search(self)
         to_transmit = [str(self.lineedit1.text()), str(self.lineedit3.text()), self.rel_list, self.ref_list]
         self.getChoice_update(to_transmit)

@@ -21,6 +21,8 @@ PU : dans l'ecriture du publish, remettre PU50ns_ ou PU25ns_ (et pmx)
 
 mettre les langues sous forme de fichier txt.
 
+
+
 resume:
 self.choix_calcul = 'Full'   # default
 

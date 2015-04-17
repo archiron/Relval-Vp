@@ -177,21 +177,28 @@ def cmd_test():
 #    print toto, titi
 #    return toto, titi
 
-def cmd_folder_creation(choix_calcul):
+def cmd_folder_creation(choix_calcul, working_dir):
     import subprocess, os, datetime
     now = datetime.datetime.now()
     newDirName = now.strftime("%Y_%m_%d-%H%M%S")
 #    print "Making directory " + newDirName
+    print "working dir : ", working_dir
+    actual_dir = os.getcwd()
+    print "cmd_folder_creation - actual dir : ", actual_dir
+    os.chdir(working_dir)
+    print "cmd_folder_creation - je suis en : ", os.getcwd()
     if ( ( choix_calcul == 'Full' ) or ( choix_calcul == 'gedvsgedFull'  )):
-        if not os.path.exists("GED"):
-            print "Creation of GED folder"
-            os.makedirs("GED")
-            tmp = 'GED'
-        else:
-            print "GED folder already created"
-            newDirName = 'GED_' + newDirName
-            os.makedirs(newDirName)            
-            tmp = newDirName
+#        m_dir = working_dir + "/GED"
+#        if not os.path.exists(m_dir):
+#            print "Creation of GED folder"
+#            os.makedirs(m_dir)
+#            tmp = m_dir # 'GED'
+#        else:
+#            print "GED folder already created"
+        newDirName = '/GED_' + newDirName
+        m_dir = working_dir + newDirName
+        os.makedirs(m_dir)            
+        tmp = m_dir
     elif ( choix_calcul == 'Fast' ):
         if not os.path.exists("FAST"):
             print "Creation of FAST folder"
@@ -212,7 +219,8 @@ def cmd_folder_creation(choix_calcul):
             newDirName = 'PU_' + newDirName
             os.makedirs(newDirName)
             tmp = newDirName
-        
+    
+    os.chdir(actual_dir)
     return tmp
     
 def get_collection_list(self):
