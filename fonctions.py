@@ -182,43 +182,21 @@ def cmd_folder_creation(choix_calcul, working_dir):
     now = datetime.datetime.now()
     newDirName = now.strftime("%Y_%m_%d-%H%M%S")
 #    print "Making directory " + newDirName
-    print "working dir : ", working_dir
+#    print "working dir : ", working_dir
     actual_dir = os.getcwd()
-    print "cmd_folder_creation - actual dir : ", actual_dir
+#    print "cmd_folder_creation - actual dir : ", actual_dir
     os.chdir(working_dir)
     print "cmd_folder_creation - je suis en : ", os.getcwd()
     if ( ( choix_calcul == 'Full' ) or ( choix_calcul == 'gedvsgedFull'  )):
-#        m_dir = working_dir + "/GED"
-#        if not os.path.exists(m_dir):
-#            print "Creation of GED folder"
-#            os.makedirs(m_dir)
-#            tmp = m_dir # 'GED'
-#        else:
-#            print "GED folder already created"
         newDirName = '/GED_' + newDirName
-        m_dir = working_dir + newDirName
-        os.makedirs(m_dir)            
-        tmp = m_dir
     elif ( choix_calcul == 'Fast' ):
-        if not os.path.exists("FAST"):
-            print "Creation of FAST folder"
-            os.makedirs("FAST")
-            tmp = 'FAST'
-        else:
-            print "FAST folder already created"
-            newDirName = 'FAST_' + newDirName
-            os.makedirs(newDirName)            
-            tmp = newDirName
+        newDirName = '/FAST_' + newDirName
     elif ( choix_calcul == 'PileUp' ):
-        if not os.path.exists("PU"):
-            print "Creation of PU folder"
-            os.makedirs("PU")
-            tmp = 'PU'
-        else:
-            print "PU folder already created"
-            newDirName = 'PU_' + newDirName
-            os.makedirs(newDirName)
-            tmp = newDirName
+        newDirName = '/PU_' + newDirName
+    
+    m_dir = working_dir + newDirName
+    os.makedirs(m_dir)
+    tmp = m_dir
     
     os.chdir(actual_dir)
     return tmp
@@ -461,8 +439,8 @@ def clean_collections(collection, gccs):
         if ( gccs == 'Full' ):
             if ( re.search('PU', items) ):
                 print " PU exist in Full", items # to be removed
-            elif ( re.search('Fast', items) ):
-                print " Fast exist in Full", items # to be removed
+#            elif ( re.search('Fast', items) ):
+#                print " Fast exist in Full", items # to be removed
             else:
                 temp.append(items)
         elif ( gccs == 'PU' ):
@@ -470,7 +448,7 @@ def clean_collections(collection, gccs):
                 print " Fast exist in PU", items # to be removed
             else:
                 temp.append(items)
-        else:
+        else: # FAST
             if ( re.search('PU', items) ):
                 print " PU exist in Fast", items # to be removed
             else:

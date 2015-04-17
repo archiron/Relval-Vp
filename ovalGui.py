@@ -221,8 +221,8 @@ class ovalGui(QWidget):
         
             # creation des repertoires
             self.working_dir = self.working_dir_base + '/' + str(self.lineedit1.text()[6:])
-            print "liste 3 - base dir : ", self.working_dir_base
-            print "liste 3 - working dir : ", self.working_dir
+#            print "liste 3 - base dir : ", self.working_dir_base
+#            print "liste 3 - working dir : ", self.working_dir
             if not os.path.exists(self.working_dir):
                 print "working dir does not exist - END" # going to base folder
             else :
@@ -232,10 +232,10 @@ class ovalGui(QWidget):
                 self.coll_list = get_collection_list(self)
 
                 # TEMPORAIRE TEST REVIENT DE RELEASE FOLDER POUR TRAVAIL
-                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
+#                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
                 os.chdir(self.working_dir_base)   # Change current working directory
-                print "liste 3 - going to base path"
-                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
+#                print "liste 3 - going to base path"
+#                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
 
                 # work to execute
 #                if self.radio04.isChecked():     # publish
@@ -257,9 +257,9 @@ class ovalGui(QWidget):
                 if not os.path.exists(str(self.lineedit1.text()[6:])):
                     print "liste 3 - Creation of %s folder" % (str(self.lineedit1.text()[6:]))
                     os.makedirs(str(self.lineedit1.text()[6:]))
-                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
+#                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
                 os.chdir(str(self.lineedit1.text()[6:]))   # Change current working directory
-                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
+#                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
 
                 # clean dqm*.root and dd*.olog files. Copy other .root, .olog files and OvalFile into self.folder_name
                 clean_files(self)
@@ -273,9 +273,9 @@ class ovalGui(QWidget):
             os.chdir(self.working_dir_base) # going to base folder
             print "liste 4 - Creation of %s folder", str(self.lineedit1.text()[6:])
             os.makedirs(str(self.lineedit1.text()[6:]))
-        print "liste 4 - current working directory : ", os.getcwd()      # Return the current working directory, = base
+#        print "liste 4 - current working directory : ", os.getcwd()      # Return the current working directory, = base
         os.chdir(self.working_dir)   # Change current working directory
-        print "liste 4 - current working directory : ", os.getcwd()      # Return the current working directory = base/str(self.lineedit1.text()[6:])
+#        print "liste 4 - current working directory : ", os.getcwd()      # Return the current working directory = base/str(self.lineedit1.text()[6:])
         list_search(self)
         to_transmit = [str(self.lineedit1.text()), str(self.lineedit3.text()), self.rel_list, self.ref_list]
         self.getChoice_update(to_transmit)
