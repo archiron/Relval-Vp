@@ -832,51 +832,51 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '</environment>\n'
         file.write(tmp)
     else : # FASTSIM
-        tmp = '  <environment name="ValFastVsFast">\n\n'
-        tmp += '    <environment name="ValFastVsFastStartup">\n\n'
+        tmp = '  <environment name="ValFastVsFast">\n\n' # environment ValFastVsFast
+        tmp += '    <environment name="ValFastVsFastStartup">\n\n' # environment ValFastVsFastStartup
         file.write(tmp)
         tmp = '      <var name="TEST_GLOBAL_TAG" value="${TAG_STARTUP}">\n'
         tmp += '      <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}*FastSim*-${DATA_VERSION}">\n\n'
         file.write(tmp)
         for items in self.files_list:
-#            print "fast : ", items
+            print "fast vs fast : ", items
             tmp = ''
-            tmp += '      <environment name="ValFastVsFast' + items[0] + '_gedGsfE">\n\n'
+            tmp += '      <environment name="ValFastVsFast' + items[0] + '_gedGsfE">\n\n' # environment DD_SAMPLE
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-#                         <target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${TEST_NEW} -b ${TEST_REF} 
             tmp += '-t "${TEST_NEW} / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / ${DD_SAMPLE} / ${DD_COND_REF}" '
-#                   -t "${TEST_NEW} / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / ${DD_SAMPLE} / ${DD_COND_REF}" 
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/vs${TEST_REF}/Fast_${DD_SAMPLE}_Startup\'>\n\n'
-#    ${STORE_DIR}/${TEST_HISTOS_FILE} ${STORE_REF}/${TEST_HISTOS_FILE} ${WEB_DIR}/${TEST_NEW}/vs${TEST_REF}/Fast_${DD_SAMPLE}_Startup'>
-            tmp += '      </environment>\n\n'
+            tmp += '      </environment>\n\n'                                             # environment DD_SAMPLE
             file.write(tmp)
+        tmp = '  </environment>\n\n'                               # environment ValFastVsFastStartup
+        tmp += ' </environment>\n\n'                               # environment ValFastVsFast
+
+        file.write(tmp)
         tmp = '  <environment name="ValFastVsFull">\n\n'
-        tmp += '    <environment name="ValFastVsFullStartup">\n\n'
+        tmp += '    <environment name="ValFastVsFullStartup">\n\n' # environment ValFastVsFullStartup
         file.write(tmp)
         tmp = '      <var name="TEST_GLOBAL_TAG" value="${TAG_STARTUP}">\n'
         tmp += '      <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
         tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
         for items in self.files_list:
-#            print "fast : ", items
+            print "fast vs full : ", items
             tmp = ''
-            tmp += '      <environment name="ValFastVsFull' + items[0] + '_gedGsfE">\n\n'
+            tmp += '      <environment name="ValFastVsFull' + items[0] + '_gedGsfE">\n\n' # environment DD_SAMPLE
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-#                         <target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${TEST_NEW} -b ${TEST_NEW} 
             tmp += '-t "Fast vs Full / ${DD_SAMPLE} / ${DD_COND}" '
- #                  -t "Fast vs Full / ${DD_SAMPLE} / ${DD_COND}" 
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFull/${DD_SAMPLE}_Startup\'>\n\n'
-#                   ${STORE_DIR}/${RED_FILE} ${STORE_DIR}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFull/${DD_SAMPLE}_Startup'>
-            tmp += '      </environment>\n\n'
+            tmp += '      </environment>\n\n'                                             # environment DD_SAMPLE
             file.write(tmp)
-        tmp = '  </environment>\n\n' 
+        tmp = '  </environment>\n\n'                               # environment ValFastVsFullStartup
+        tmp += ' </environment>\n\n'                               # environment ValFastVsFull
+        
         tmp += '</environment>\n'
         file.write(tmp)
         
