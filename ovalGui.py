@@ -9,7 +9,7 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_test, liste, cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files, cmd_fetch, cmd_relval, cmd_listeRECO, cmd_listeDQM, list_search, explode_item
-from fonctions import list_simplify, write_OvalFile, create_file_list, create_commonfile_list
+from fonctions import list_simplify, write_OvalFile, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from getChoice import *
 from getPublish import *
 		
@@ -29,7 +29,8 @@ class ovalGui(QWidget):
         self.my_choice_rel = "" # for transmission data between the 2 windows
         self.my_choice_ref = "" # for transmission data between the 2 windows
         self.working_dir_base = os.getcwd()
-        self.working_dir = os.getcwd()
+        self.working_dir_rel = os.getcwd()
+        self.working_dir_ref = os.getcwd()
 						
 		# creation du grpe Calcul
         self.QGBox1 = QGroupBox("Calcul")
@@ -217,25 +218,20 @@ class ovalGui(QWidget):
             self.choix_interaction = '/afs/cern.ch/cms/utils/oval run publish.Val'
         
             get_choix_calcul(self)        
-#            print "choix_calcul : ", self.choix_calcul
         
             # creation des repertoires
-            self.working_dir = self.working_dir_base + '/' + str(self.lineedit1.text()[6:])
-#            print "liste 3 - base dir : ", self.working_dir_base
-#            print "liste 3 - working dir : ", self.working_dir
-            if not os.path.exists(self.working_dir):
+            cmd_working_dirs_creation(self)
+            if not os.path.exists(self.working_dir_rel):
                 print "working dir does not exist - END" # going to base folder
             else :
-                self.folder_name = cmd_folder_creation(self.choix_calcul, self.working_dir )
+                self.folder_name = cmd_folder_creation(self.choix_calcul, self.working_dir_rel )
         
                 # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
                 self.coll_list = get_collection_list(self)
 
                 # TEMPORAIRE TEST REVIENT DE RELEASE FOLDER POUR TRAVAIL
 #                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
-                os.chdir(self.working_dir_base)   # Change current working directory
-#                print "liste 3 - going to base path"
-#                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
+                os.chdir(self.working_dir_base)   # Change current working directory to base directory
 
                 # work to execute
 #                if self.radio04.isChecked():     # publish
@@ -254,11 +250,12 @@ class ovalGui(QWidget):
                         subprocess.call(cmd, shell = True)
             
                 # TEMPORAIRE TEST REPASSE DANS RELEASE FOLDER
-                if not os.path.exists(str(self.lineedit1.text()[6:])):
-                    print "liste 3 - Creation of %s folder" % (str(self.lineedit1.text()[6:]))
-                    os.makedirs(str(self.lineedit1.text()[6:]))
+#                if not os.path.exists(str(self.lineedit1.text()[6:])):
+#                    print "liste 3 - Creation of %s folder" % (str(self.lineedit1.text()[6:]))
+#                    os.makedirs(str(self.lineedit1.text()[6:]))
 #                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
-                os.chdir(str(self.lineedit1.text()[6:]))   # Change current working directory
+#                os.chdir(str(self.lineedit1.text()[6:]))   # Change current working directory
+                os.chdir(self.working_dir_rel)   # Change current working directory to release directory
 #                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
 
                 # clean dqm*.root and dd*.olog files. Copy other .root, .olog files and OvalFile into self.folder_name
@@ -267,21 +264,23 @@ class ovalGui(QWidget):
         print "fin"
 
     def liste4(self):
-#        print "liste 4 Get Choice"
-        self.working_dir = self.working_dir_base + '/' + str(self.lineedit1.text()[6:])
-        if not os.path.exists(self.working_dir):
+        cmd_working_dirs_creation(self)
+        
+        if not os.path.exists(self.working_dir_rel):
             os.chdir(self.working_dir_base) # going to base folder
             print "liste 4 - Creation of %s folder", str(self.lineedit1.text()[6:])
             os.makedirs(str(self.lineedit1.text()[6:]))
 #        print "liste 4 - current working directory : ", os.getcwd()      # Return the current working directory, = base
-        os.chdir(self.working_dir)   # Change current working directory
-#        print "liste 4 - current working directory : ", os.getcwd()      # Return the current working directory = base/str(self.lineedit1.text()[6:])
+        os.chdir(self.working_dir_rel)   # Change current working directory
+        if not os.path.exists(self.working_dir_ref):
+            print "liste 4 - Creation of %s folder", str(self.lineedit3.text()[6:])
+            os.makedirs(str(self.lineedit3.text()[6:]))
         list_search(self)
         to_transmit = [str(self.lineedit1.text()), str(self.lineedit3.text()), self.rel_list, self.ref_list]
         self.getChoice_update(to_transmit)
         
     def liste5(self):
-#        print "liste 5"
+#        print "liste 5 Get Files"
         # pour recuperer les fichiers DQM*.root
         # step 1 : si pas de release et/ou de reference : ne rien faire
         # step 2 : refaire une liste des fichiers a recuperer
@@ -307,14 +306,19 @@ class ovalGui(QWidget):
                 
                 # step 2 : done
                 option_release_rel = str(self.choice_rel[0]) 
+                actual_dir = os.getcwd() # get the actual directory
+                os.chdir(self.working_dir_rel)   # Change current working directory to release directory
                 for part_rel_3 in itl2:
                     option_regexp_rel = str( part_rel_3[1] ) 
                     cmd_fetch(option_is_from_data, option_release_rel, option_regexp_rel, option_mthreads, option_dry_run)
 
                 option_release_ref = str(self.choice_ref[0]) 
+                os.chdir(self.working_dir_ref)   # Change current working directory to release directory
                 for part_ref_3 in itf2:
                     option_regexp_ref = str( part_ref_3[1] ) 
                     cmd_fetch(option_is_from_data, option_release_ref, option_regexp_ref, option_mthreads, option_dry_run)
+
+                os.chdir(actual_dir) # back to actual directory
                 # step 3 : done
                 tmp = self.labelResume.text()
                 tmp += "<br /><strong>All files loaded.</strong>"

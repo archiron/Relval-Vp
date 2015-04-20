@@ -200,6 +200,12 @@ def cmd_folder_creation(choix_calcul, working_dir):
     
     os.chdir(actual_dir)
     return tmp
+
+def cmd_working_dirs_creation(self):
+#    print "cmd_working_dirs_creation"
+    self.working_dir_rel = self.working_dir_base + '/' + str(self.lineedit1.text()[6:])
+    self.working_dir_ref = self.working_dir_rel + '/' + str(self.lineedit3.text()[6:])
+    return
     
 def get_collection_list(self):
     import subprocess, os
@@ -275,9 +281,9 @@ def clean_files(self):
         os.remove(items)
     for items in glob.glob(self.working_dir_base + '/*.olog'): 
         shutil.move(items, self.folder_name)
-    for items in glob.glob('*.root'): 
+#    for items in glob.glob('*.root'): 
 #        shutil.copy(items, self.folder_name)
-        shutil.move(items, self.folder_name)
+#        shutil.move(items, self.folder_name)
     shutil.copy('OvalFile', self.folder_name)
     return
     
@@ -439,8 +445,8 @@ def clean_collections(collection, gccs):
         if ( gccs == 'Full' ):
             if ( re.search('PU', items) ):
                 print " PU exist in Full", items # to be removed
-#            elif ( re.search('Fast', items) ):
-#                print " Fast exist in Full", items # to be removed
+            elif ( re.search('Fast', items) ):
+                print " Fast exist in Full", items # to be removed
             else:
                 temp.append(items)
         elif ( gccs == 'PU' ):
@@ -766,18 +772,27 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         file.write(tmp)
 
         for items in self.files_list:
+            print items[1]
             tmp = ''
             tmp += '      <environment name="ValgedvsgedFull' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             if ( re.search('Pt1000', items[1]) ):
-                print 'Pt1000\n'
+                print 'OvalFile : Pt1000\n'
 #                tmp += '      <var name="VAL_HISTOS" value="ElectronMcSignalHistosPt1000.txt">\n'
 #                tmp += '      <var name="VAL_ANALYZER" value="ElectronMcSignalValidatorPt1000">\n'
 #                tmp += '      <var name="VAL_POST_ANALYZER" value="ElectronMcSignalPostValidatorPt1000">\n'
 #                tmp += '      <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidationPt1000_gedGsfElectrons_cfg">\n'
 #                tmp += '      <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidationPt1000_cfg">\n'
+            if ( re.search('QCD', items[1]) ):
+                print 'OvalFile : QcdPt80120Startup_13\n'
+                tmp += '      <var name="VAL_HISTOS" value="ElectronMcFakeHistos.txt">\n'
+                tmp += '      <var name="VAL_ANALYZER" value="ElectronMcFakeValidator">\n'
+                tmp += '      <var name="VAL_POST_ANALYZER" value="ElectronMcFakePostValidator">\n'
+                tmp += '      <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcFakeValidation_gedGsfElectrons_cfg">\n'
+                tmp += '      <var name="VAL_POST_CONFIGURATION" value="ElectronMcFakePostValidation_cfg">\n'
+                
             tmp += '        <var name="RED_FILE" value="' + items[2] + '">\n'
-            tmp += '        <var name="BLUE_FILE" value="' + items[3] + '">\n'
+            tmp += '        <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n'
             tmp += '        <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
             tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
@@ -800,7 +815,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
             tmp += '      <environment name="ValPileUp' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
-            tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n\n'
+            tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
             tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
@@ -823,7 +838,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
             tmp += '      <environment name="ValFastVsFast' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
-            tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n'
+            tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
             tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
