@@ -454,7 +454,7 @@ def clean_collections(collection, gccs):
                 print " Fast exist in PU", items # to be removed
             else:
                 temp.append(items)
-        else: # FAST
+        else: # gccs == 'FAST'
             if ( re.search('PU', items) ):
                 print " PU exist in Fast", items # to be removed
             else:
@@ -528,6 +528,7 @@ def explode_item(item):
     # splitting with __ : TTbar_13 CMSSW_7_4_0_pre8-PUpmx50ns_MCRUN2_74_V6_gs_pre7-v1
     # splitting second term with - : TTbar_13 CMSSW_7_4_0_pre8 PUpmx50ns_MCRUN2_74_V6_gs_pre7-v1
     
+#    print "explode item : ", item
     temp_item = item[22:] # DQM_V0001_R000000001__ removed
     temp_item = temp_item[:-12] # __DQMIO.root removed
     temp_item = temp_item[6:] # RelVal removed
@@ -807,18 +808,24 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         file.write(tmp)
         tmp = '    <var name="TEST_GLOBAL_TAG" value="${TAG_STARTUP}">\n'
         tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
-        tmp += '    <var name="DD_COND" value="PU50ns_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
+#        tmp += '    <var name="DD_COND" value="PU_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
         for items in self.files_list:
             print items[0]
+            print items[2]
+            it_tmp = explode_item(items[2])
+            prefix = it_tmp[2][:6]
+            print "COUCOU" , prefix
             tmp = ''
+            tmp += '    <var name="DD_COND" value="' + prefix + '_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
+            tmp += '    <var name="DD_COND_REF" value="' + prefix + '_' + tag_startup + '-' + data_version + '">\n\n'
             tmp += '      <environment name="ValPileUp' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
             tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
-            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/' + prefix + '_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
         tmp = '  </environment>\n\n' 
@@ -840,8 +847,11 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-            tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
-            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+#                         <target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${TEST_NEW} -b ${TEST_REF} 
+            tmp += '-t "${TEST_NEW} / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / ${DD_SAMPLE} / ${DD_COND_REF}" '
+#                   -t "${TEST_NEW} / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / ${DD_SAMPLE} / ${DD_COND_REF}" 
+            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/vs${TEST_REF}/Fast_${DD_SAMPLE}_Startup\'>\n\n'
+#    ${STORE_DIR}/${TEST_HISTOS_FILE} ${STORE_REF}/${TEST_HISTOS_FILE} ${WEB_DIR}/${TEST_NEW}/vs${TEST_REF}/Fast_${DD_SAMPLE}_Startup'>
             tmp += '      </environment>\n\n'
             file.write(tmp)
         tmp = '  <environment name="ValFastVsFull">\n\n'
@@ -857,10 +867,13 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
             tmp += '      <environment name="ValFastVsFull' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
-            tmp += '      <var name="BLUE_FILE" value="' + items[3] + '">\n'
+            tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-            tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
-            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+#                         <target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${TEST_NEW} -b ${TEST_NEW} 
+            tmp += '-t "Fast vs Full / ${DD_SAMPLE} / ${DD_COND}" '
+ #                  -t "Fast vs Full / ${DD_SAMPLE} / ${DD_COND}" 
+            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFull/${DD_SAMPLE}_Startup\'>\n\n'
+#                   ${STORE_DIR}/${RED_FILE} ${STORE_DIR}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFull/${DD_SAMPLE}_Startup'>
             tmp += '      </environment>\n\n'
             file.write(tmp)
         tmp = '  </environment>\n\n' 

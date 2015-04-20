@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v0.8.0')
+        self.setWindowTitle('DQMGui publish v0.8.6')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -268,12 +268,12 @@ class ovalGui(QWidget):
         
         if not os.path.exists(self.working_dir_rel):
             os.chdir(self.working_dir_base) # going to base folder
-            print "liste 4 - Creation of %s folder", str(self.lineedit1.text()[6:])
+            print "liste 4 - Creation of (%s) folder" % str(self.lineedit1.text()[6:])
             os.makedirs(str(self.lineedit1.text()[6:]))
 #        print "liste 4 - current working directory : ", os.getcwd()      # Return the current working directory, = base
         os.chdir(self.working_dir_rel)   # Change current working directory
         if not os.path.exists(self.working_dir_ref):
-            print "liste 4 - Creation of %s folder", str(self.lineedit3.text()[6:])
+            print "liste 4 - Creation of (%s) folder" % str(self.lineedit3.text()[6:])
             os.makedirs(str(self.lineedit3.text()[6:]))
         list_search(self)
         to_transmit = [str(self.lineedit1.text()), str(self.lineedit3.text()), self.rel_list, self.ref_list]
