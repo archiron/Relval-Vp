@@ -807,15 +807,25 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '    <var name="TAG_STARTUP" value="${TAG_STARTUP}">\n'
         file.write(tmp)
         tmp = '    <var name="TEST_GLOBAL_TAG" value="${TAG_STARTUP}">\n'
-        tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
+        tmp += '    <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n\n'
 #        tmp += '    <var name="DD_COND" value="PU_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
+        tmp = ''
+        tmp += '    <environment name="Valdummy">\n\n'
+        tmp += '      <var name="DD_SAMPLE" value="dummy">\n\n'
+        tmp += '        <var name="RED_FILE" value="DQM_DUMMY.root">\n'
+        tmp += ' <var name="BLUE_FILE" value="DQM_DUMMY.root">\n'
+        tmp += ' <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
+        tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
+        tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+        tmp += '    </environment>\n\n'
+        file.write(tmp)
         for items in self.files_list:
-            print items[0]
-            print items[2]
+#            print items[0]
+#            print items[2]
             it_tmp = explode_item(items[2])
-            prefix = it_tmp[2][:6]
-            print "COUCOU PU " , items[2], ' - ', prefix
+            prefix = it_tmp[2].split('_')[0]
+#            print "COUCOU PU " , items[2], ' - ', prefix
             tmp = ''
             tmp += '    <var name="DD_COND" value="' + prefix + '_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
             tmp += '    <var name="DD_COND_REF" value="' + prefix + '_' + tag_startup + '-' + data_version + '">\n\n'
@@ -863,9 +873,9 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
         file.write(tmp)
         for items in self.files_list:
-            print "fast vs full : ", items
-            print items[0]
-            print items[2]
+#            print "fast vs full : ", items
+#            print items[0]
+#            print items[2]
             it_tmp = items[2].replace('_FastSim', '')
 #            print "COUCOU FAST " , items[2], ' - ', it_tmp
             tmp = ''
