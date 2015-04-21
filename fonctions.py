@@ -186,7 +186,7 @@ def cmd_folder_creation(choix_calcul, working_dir):
     actual_dir = os.getcwd()
 #    print "cmd_folder_creation - actual dir : ", actual_dir
     os.chdir(working_dir)
-    print "cmd_folder_creation - je suis en : ", os.getcwd()
+#    print "cmd_folder_creation - je suis en : ", os.getcwd()
     if ( ( choix_calcul == 'Full' ) or ( choix_calcul == 'gedvsgedFull'  )):
         newDirName = '/GED_' + newDirName
     elif ( choix_calcul == 'Fast' ):
@@ -815,7 +815,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
             print items[2]
             it_tmp = explode_item(items[2])
             prefix = it_tmp[2][:6]
-            print "COUCOU" , prefix
+            print "COUCOU PU " , items[2], ' - ', prefix
             tmp = ''
             tmp += '    <var name="DD_COND" value="' + prefix + '_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
             tmp += '    <var name="DD_COND_REF" value="' + prefix + '_' + tag_startup + '-' + data_version + '">\n\n'
@@ -864,11 +864,15 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
         file.write(tmp)
         for items in self.files_list:
             print "fast vs full : ", items
+            print items[0]
+            print items[2]
+            it_tmp = items[2].replace('_FastSim', '')
+#            print "COUCOU FAST " , items[2], ' - ', it_tmp
             tmp = ''
             tmp += '      <environment name="ValFastVsFull' + items[0] + '_gedGsfE">\n\n' # environment DD_SAMPLE
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
-            tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n'
+            tmp += '      <var name="BLUE_FILE" value="' + it_tmp + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
             tmp += '-t "Fast vs Full / ${DD_SAMPLE} / ${DD_COND}" '
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFull/${DD_SAMPLE}_Startup\'>\n\n'

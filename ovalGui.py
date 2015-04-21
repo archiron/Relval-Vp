@@ -311,6 +311,11 @@ class ovalGui(QWidget):
                 for part_rel_3 in itl2:
                     option_regexp_rel = str( part_rel_3[1] ) 
                     cmd_fetch(option_is_from_data, option_release_rel, option_regexp_rel, option_mthreads, option_dry_run)
+                    if self.gccs == 'Fast': # FASTSIM - same as in FastvsFull in write_OvalFile()
+                        print "loading liste 5 : ", part_rel_3[1]
+                        it_tmp = part_rel_3[1].replace('_FastSim', '')
+                        option_regexp_rel = str( it_tmp ) 
+                        cmd_fetch(option_is_from_data, option_release_rel, option_regexp_rel, option_mthreads, option_dry_run)
 
                 option_release_ref = str(self.choice_ref[0]) 
                 os.chdir(self.working_dir_ref)   # Change current working directory to release directory
