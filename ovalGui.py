@@ -265,6 +265,7 @@ class ovalGui(QWidget):
 
     def liste4(self):
         cmd_working_dirs_creation(self)
+#        print "liste 4 Get Choice"
         
         if not os.path.exists(self.working_dir_rel):
             os.chdir(self.working_dir_base) # going to base folder
@@ -302,14 +303,18 @@ class ovalGui(QWidget):
                 itf2 = create_file_list(self.choice_ref)
                 
                 self.files_list = create_commonfile_list(itl2, itf2) # attention on ne compare pas la longueur des tableaux
-#                print self.files_list
+#                print "liste 5 - self.files_list : ", self.files_list
+                print "liste 5 - itl2 : ", itl2
+                print "liste 5 - itf2 : ", itf2
                 
                 # step 2 : done
                 option_release_rel = str(self.choice_rel[0]) 
                 actual_dir = os.getcwd() # get the actual directory
                 os.chdir(self.working_dir_rel)   # Change current working directory to release directory
                 for part_rel_3 in itl2:
+                    print "\npart_rel_3 : ", part_rel_3 # OK
                     option_regexp_rel = str( part_rel_3[1] ) 
+#                    print "part_rel_3 : ", option_regexp_rel # OK
                     cmd_fetch(option_is_from_data, option_release_rel, option_regexp_rel, option_mthreads, option_dry_run)
                     if self.gccs == 'Fast': # FASTSIM - same as in FastvsFull in write_OvalFile()
                         print "loading liste 5 : ", part_rel_3[1]
@@ -320,7 +325,9 @@ class ovalGui(QWidget):
                 option_release_ref = str(self.choice_ref[0]) 
                 os.chdir(self.working_dir_ref)   # Change current working directory to release directory
                 for part_ref_3 in itf2:
+                    print "\npart_ref_3 : ", part_ref_3 # OK
                     option_regexp_ref = str( part_ref_3[1] ) 
+#                    print "part_rel_3 : ", option_regexp_rel # OK
                     cmd_fetch(option_is_from_data, option_release_ref, option_regexp_ref, option_mthreads, option_dry_run)
 
                 os.chdir(actual_dir) # back to actual directory
@@ -375,13 +382,19 @@ class ovalGui(QWidget):
                 BoiteMessage.exec_()
             else: # release and reference are OK
                 self.getChoice.bouton.setText("Quit") # to be removed ?
+#                print "liste 6 - to_transmit[2] : ", to_transmit[2]
                 for items in to_transmit[2]:
+#                    print items
                     items3 = explode_item(items)
-                    items4 = (items3[1], items3[2], items3[0])
+                    items4 = (items3[1], items3[2], items3[0], items)
+#                    print "liste 6 : ", items4
                     self.rel_list_mod.append(items4)
+#                print "liste 6 - to_transmit[3] : ", to_transmit[3]
                 for items in to_transmit[3]:
+#                    print items
                     items3 = explode_item(items)
-                    items4 = (items3[1], items3[2], items3[0])
+                    items4 = (items3[1], items3[2], items3[0], items)
+#                    print "liste 6 : ", items4
                     self.ref_list_mod.append(items4)
             
                 list_tmp = sorted(self.rel_list_mod, key=itemgetter(0,1), reverse=True)
@@ -389,10 +402,14 @@ class ovalGui(QWidget):
                 list_tmp = sorted(self.ref_list_mod, key=itemgetter(0,1), reverse=True)
                 self.ref_list_mod = list_tmp
         
-#                print "release tablo avant : ", self.rel_list_mod
+#                print "release tablo avant : " 
+#                for it in self.rel_list_mod:   
+#                    print it
 #                print "longueur tablo : ", len(self.rel_list_mod)
                 self.rel_list_mod2 = list_simplify(self.rel_list_mod)
-#                print "release retour tablo : ", self.rel_list_mod2
+#                print "release retour tablo : "
+#                for it in self.rel_list_mod2:
+#                    print it
 #                print "reference tablo avant : ", self.ref_list_mod
 #                print "longueur tablo : ", len(self.ref_list_mod)
                 self.ref_list_mod2 = list_simplify(self.ref_list_mod)
@@ -402,6 +419,7 @@ class ovalGui(QWidget):
                 k = 0
                 self.buttons_rel = []
                 for items in self.rel_list_mod2:
+#                    print "boutons : ", items
                     it1 = ''
                     it2 = items[2]
                     for it in it2:
@@ -409,6 +427,7 @@ class ovalGui(QWidget):
                         it1 += it + ', '
                     it1 = it1[0:len(it1)-2]
                     items = (items[0], items[1], it1)
+#                    print "new boutons :", items
                     j = 0
                     for items2 in items:
                         if ( j == 1 ):
@@ -456,12 +475,17 @@ class ovalGui(QWidget):
         """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
         tmp = self.trUtf8(self.texte) 
         tmp += "<br /><strong>Release : </strong>"
+#        print "clientchoice : ", self.my_choice_rel
         if ( self.my_choice_rel ) :
-            tmp += str(self.my_choice_rel)
+            tmp += str(self.my_choice_rel[0]) # to not write self.my_choice_rel[3]
+            tmp += str(self.my_choice_rel[1]) # to not write self.my_choice_rel[3]
+            tmp += str(self.my_choice_rel[2]) # to not write self.my_choice_rel[3]
 #            self.choice_rel = self.my_choice_rel
         tmp += "<br /><strong>Reference : </strong>"
         if ( self.my_choice_ref ) :
-            tmp += str(self.my_choice_ref)
+            tmp += str(self.my_choice_ref[0]) # to not write self.my_choice_ref[3]
+            tmp += str(self.my_choice_ref[1]) # to not write self.my_choice_ref[3]
+            tmp += str(self.my_choice_ref[2]) # to not write self.my_choice_ref[3]
         self.labelResume.setText(tmp)
         QtCore.QCoreApplication.processEvents()
         print "recup = ", x # to be removed
@@ -477,7 +501,11 @@ class ovalGui(QWidget):
         k = 0
         for items in self.rel_list_mod2:
             j = 0
+#            print "buttons_relClicked : ", items
+            items = (items[0], items[1], items[2])
+#            print "buttons_relClicked : ", items
             for items2 in items:
+#                print "%d - %d - %d" % (i, j, k)
                 if ( j == 1 ):
                     if self.buttons_rel[i].isChecked():
                         self.my_choice_rel = self.rel_list_mod2[k]
@@ -494,6 +522,7 @@ class ovalGui(QWidget):
         k = 0
         for items in self.ref_list_mod2:
             j = 0
+            items = (items[0], items[1], items[2])
             for items2 in items:
                 if ( j == 1 ):
                     if self.buttons_ref[i].isChecked():
@@ -553,9 +582,11 @@ class ovalGui(QWidget):
                 # insert the web folder name            
                 t_rel_default_text = to_transmit[0][0][6:] + self.getPublish.text_ext
                 self.getPublish.t_rel_default.setText("Default web folder name : " + t_rel_default_text)
-        
+                
+#                print "to transmit : " , to_transmit[0][1], to_transmit[1][1]
+                
                 self.Oval_OK = False
-                self.Oval_OK = write_OvalFile(self, t_rel_default_text, to_transmit[0][1])
+                self.Oval_OK = write_OvalFile(self, t_rel_default_text, to_transmit[0][1], to_transmit[1][1])
 
         
                 # en cas de signal "fermeturegetPublish()" reçu de self.getPublish => exécutera clienchoisi 

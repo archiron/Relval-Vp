@@ -416,10 +416,14 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
 
     file_list_re = re.compile(r"<a href='[-./\w]*'>([-./\w]*)<")
     all_files = file_list_re.findall(filedir_html)[1:]  # list of file names
+#    print "cmd_fetch : ", all_files
 
     ### Fetch the files, using multi-processing
+    print "cmd_fetch : ", option_regexp.split(',') + [option_release]
     file_res = [re.compile(r) for r in option_regexp.split(',') + [option_release]]
+
     selected_files = [f for f in all_files if all([r.search(f) for r in file_res])]
+#    print selected_files
 
     print 'Downloading files:'
     for i, name in enumerate(selected_files):
@@ -549,37 +553,42 @@ def list_simplify(tablo):
     temp = []
     item_line = tablo[0]
     temp2 = [item_line[2]]
+    temp3 = [item_line[3]]
     
-    item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ] )
+    item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ], [ tablo[0][3] ] )
+#    print "list_simplify : ", item_line
 
 #    print "list simplify : longueur tablo : ", len(tablo)
     if ( len(tablo) == 1 ):
-        item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ] )
+        item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ], tablo[0][3] )
 #        print "item_line : ", item_line
         
 #    for items in tablo:
 #        print "tablo : ", items  
     for i in range(1, len(tablo)-0):
 #        print "i = ", i
-        (t, u, v) = tablo[i]
+        (t, u, v, w) = tablo[i]
         if ( t == item_line[0]):
             if (u == item_line[1]):
                 temp2.append(v)
-                item_line = (item_line[0], item_line[1], temp2 )
+                temp3.append(w)
+                item_line = (item_line[0], item_line[1], temp2, temp3 )
                 if ( i == len(tablo)-1 ):
                     temp.append(item_line)
             else :
-                temp2 = (item_line[0], item_line[1], temp2)
+                temp2 = (item_line[0], item_line[1], temp2) # to be removed ?
                 temp.append(item_line)
-                item_line = ( tablo[i][0], tablo[i][1], [ tablo[i][2] ] )
+                item_line = ( tablo[i][0], tablo[i][1], [ tablo[i][2] ], [ tablo[i][3] ] )
                 temp2 = item_line[2]
+                temp3 = item_line[3]
 #                print "new item_line a : ", item_line
                 if ( i == len(tablo)-1 ):
                     temp.append(item_line)
         else:
             temp.append(item_line)
-            item_line = ( tablo[i][0], tablo[i][1],  [ tablo[i][2] ]  )
+            item_line = ( tablo[i][0], tablo[i][1],  [ tablo[i][2] ], [ tablo[i][3] ]  )
             temp2 = item_line[2]
+            temp3 = item_line[3]
 #            print "new item_line a : ", item_line
             if ( i == len(tablo)-1 ):
                 temp.append(item_line)
@@ -619,14 +628,20 @@ def compare_datasets(t1, t2):
 def create_file_list(tablo):
     temp = []
 #    print "create_file_list"
-    part_1 = tablo[0]
-    part_2 = tablo[1]
+#    part_1 = tablo[0]
+#    part_2 = tablo[1]
     itl2 = tablo[2]
-    name_base = "DQM_V0001_R000000001__RelVal" 
-    name_suffix = "__" + part_1 + "-" + part_2 + "__DQMIO.root"
+    itl3 = tablo[3]
+#    print "create_file_list :", itl3
+#    name_base = "DQM_V0001_R000000001__RelVal" 
+#    name_suffix = "__" + part_1 + "-" + part_2 + "__DQMIO.root"
+    i = 0
     for part_3 in itl2:
-        name_rel = name_base + part_3 + name_suffix
-        temp.append([part_3, name_rel])
+#        print "create : ", part_3
+#        name_rel = name_base + part_3 + name_suffix
+#        temp.append([part_3, name_rel])
+        temp.append([part_3, itl3[i] ])
+        i += 1
     return temp
 
 def create_commonfile_list(t1, t2):
@@ -635,8 +650,9 @@ def create_commonfile_list(t1, t2):
 #    print "create commonfile list"
     for it1 in t1:
         for it2 in t2:
+#            print it1, it2
             if (it1[0] == it2[0]):
-#                print it1, it2
+                print "create commeon file list : ", it1, it2
                 temp.append([it1[0], it1[1], it2[1]])
     
     return temp
@@ -645,19 +661,37 @@ def clean_files_list(t1, t2):
     temp = []
 #    print "clean_files_list"
     for it1 in t1:
-#        print it1[0], it1[1]
+#        print "clean : ",it1[0], it1[1]
         for it2 in t2:
-            print "clean : ",it2, it1[1], it2[0]
+#            print "clean : ", it2, it1[1], it2[0]
             if ( it1[1] == it2[0] ):
 #                print 'ok'
                 tmp = [it1[0], it1[1], it2[1], it2[2]]
                 temp.append(tmp)
     return temp
 
-def write_OvalFile(self, t_rel_default_text, to_transmit):
+def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     import os,sys,subprocess,glob,re,shutil
     
-    (tag_startup, data_version) = to_transmit.split('-')
+    # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
+    self.coll_list = get_collection_list(self)
+    dataset_resume = compare_datasets(self.coll_list, self.my_choice_rel[2])
+#    print "dataset_resume : ", dataset_resume
+    if ( self.files_list ):
+        self.files_list = clean_files_list(dataset_resume, self.files_list)
+    else:
+        itl2 = create_file_list(self.choice_rel)
+        itf2 = create_file_list(self.choice_ref)
+        self.files_list = create_commonfile_list(itl2, itf2) # attention on ne compare pas la longueur des tableaux
+#        print "self.files_list apres common", self.files_list
+        self.files_list = clean_files_list(dataset_resume, self.files_list)
+    
+    for items in self.files_list:
+        print "--", items, len(items)
+        for it in items:
+            print "--", it
+
+    (tag_startup, data_version) = to_transmit_rel.split('-')
     if self.gccs == 'Fast':
         tag_startup = tag_startup[:-8]
     if self.gccs == 'PU':
@@ -674,7 +708,8 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
     file.write(tmp)
     tmp = 'TAG for the REFERENCE DATA, USED ONLY FOR INFORMATION ON WEB PAGE\n'
     file.write(tmp)
-    tmp = '<var name="DD_COND_REF" value="' + tag_startup + '-' + data_version + '">\n\n'
+#    tmp = '<var name="DD_COND_REF" value="' + tag_startup + '-' + data_version + '">\n\n'
+    tmp = '<var name="DD_COND_REF" value="' + to_transmit_ref + '">\n\n'
     file.write(tmp) # <var name="DD_COND_REF" value="MCRUN2_74_V7-v1">
     tmp = '<var name="DD_RELEASE" value="${CMSSW_VERSION}">\n\n'
     file.write(tmp)
@@ -727,32 +762,6 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
     tmp += '  <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidation_gedGsfElectrons_cfg">\n'
     tmp += '  <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidation_cfg">\n\n'
     file.write(tmp)
-    # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
-    self.coll_list = get_collection_list(self)
-
-###### to be removed
-#    print "self.my_choice_rel : ", self.my_choice_rel
-    # need to compare datasets from self.my_choice_rel and datasets selected in coll_list
-#    for items in self.coll_list:
-#        print "coll_list : ", items
-#    for items in self.my_choice_rel[2]:
-#        print "my_choice_rel : ", items
-###### to be removed
-        
-    dataset_resume = compare_datasets(self.coll_list, self.my_choice_rel[2])
-#    print dataset_resume
-    if ( self.files_list ):
-        self.files_list = clean_files_list(dataset_resume, self.files_list)
-    else:
-        itl2 = create_file_list(self.choice_rel)
-        itf2 = create_file_list(self.choice_ref)
-        self.files_list = create_commonfile_list(itl2, itf2) # attention on ne compare pas la longueur des tableaux
-        self.files_list = clean_files_list(dataset_resume, self.files_list)
-    
-    for items in self.files_list:
-#        print "--", items, len(items)
-        for it in items:
-            print "--", it
 
     if self.gccs == 'Full': # FULLSIM
         tmp = '  <environment name="ValFullgedvsged">\n\n'
@@ -828,7 +837,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit):
 #            print "COUCOU PU " , items[2], ' - ', prefix
             tmp = ''
             tmp += '    <var name="DD_COND" value="' + prefix + '_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
-            tmp += '    <var name="DD_COND_REF" value="' + prefix + '_' + tag_startup + '-' + data_version + '">\n\n'
+            tmp += '    <var name="DD_COND_REF" value="' + to_transmit_ref + '">\n\n'
             tmp += '      <environment name="ValPileUp' + items[0] + '_gedGsfE">\n\n'
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
