@@ -27,10 +27,10 @@ class GetChoice(QWidget):
         self.QGBox_0.setLayout(vbox_0)
         
         # QHBoxLayout + 2 QGroupBox
-        self.QGBox_H1b = QGroupBox("Release list b")
+        self.QGBox_H1b = QGroupBox("Release list")
         self.gbox_H1 = QGridLayout()
         self.QGBox_H1b.setLayout(self.gbox_H1)
-        self.QGBox_H2b = QGroupBox("Reference list b")
+        self.QGBox_H2b = QGroupBox("Reference list")
         self.gbox_H2 = QGridLayout()
         self.QGBox_H2b.setLayout(self.gbox_H2)
 

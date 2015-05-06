@@ -121,9 +121,7 @@ if __name__ == "__main__":
   #===================================================
   # improved default options
   #===================================================
-  print "A QUE COUCOU ARNAUD", red_file
   (red_head,red_tail) = os.path.split(red_file)
-  print "red_head : ", red_head
   red_long_name = os.path.basename(red_head)+'/'+red_tail
   (blue_head,blue_tail) = os.path.split(blue_file)
   blue_long_name = os.path.basename(blue_head)+'/'+blue_tail
@@ -135,9 +133,6 @@ if __name__ == "__main__":
     options.title = red_long_name+' vs '+blue_long_name
          
   (red_hd, red_release) = os.path.split(red_head)
-  print  "red_hd : ", red_head
-  print  "red_release : ", red_release
-  print
   (blue_hd, blue_release) = os.path.split(blue_head)
          
   #============================================

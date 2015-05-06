@@ -3,15 +3,14 @@ voir le texte a afficher de la page web
 finir Pt1000, QCD : QCD FAIT
 
 Dans release reference il manque le _std
+il faut voir le nom du repertoire final. Si on veut comparer 750pre2 avec 750pre1 et avec 740pre9 celà se fait dans le meme repertoire.
 
 pbm du FastvsFull
-voir comment telecharger aussi les FullSim pour les FastvsFull
+voir comment telecharger aussi les FullSim pour les FastvsFull -> a priori regle
 
 remettre les nvelles valeurs des releases/dataset apres le Choice
 pbm du Pt1000 avant et apres la PR8202 (voir avec le electronCompare.C (dans Validation\RecoEgamma\test ) et le electronCompare.py (dans DQMOffline\EGamma\scripts )
 local vs non local (voir avec le electronCompare.py (dans DQMOffline\EGamma\scripts )
-
-PU : dans l'ecriture du publish, remettre PU50ns_ ou PU25ns_ (et pmx) : FAIT sauf pmx
 
 mettre les langues sous forme de fichier txt.
 
