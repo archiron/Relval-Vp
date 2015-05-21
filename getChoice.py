@@ -18,21 +18,32 @@ class GetChoice(QWidget):
         super(GetChoice, self).__init__(parent)
         self.setWindowTitle("Files choice")
  
-        # créer un lineEdit
-        self.lineEdit = QLineEdit(self)
-        self.QGBox_0 = QGroupBox("Files list")
-        self.QGBox_0.setMinimumWidth(1000)
-        vbox_0 = QVBoxLayout()
-        vbox_0.addWidget(self.lineEdit)
-        self.QGBox_0.setLayout(vbox_0)
-        
         # QHBoxLayout + 2 QGroupBox
+#        self.QGBox_H1b = QGroupBox("Release list")
+#        self.gbox_H1 = QGridLayout()
+#        self.QGBox_H1b.setLayout(self.gbox_H1)
         self.QGBox_H1b = QGroupBox("Release list")
-        self.gbox_H1 = QGridLayout()
-        self.QGBox_H1b.setLayout(self.gbox_H1)
+        self.QVL_H1b = QVBoxLayout(self.QGBox_H1b)
+        self.QSArea_H1b = QScrollArea()
+        self.QSArea_H1b.setWidgetResizable(True)
+        self.scrolldwidget1 = QWidget()
+        self.gbox_H1 = QGridLayout(self.scrolldwidget1)        
+        self.QVL_H1b.addWidget(self.QSArea_H1b)
+        self.QSArea_H1b.setWidget(self.scrolldwidget1)
+        self.QGBox_H1b.setLayout(self.QVL_H1b)
+
+#        self.QGBox_H2b = QGroupBox("Reference list")
+#        self.gbox_H2 = QGridLayout()
+#        self.QGBox_H2b.setLayout(self.gbox_H2)
         self.QGBox_H2b = QGroupBox("Reference list")
-        self.gbox_H2 = QGridLayout()
-        self.QGBox_H2b.setLayout(self.gbox_H2)
+        self.QVL_H2b = QVBoxLayout(self.QGBox_H2b)
+        self.QSArea_H2b = QScrollArea()
+        self.QSArea_H2b.setWidgetResizable(True)
+        self.scrolldwidget2 = QWidget()
+        self.gbox_H2 = QGridLayout(self.scrolldwidget2)        
+        self.QVL_H2b.addWidget(self.QSArea_H2b)
+        self.QSArea_H2b.setWidget(self.scrolldwidget2)
+        self.QGBox_H2b.setLayout(self.QVL_H2b)
 
         vbox_H0 = QVBoxLayout()
         vbox_H0.addWidget(self.QGBox_H1b)
@@ -46,7 +57,6 @@ class GetChoice(QWidget):
         hbox_button.addWidget(self.bouton)
         # positionner les widgets dans la fenêtre
         posit = QVBoxLayout()
-        posit.addWidget(self.QGBox_0)
         posit.addLayout(vbox_H0)
         posit.addLayout(hbox_button)
 
@@ -54,7 +64,8 @@ class GetChoice(QWidget):
  
     def ok_Choice(self):
         # emettra un signal "fermeturegetChoice()" avec l'argument cité
-        self.emit(SIGNAL("fermeturegetChoice(PyQt_PyObject)"), unicode(self.lineEdit.text())) 
+#        self.emit(SIGNAL("fermeturegetChoice(PyQt_PyObject)"), unicode(self.lineEdit.text())) 
+        self.emit(SIGNAL("fermeturegetChoice(PyQt_PyObject)"), "Au revoir !") 
         # fermer la fenêtre
         self.close()
  
