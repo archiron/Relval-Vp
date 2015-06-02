@@ -2,8 +2,9 @@ voir si on a tjs la bonne valeur pour choix calcul (a priori oui)
 voir le texte a afficher de la page web
 finir Pt1000, QCD : QCD FAIT
 
-Dans release reference il manque le _std
-il faut voir le nom du repertoire final. Si on veut comparer 750pre2 avec 750pre1 et avec 740pre9 celà se fait dans le meme repertoire.
+Dans release reference on met DQM pour les fichiers _std
+peut etre un pepin pour les reprise : les FullSim reutilisent bien les fichiers deja charges mais pas les PU
+il faut voir le nom du repertoire final. 
 
 pbm du FastvsFull
 voir comment telecharger aussi les FullSim pour les FastvsFull -> a priori regle

@@ -653,7 +653,7 @@ def create_commonfile_list(t1, t2):
         for it2 in t2:
 #            print it1, it2
             if (it1[0] == it2[0]):
-                print "create commeon file list : ", it1, it2
+#                print "create commeon file list : ", it1, it2
                 temp.append([it1[0], it1[1], it2[1]])
     
     return temp
@@ -697,9 +697,11 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
         tag_startup = tag_startup[:-8]
     if self.gccs == 'PU':
         tag_startup = tag_startup[7:]
+    
 #    file = open("newfile.txt", "w+") # default : overwrite the OvalFile
     file = open("OvalFile", "w+") # default : overwrite the OvalFile
     file.write('<var name="TEST_COMMENT" value="">\n')
+    
     tmp = '<var name="TEST_NEW" value="' + t_rel_default_text + '">\n'
     file.write(tmp) # <var name="TEST_NEW" value="7_4_0_pre9_ROOT6_dev">
     tmp = '<var name="TEST_REF" value="' + self.lineedit3.text()[6:] + '">\n'
@@ -716,7 +718,11 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     file.write(tmp)
     tmp = '<var name="STORE_DIR" value="' + os.getcwd() + '">\n'
     tmp += '<var name="STORE_REF" value="' + os.getcwd() + '">\n\n'
-    tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Dev">\n\n'
+    
+    if ( self.getPublish.text_ext == "_dev" ):
+        tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Dev">\n\n'
+    if ( self.getPublish.text_ext == "_DQM_std" ):
+        tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases">\n\n'
     file.write(tmp)
     tmp = 'The value of OVAL_ENVNAME is automatically set by Oval to the name\n'
     tmp += 'of the current environment, before running any executable. Using it below,\n'
