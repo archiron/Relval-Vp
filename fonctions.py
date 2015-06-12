@@ -457,6 +457,7 @@ def clean_collections(collection, gccs):
         elif ( gccs == 'PU' ):
             if ( re.search('Fast', items) ):
                 print " Fast exist in PU", items # to be removed
+                temp.append(items) # TEMP. To be removed
             else:
                 temp.append(items)
         else: # gccs == 'FAST'
@@ -684,7 +685,6 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
         itl2 = create_file_list(self.choice_rel)
         itf2 = create_file_list(self.choice_ref)
         self.files_list = create_commonfile_list(itl2, itf2) # attention on ne compare pas la longueur des tableaux
-#        print "self.files_list apres common", self.files_list
         self.files_list = clean_files_list(dataset_resume, self.files_list)
     
     for items in self.files_list:
@@ -696,24 +696,24 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     if self.gccs == 'Fast':
         tag_startup = tag_startup[:-8]
     if self.gccs == 'PU':
-        tag_startup = tag_startup[7:]
+        len_prefix = len(tag_startup.split('_')[0])+1
+        tag_startup = tag_startup[len_prefix:]
     
-#    file = open("newfile.txt", "w+") # default : overwrite the OvalFile
     file = open("OvalFile", "w+") # default : overwrite the OvalFile
+#    file = open("newfile.txt", "w+") # default : overwrite the OvalFile
     file.write('<var name="TEST_COMMENT" value="">\n')
     
     tmp = '<var name="TEST_NEW" value="' + t_rel_default_text + '">\n'
-    file.write(tmp) # <var name="TEST_NEW" value="7_4_0_pre9_ROOT6_dev">
+    file.write(tmp) 
     tmp = '<var name="TEST_REF" value="' + self.lineedit3.text()[6:] + '">\n'
-    file.write(tmp) # <var name="TEST_REF" value="7_4_0_pre8_std">
+    file.write(tmp) 
     tmp = '\n<var name="TAG_STARTUP" value="' + tag_startup + '">\n'
     tmp += '<var name="DATA_VERSION" value="' + data_version + '">\n\n'
     file.write(tmp)
     tmp = 'TAG for the REFERENCE DATA, USED ONLY FOR INFORMATION ON WEB PAGE\n'
     file.write(tmp)
-#    tmp = '<var name="DD_COND_REF" value="' + tag_startup + '-' + data_version + '">\n\n'
     tmp = '<var name="DD_COND_REF" value="' + to_transmit_ref + '">\n\n'
-    file.write(tmp) # <var name="DD_COND_REF" value="MCRUN2_74_V7-v1">
+    file.write(tmp) 
     tmp = '<var name="DD_RELEASE" value="${CMSSW_VERSION}">\n\n'
     file.write(tmp)
     tmp = '<var name="STORE_DIR" value="' + os.getcwd() + '">\n'
@@ -841,7 +841,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
 #            print items[2]
             it_tmp = explode_item(items[2])
             prefix = it_tmp[2].split('_')[0]
-#            print "COUCOU PU " , items[2], ' - ', prefix
+            print "PU prefix " , items[2], ' - ', prefix
             tmp = ''
             tmp += '    <var name="DD_COND" value="' + prefix + '_${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
             tmp += '    <var name="DD_COND_REF" value="' + to_transmit_ref + '">\n\n'

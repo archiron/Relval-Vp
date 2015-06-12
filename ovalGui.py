@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v0.9.0')
+        self.setWindowTitle('DQMGui publish v0.9.3')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -568,45 +568,44 @@ class ovalGui(QWidget):
                 self.getPublish.test_ref.setText('test ref : ' + self.getPublish.transmit_ref[6:])
                 
                 (tag_startup, data_version) = to_transmit[0][1].split('-')
-#                print "tag_startup : ",tag_startup
-#                print "data_version : ", data_version
-#                print self.gccs
                 if self.gccs == 'Fast':
                     tag_startup = tag_startup[:-8]
                 if self.gccs == 'PU':
-                    tag_startup = tag_startup[7:]
+                    len_prefix = len(tag_startup.split('_')[0])+1
+                    tag_startup = tag_startup[len_prefix:]
                 self.getPublish.tag_startup.setText('Tag Startup : ' + tag_startup) # pbm with fastsim_ pu get choix calcul -> done
                 self.getPublish.data_version.setText('Data Version : ' + data_version)
                 self.getPublish.lineEdit.setText('File to be created')
+                t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + self.getPublish.text_ext
+                print "getPublish_update - t_rel_default_text : ", self.getPublish.text_ext, t_rel_default_text
+                self.getPublish.t_rel_default.setText('Default web folder name : ' + t_rel_default_text)
                 
-                # insert the web folder name            
-                t_rel_default_text = to_transmit[0][0][6:] + self.getPublish.text_ext
-                self.getPublish.t_rel_default.setText("Default web folder name : " + t_rel_default_text)
-                
-#                print "to transmit : " , to_transmit[0][1], to_transmit[1][1]
-                
-                self.Oval_OK = False
-                self.Oval_OK = write_OvalFile(self, t_rel_default_text, to_transmit[0][1], to_transmit[1][1])
-
-        
                 # en cas de signal "fermeturegetPublish()" reçu de self.getPublish => exécutera clienchoisi 
                 self.connect(self.getPublish, SIGNAL("fermeturegetPublish(PyQt_PyObject)"), self.clientpublish) 
                 # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
                 self.getPublish.setWindowModality(QtCore.Qt.ApplicationModal)
                 # appel de la deuxième fenêtre
-                self.getPublish.show()
-
+                self.getPublish.show()                
+                
     def clientpublish(self, x):
         """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
+        tmp = self.labelResume.text()
+        self.Oval_OK = False
+        t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + self.getPublish.text_ext
+        self.Oval_OK = write_OvalFile(self, t_rel_default_text, self.getPublish.to_transmit[0][1], self.getPublish.to_transmit[1][1])
         if self.Oval_OK:
             print "True"
+            print "clientItem OvalGui - t_rel_default_text : ", self.getPublish.text_ext, t_rel_default_text
+            tmp += "<br /><strong>OvalFile created</strong>"
         else:
             print "False"
-        tmp = self.labelResume.text()
-        tmp += "<br /><strong>OvalFile created</strong>"
+            tmp += "<br /><strong>OvalFile non created !</strong>"
+
         self.labelResume.setText(tmp)
+            
         QtCore.QCoreApplication.processEvents()
         print "recup2 = ", x # to be removed
+
         
     def radio11Clicked(self):
         if self.radio11.isChecked():
