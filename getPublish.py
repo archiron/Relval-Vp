@@ -134,7 +134,7 @@ class GetPublish(QWidget):
         
     def radio41_PClicked(self):
         if self.radio41_P.isChecked():
-            self.text_ext = "_RelMon_std"
+            self.text_ext = "_DQM_std"
             self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + self.text_ext)
         QtCore.QCoreApplication.processEvents()
 

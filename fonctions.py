@@ -409,7 +409,7 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
 #    print "releasedir : ", releasedir
     base_url = 'https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/'
     filedir_url = base_url + relvaldir + '/' + releasedir + '/'
-#    print "AAAAAAA : ", filedir_url
+    print "AAAAAAA : ", filedir_url
     filedir_html = auth_wget(filedir_url)
 
     #auth_wget("https://cmsweb.cern.ch/dqm/offline/data/browse/ROOT/OfflineData/Run2012/JetHT/0002029xx/DQM_V0001_R000202950__JetHT__Run2012C-PromptReco-v2__DQM.root")
@@ -457,7 +457,7 @@ def clean_collections(collection, gccs):
         elif ( gccs == 'PU' ):
             if ( re.search('Fast', items) ):
                 print " Fast exist in PU", items # to be removed
-                temp.append(items) # TEMP. To be removed
+#                temp.append(items) # TEMP. To be removed
             else:
                 temp.append(items)
         else: # gccs == 'FAST'
@@ -558,15 +558,15 @@ def list_simplify(tablo):
     temp3 = [item_line[3]]
     
     item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ], [ tablo[0][3] ] )
-#    print "list_simplify : ", item_line
+#    print "\nlist_simplify : ", item_line
 
-#    print "list simplify : longueur tablo : ", len(tablo)
+#    print "list_simplify : longueur tablo : ", len(tablo)
     if ( len(tablo) == 1 ):
-        item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ], tablo[0][3] )
+        item_line = ( tablo[0][0], tablo[0][1], [ tablo[0][2] ], [ tablo[0][3] ] )
 #        print "item_line : ", item_line
         
 #    for items in tablo:
-#        print "tablo : ", items  
+#        print "list_simplify - debut : ", items  
     for i in range(1, len(tablo)-0):
 #        print "i = ", i
         (t, u, v, w) = tablo[i]
@@ -600,7 +600,7 @@ def list_simplify(tablo):
         temp.append(item_line)
 
 #    for items in temp:
-#        print "temp : ", items  
+#        print "list_simplify - fin : ", items  
     
     return temp
       
@@ -629,17 +629,19 @@ def compare_datasets(t1, t2):
 
 def create_file_list(tablo):
     temp = []
-#    print "create_file_list"
+    print "\ncreate_file_list", tablo
 #    part_1 = tablo[0]
 #    part_2 = tablo[1]
     itl2 = tablo[2]
     itl3 = tablo[3]
+#    print "create_file_list itl2", itl2
+#    print "create_file_list itl3", itl3
 #    print "create_file_list :", itl3
 #    name_base = "DQM_V0001_R000000001__RelVal" 
 #    name_suffix = "__" + part_1 + "-" + part_2 + "__DQMIO.root"
     i = 0
     for part_3 in itl2:
-#        print "create : ", part_3
+#        print "create_file_list %d : %s \n"% (i, part_3)
 #        name_rel = name_base + part_3 + name_suffix
 #        temp.append([part_3, name_rel])
         temp.append([part_3, itl3[i] ])

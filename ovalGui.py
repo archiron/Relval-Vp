@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v0.9.3')
+        self.setWindowTitle('DQMGui publish v0.9.5')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -282,6 +282,7 @@ class ovalGui(QWidget):
         
     def liste5(self):
 #        print "liste 5 Get Files"
+
         # pour recuperer les fichiers DQM*.root
         # step 1 : si pas de release et/ou de reference : ne rien faire
         # step 2 : refaire une liste des fichiers a recuperer
@@ -299,11 +300,13 @@ class ovalGui(QWidget):
                 option_mthreads = 3
                 option_dry_run = False # False telecharge , True liste
 
+                print "liste5 - choice_rel : ", self.choice_rel
+                print "liste5 - choice_ref : ", self.choice_ref
                 itl2 = create_file_list(self.choice_rel)
                 itf2 = create_file_list(self.choice_ref)
                 
                 self.files_list = create_commonfile_list(itl2, itf2) # attention on ne compare pas la longueur des tableaux
-#                print "liste 5 - self.files_list : ", self.files_list
+                print "liste 5 - self.files_list : ", self.files_list
                 print "liste 5 - itl2 : ", itl2
                 print "liste 5 - itf2 : ", itf2
                 
@@ -314,12 +317,13 @@ class ovalGui(QWidget):
                 for part_rel_3 in itl2:
                     print "\npart_rel_3 : ", part_rel_3 # OK
                     option_regexp_rel = str( part_rel_3[1] ) 
-#                    print "part_rel_3 : ", option_regexp_rel # OK
+#                    print "appel chargement files" # OK
                     cmd_fetch(option_is_from_data, option_release_rel, option_regexp_rel, option_mthreads, option_dry_run)
                     if self.gccs == 'Fast': # FASTSIM - same as in FastvsFull in write_OvalFile()
                         print "loading liste 5 : ", part_rel_3[1]
                         it_tmp = part_rel_3[1].replace('_FastSim', '')
                         option_regexp_rel = str( it_tmp ) 
+#                        print "appel chargement files" # OK
                         cmd_fetch(option_is_from_data, option_release_rel, option_regexp_rel, option_mthreads, option_dry_run)
 
                 option_release_ref = str(self.choice_ref[0]) 
@@ -327,7 +331,7 @@ class ovalGui(QWidget):
                 for part_ref_3 in itf2:
                     print "\npart_ref_3 : ", part_ref_3 # OK
                     option_regexp_ref = str( part_ref_3[1] ) 
-#                    print "part_rel_3 : ", option_regexp_rel # OK
+#                    print "appel chargement files" # OK
                     cmd_fetch(option_is_from_data, option_release_ref, option_regexp_ref, option_mthreads, option_dry_run)
 
                 os.chdir(actual_dir) # back to actual directory
@@ -360,6 +364,7 @@ class ovalGui(QWidget):
         from operator import itemgetter
         """Lance la deuxième fenêtre"""
         self.getChoice = GetChoice()
+        print "\ngetChoice_update - to_transmit : ", to_transmit
         
         self.rel_list_mod = []
         self.ref_list_mod = []
@@ -382,19 +387,19 @@ class ovalGui(QWidget):
                 BoiteMessage.exec_()
             else: # release and reference are OK
                 self.getChoice.bouton.setText("Quit") # to be removed ?
-#                print "liste 6 - to_transmit[2] : ", to_transmit[2]
+#                print "getChoice_update - to_transmit[2] : ", to_transmit[2]
                 for items in to_transmit[2]:
-#                    print items
+#                    print "rel ", items
                     items3 = explode_item(items)
                     items4 = (items3[1], items3[2], items3[0], items)
-#                    print "liste 6 : ", items4
+#                    print "getChoice_update : ", items4
                     self.rel_list_mod.append(items4)
-#                print "liste 6 - to_transmit[3] : ", to_transmit[3]
+#                print "getChoice_update - to_transmit[3] : ", to_transmit[3]
                 for items in to_transmit[3]:
-#                    print items
+#                    print "ref ", items
                     items3 = explode_item(items)
                     items4 = (items3[1], items3[2], items3[0], items)
-#                    print "liste 6 : ", items4
+#                    print "getChoice_update : ", items4
                     self.ref_list_mod.append(items4)
             
                 list_tmp = sorted(self.rel_list_mod, key=itemgetter(0,1), reverse=True)
@@ -405,13 +410,12 @@ class ovalGui(QWidget):
 #                print "release tablo avant : " 
 #                for it in self.rel_list_mod:   
 #                    print it
-#                print "longueur tablo : ", len(self.rel_list_mod)
                 self.rel_list_mod2 = list_simplify(self.rel_list_mod)
-#                print "release retour tablo : "
+#                print "release retour tablo : "               
 #                for it in self.rel_list_mod2:
 #                    print it
+
 #                print "reference tablo avant : ", self.ref_list_mod
-#                print "longueur tablo : ", len(self.ref_list_mod)
                 self.ref_list_mod2 = list_simplify(self.ref_list_mod)
 #                print "reference retour tablo : ", self.ref_list_mod2
 
@@ -488,7 +492,7 @@ class ovalGui(QWidget):
             tmp += str(self.my_choice_ref[2]) # to not write self.my_choice_ref[3]
         self.labelResume.setText(tmp)
         QtCore.QCoreApplication.processEvents()
-        print "recup = ", x # to be removed
+        print "recup = ", x, "\n" # to be removed
         self.bouton5.setEnabled(False)
         if ( self.my_choice_rel ) :
 #            print "self.choice_rel : ", self.choice_rel
@@ -604,7 +608,7 @@ class ovalGui(QWidget):
         self.labelResume.setText(tmp)
             
         QtCore.QCoreApplication.processEvents()
-        print "recup2 = ", x # to be removed
+        print "recup2 = ", x, "\n" # to be removed
 
         
     def radio11Clicked(self):
