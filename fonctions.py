@@ -409,7 +409,7 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
 #    print "releasedir : ", releasedir
     base_url = 'https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/'
     filedir_url = base_url + relvaldir + '/' + releasedir + '/'
-    print "AAAAAAA : ", filedir_url
+#    print "AAAAAAA : ", filedir_url
     filedir_html = auth_wget(filedir_url)
 
     #auth_wget("https://cmsweb.cern.ch/dqm/offline/data/browse/ROOT/OfflineData/Run2012/JetHT/0002029xx/DQM_V0001_R000202950__JetHT__Run2012C-PromptReco-v2__DQM.root")
@@ -457,7 +457,7 @@ def clean_collections(collection, gccs):
         elif ( gccs == 'PU' ):
             if ( re.search('Fast', items) ):
                 print " Fast exist in PU", items # to be removed
-#                temp.append(items) # TEMP. To be removed
+                temp.append(items) # TEMP. To be removed
             else:
                 temp.append(items)
         else: # gccs == 'FAST'
@@ -493,8 +493,8 @@ def list_search(self):
     self.ref_list = []
     
     for items in coll_list:
-#        print items
-        option_regexp = str( items )
+        print "ITEMS : ", items
+        option_regexp = str( items ) + '__'
         if ( self.gccs != 'Full' ):
             option_regexp += ',' + str(self.gccs)
 #        print "**********", items, "- ", option_release_1 # to be removed
