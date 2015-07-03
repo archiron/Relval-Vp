@@ -797,11 +797,11 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             if ( re.search('Pt1000', items[1]) ):
                 print 'OvalFile : Pt1000\n'
-#                tmp += '      <var name="VAL_HISTOS" value="ElectronMcSignalHistosPt1000.txt">\n'
-#                tmp += '      <var name="VAL_ANALYZER" value="ElectronMcSignalValidatorPt1000">\n'
-#                tmp += '      <var name="VAL_POST_ANALYZER" value="ElectronMcSignalPostValidatorPt1000">\n'
-#                tmp += '      <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidationPt1000_gedGsfElectrons_cfg">\n'
-#                tmp += '      <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidationPt1000_cfg">\n'
+                tmp += '      <var name="VAL_HISTOS" value="ElectronMcSignalHistosPt1000.txt">\n'
+                tmp += '      <var name="VAL_ANALYZER" value="ElectronMcSignalValidatorPt1000">\n'
+                tmp += '      <var name="VAL_POST_ANALYZER" value="ElectronMcSignalPostValidatorPt1000">\n'
+                tmp += '      <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidationPt1000_gedGsfElectrons_cfg">\n'
+                tmp += '      <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidationPt1000_cfg">\n'
             if ( re.search('QCD', items[1]) ):
                 print 'OvalFile : QcdPt80120Startup_13\n'
                 tmp += '      <var name="VAL_HISTOS" value="ElectronMcFakeHistos.txt">\n'
