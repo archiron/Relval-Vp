@@ -1,0 +1,38 @@
+modifier get_collection_list & get_collection_list_search pour utiliser les meme racines.
+local vs non local (voir avec le electronCompare.py (dans DQMOffline\EGamma\scripts )
+
+voir le texte a afficher de la page web
+
+remettre les nvelles valeurs des releases/dataset apres le Choice
+pbm du Pt1000 avant et apres la PR8202 (voir avec le electronCompare.C (dans Validation\RecoEgamma\test ) et le electronCompare.py (dans DQMOffline\EGamma\scripts )
+
+mettre les langues sous forme de fichier txt.
+
+Faire un test avant d'écraser sur /afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases/ que les fichiers n'existent pas
+
+resume:
+self.choix_calcul = 'Full'   # default
+
+radio11-3 : FULL, PU, FAST
+check31-6 : Pt10Startup_UP15, Pt35Startup_UP15, Pt1000Startup_UP15, QcdPt80Pt120Startup_13, TTbarStartup_13, ZEEStartup_13
+check37-8 : TTbarStartup_13, ZEEStartup_13
+
+self.rel_list : liste tous les fichiers DQM_V001_**.root possibles pour les différents datasets cochés (check3*) pour la release a valider
+self.ref_list : liste tous les fichiers DQM_V001_**.root possibles pour les différents datasets cochés (check3*) pour la release de reference
+self.files_list : tableau des fichiers DQM*.root de la release et de la reference pour les datasets selectionnes [dataset, release_file, ref_file]
+
+self.rel_list_mod : liste les releases, globaltags et datasets a partir des datasets cochés (check3*) pour la release a valider
+self.ref_list_mod : liste les releases, globaltags et datasets a partir des datasets cochés (check3*) pour la release de reference
+self.rel_list_mod2 : liste classee des releases, globaltags et datasets a partir de self.rel_list_mod pour la release a valider
+self.ref_list_mod2 : liste classee des releases, globaltags et datasets a partir de self.ref_list_mod pour la release de reference
+
+self.coll_list : recupere les boutons cochés pour les datasets
+self.my_choice_rel : recupere self.rel_list_mod2
+self.choice_ref : recupere self.rel_list_mod2 : seems idem to  : recupere self.my_choice_rel
+dataset_resume : liste des datasets a partir self.coll_list, self.my_choice_rel[2]
+
+OvalFile:
+<target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} -t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" ${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup'>
+<target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} -t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" ${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed/PileUp50ns_${DD_SAMPLE}_gedGsfE_Startup'>
+<target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${TEST_NEW} -b ${TEST_REF} -t "${TEST_NEW} / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / ${DD_SAMPLE} / ${DD_COND_REF}" ${STORE_DIR}/${TEST_HISTOS_FILE} ${STORE_REF}/${TEST_HISTOS_FILE} ${WEB_DIR}/${TEST_NEW}/vs${TEST_REF}/Fast_${DD_SAMPLE}_Startup'>
+<target name="publish" cmd='electronCompare.py -c ${VAL_HISTOS} -r ${TEST_NEW} -b ${TEST_NEW} -t "Fast vs Full / ${DD_SAMPLE} / ${DD_COND}" ${STORE_DIR}/${RED_FILE} ${STORE_DIR}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFull/${DD_SAMPLE}_Startup'>
