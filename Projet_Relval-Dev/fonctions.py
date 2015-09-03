@@ -721,10 +721,19 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     tmp = '<var name="STORE_DIR" value="' + os.getcwd() + '">\n'
     tmp += '<var name="STORE_REF" value="' + os.getcwd() + '">\n\n'
     
-    if ( self.getPublish.text_ext == "_dev" ):
-        tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Dev">\n\n'
-    if ( self.getPublish.text_ext == "_DQM_std" ):
-        tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases">\n\n'
+    if self.getPublish.radio21_P.isChecked():
+        print 'ovalfile local'
+        web_dir_path = self.working_dir_base
+        tmp += '<var name="WEB_DIR" value="' + web_dir_path + '">\n\n'
+    if self.getPublish.radio22_P.isChecked():
+        print 'ovalfile external'
+        web_dir_path = '"/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/'
+        if ( self.getPublish.text_ext == "_dev" ):
+            tmp += '<var name="WEB_DIR" value=' + web_dir_path + 'Dev">\n\n'
+        if ( self.getPublish.text_ext == "_DQM_std" ):
+            tmp += '<var name="WEB_DIR" value=' + web_dir_path + 'Releases">\n\n'
+
+#        tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases">\n\n'
     file.write(tmp)
     tmp = 'The value of OVAL_ENVNAME is automatically set by Oval to the name\n'
     tmp += 'of the current environment, before running any executable. Using it below,\n'

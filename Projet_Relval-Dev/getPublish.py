@@ -129,12 +129,12 @@ class GetPublish(QWidget):
         # fermer la fenêtre
         self.close()
 
-    def radio21_PClicked(self):
+    def radio21_PClicked(self): # to be removed ?
         if self.radio21_P.isChecked():
             print 'local'
         QtCore.QCoreApplication.processEvents()
 
-    def radio22_PClicked(self):
+    def radio22_PClicked(self): # to be removed ?
         if self.radio22_P.isChecked():
             print 'external'
         QtCore.QCoreApplication.processEvents()

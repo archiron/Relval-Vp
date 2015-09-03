@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v0.9.7')
+        self.setWindowTitle('DQMGui publish v0.9.8')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -597,15 +597,17 @@ class ovalGui(QWidget):
         tmp = self.labelResume.text()
         self.Oval_OK = False
         t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + self.getPublish.text_ext
-        if ( x != "" ):
+        if ( x == "_" ):
+            t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + self.getPublish.text_ext
+        if ( x != "_" ):
             t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + x + self.getPublish.text_ext
         self.Oval_OK = write_OvalFile(self, t_rel_default_text, self.getPublish.to_transmit[0][1], self.getPublish.to_transmit[1][1])
         if self.Oval_OK:
-            print "True"
+#            print "True"
             print "clientItem OvalGui - t_rel_default_text : ", self.getPublish.text_ext, t_rel_default_text
             tmp += "<br /><strong>OvalFile created</strong>"
         else:
-            print "False"
+#            print "False"
             tmp += "<br /><strong>OvalFile non created !</strong>"
 
         self.labelResume.setText(tmp)
