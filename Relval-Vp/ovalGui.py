@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v0.9.6')
+        self.setWindowTitle('DQMGui publish v1.0.1')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -97,8 +97,25 @@ class ovalGui(QWidget):
         vboxAllNone.addStretch(1)
         self.QGBoxAllNone.setLayout(vboxAllNone)
                 				
+		# creation du grpe RECO/MiniAOD
+        self.QGBoxRECOMiniAOD = QGroupBox("RECO / MiniAOD")
+        self.QGBoxRECOMiniAOD.setMaximumHeight(150)
+        self.QGBoxRECOMiniAOD.setMinimumHeight(150)
+        self.checkRECOMiniAOD1 = QRadioButton("RECO")
+        self.checkRECOMiniAOD2 = QRadioButton("MiniAOD")
+        self.checkRECOMiniAOD1.setChecked(True)
+        self.connect(self.checkRECOMiniAOD1, SIGNAL("clicked()"), self.checkRECOMiniAOD1Clicked)
+        self.connect(self.checkRECOMiniAOD2, SIGNAL("clicked()"), self.checkRECOMiniAOD2Clicked)
+        vboxRECOMiniAOD = QVBoxLayout()
+        vboxRECOMiniAOD.addWidget(self.checkRECOMiniAOD1)
+        vboxRECOMiniAOD.addWidget(self.checkRECOMiniAOD2)
+        vboxRECOMiniAOD.addStretch(1)
+        self.QGBoxRECOMiniAOD.setLayout(vboxRECOMiniAOD)
+                				
 		# creation des texEdit pour release/reference
         self.QGBox6 = QGroupBox("release")
+        self.QGBox6.setMaximumHeight(150)
+        self.QGBox6.setMinimumHeight(150)
         self.lineedit1 = QLineEdit(self)
         self.lineedit1.setText(self.cmsenv.getCMSSWBASECMSSWVERSION()) # default
         self.lineedit1.setMinimumWidth(150)
@@ -129,6 +146,7 @@ class ovalGui(QWidget):
         self.layoutH_radio.addWidget(self.QGBox31)
         self.layoutH_radio.addWidget(self.QGBox32)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
+        self.layoutH_radio.addWidget(self.QGBoxRECOMiniAOD)
         self.layoutH_radio.addStretch(1)
         self.layoutH_radio.addWidget(self.QGBox6)
 
@@ -187,7 +205,7 @@ class ovalGui(QWidget):
         # creation des onglets
         self.onglets = QTabWidget()
         self.generalTab = QWidget()
-        self.generalTab.setMinimumHeight(150)
+        self.generalTab.setMinimumHeight(170)
         self.onglets.insertTab(0, self.generalTab, "General")
         #Set Layout for Tabs Pages
         self.generalTab.setLayout(self.layoutV_combobox)   
@@ -260,6 +278,10 @@ class ovalGui(QWidget):
 
                 # clean dqm*.root and dd*.olog files. Copy other .root, .olog files and OvalFile into self.folder_name
                 clean_files(self)
+                
+                tmp = self.labelResume.text()
+                tmp += "<br /><strong>Publish done.</strong>"
+                self.labelResume.setText(tmp)
 
         print "fin"
 
@@ -468,7 +490,7 @@ class ovalGui(QWidget):
                         i += 1
                     k += 1           
             
-                # en cas de signal "fermeturegetChoice()" reçu de self.getChoice => exécutera clienchoisi 
+                # en cas de signal "fermeturegetChoice()" reçu de self.getChoice => exécutera clienchoice 
                 self.connect(self.getChoice, SIGNAL("fermeturegetChoice(PyQt_PyObject)"), self.clientchoice) 
                 # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
                 self.getChoice.setWindowModality(QtCore.Qt.ApplicationModal)
@@ -482,14 +504,14 @@ class ovalGui(QWidget):
 #        print "clientchoice : ", self.my_choice_rel
         if ( self.my_choice_rel ) :
             tmp += str(self.my_choice_rel[0]) # to not write self.my_choice_rel[3]
-            tmp += str(self.my_choice_rel[1]) # to not write self.my_choice_rel[3]
-            tmp += str(self.my_choice_rel[2]) # to not write self.my_choice_rel[3]
+            tmp += ' - ' + str(self.my_choice_rel[1]) # to not write self.my_choice_rel[3]
+            tmp += ' - ' + str(self.my_choice_rel[2]) # to not write self.my_choice_rel[3]
 #            self.choice_rel = self.my_choice_rel
         tmp += "<br /><strong>Reference : </strong>"
         if ( self.my_choice_ref ) :
             tmp += str(self.my_choice_ref[0]) # to not write self.my_choice_ref[3]
-            tmp += str(self.my_choice_ref[1]) # to not write self.my_choice_ref[3]
-            tmp += str(self.my_choice_ref[2]) # to not write self.my_choice_ref[3]
+            tmp += ' - ' + str(self.my_choice_ref[1]) # to not write self.my_choice_ref[3]
+            tmp += ' - ' + str(self.my_choice_ref[2]) # to not write self.my_choice_ref[3]
         self.labelResume.setText(tmp)
         QtCore.QCoreApplication.processEvents()
         print "recup = ", x, "\n" # to be removed
@@ -570,6 +592,9 @@ class ovalGui(QWidget):
                 self.getPublish.t_ref.setText('reference : ' + to_transmit[1][0])
                 self.getPublish.test_new.setText('test new : ' + self.getPublish.transmit_rel[6:])
                 self.getPublish.test_ref.setText('test ref : ' + self.getPublish.transmit_ref[6:])
+                self.getPublish.miniAOD = False
+                if self.checkRECOMiniAOD2.isChecked():
+                    self.getPublish.miniAOD = True
                 
                 (tag_startup, data_version) = to_transmit[0][1].split('-')
                 if self.gccs == 'Fast':
@@ -579,12 +604,15 @@ class ovalGui(QWidget):
                     tag_startup = tag_startup[len_prefix:]
                 self.getPublish.tag_startup.setText('Tag Startup : ' + tag_startup) # pbm with fastsim_ pu get choix calcul -> done
                 self.getPublish.data_version.setText('Data Version : ' + data_version)
-                self.getPublish.lineEdit.setText('File to be created')
-                t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + self.getPublish.text_ext
+
+                t_rel_default_text = self.getPublish.to_transmit[0][0][6:]
+                if self.checkRECOMiniAOD2.isChecked():
+                    t_rel_default_text = t_rel_default_text + "_miniAOD"
+                t_rel_default_text = t_rel_default_text + self.getPublish.text_ext
                 print "getPublish_update - t_rel_default_text : ", self.getPublish.text_ext, t_rel_default_text
                 self.getPublish.t_rel_default.setText('Default web folder name : ' + t_rel_default_text)
                 
-                # en cas de signal "fermeturegetPublish()" reçu de self.getPublish => exécutera clienchoisi 
+                # en cas de signal "fermeturegetPublish()" reçu de self.getPublish => exécutera clienpublish 
                 self.connect(self.getPublish, SIGNAL("fermeturegetPublish(PyQt_PyObject)"), self.clientpublish) 
                 # la deuxième fenêtre sera 'modale' (la première fenêtre sera inactive)
                 self.getPublish.setWindowModality(QtCore.Qt.ApplicationModal)
@@ -592,23 +620,36 @@ class ovalGui(QWidget):
                 self.getPublish.show()                
                 
     def clientpublish(self, x):
+        import os,sys,re
         """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
+#        print "recup2 = ", x, "\n" # to be removed
         tmp = self.labelResume.text()
         self.Oval_OK = False
-        t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + self.getPublish.text_ext
+#        t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + self.getPublish.text_ext
+#        t_rel_default_text = self.getPublish.to_transmit[0][0][6:]
+        if ( x == "_" ):
+            t_rel_default_text = self.getPublish.to_transmit[0][0][6:]
+        if ( x != "_" ):
+            t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + x
+        if self.checkRECOMiniAOD2.isChecked():
+            if ( re.search('miniAOD', self.getPublish.text_ext) ):
+                t_rel_default_text = t_rel_default_text # rien
+            else:
+                t_rel_default_text = t_rel_default_text + "_miniAOD"
+        t_rel_default_text = t_rel_default_text + self.getPublish.text_ext
+        
         self.Oval_OK = write_OvalFile(self, t_rel_default_text, self.getPublish.to_transmit[0][1], self.getPublish.to_transmit[1][1])
         if self.Oval_OK:
-            print "True"
+#            print "True"
             print "clientItem OvalGui - t_rel_default_text : ", self.getPublish.text_ext, t_rel_default_text
             tmp += "<br /><strong>OvalFile created</strong>"
         else:
-            print "False"
+#            print "False"
             tmp += "<br /><strong>OvalFile non created !</strong>"
 
         self.labelResume.setText(tmp)
             
         QtCore.QCoreApplication.processEvents()
-        print "recup2 = ", x, "\n" # to be removed
 
         
     def radio11Clicked(self):
@@ -656,5 +697,15 @@ class ovalGui(QWidget):
             self.check36.setChecked(False)
             self.check37.setChecked(False)
             self.check38.setChecked(False)
+        QtCore.QCoreApplication.processEvents() 
+        
+    def checkRECOMiniAOD1Clicked(self):
+        if self.checkRECOMiniAOD1.isChecked():
+            print "RECO"
+        QtCore.QCoreApplication.processEvents() 
+
+    def checkRECOMiniAOD2Clicked(self):
+        if self.checkRECOMiniAOD2.isChecked():
+            print "MiniAOD"
         QtCore.QCoreApplication.processEvents() 
         
