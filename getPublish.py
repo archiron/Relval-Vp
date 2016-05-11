@@ -22,14 +22,21 @@ class GetPublish(QWidget):
         self.to_transmit = []
         self.transmit_rel = ""
         self.transmit_ref = ""
+        self.miniAOD = False
 
         # créer un lineEdit
+        self.label01 = QLabel("Web folder customization : ", self)
+        self.label01.setMaximumWidth(150)
+        self.label01.setMinimumWidth(150)
         self.lineEdit = QLineEdit(self)
+        self.lineEdit.setMaximumWidth(300)
+        self.lineEdit.connect(self.lineEdit, SIGNAL("textChanged(QString)"), self.changeText)
         self.QGBox_P0 = QGroupBox("Publish configuration")
-        self.QGBox_P0.setMinimumWidth(1050)
-        vbox_P0 = QVBoxLayout()
-        vbox_P0.addWidget(self.lineEdit)
-        self.QGBox_P0.setLayout(vbox_P0)
+        hbox_P0 = QHBoxLayout()
+        hbox_P0.addWidget(self.label01)
+        hbox_P0.addWidget(self.lineEdit)
+        hbox_P0.addStretch(1)
+        self.QGBox_P0.setLayout(hbox_P0)
         
         # QHBoxLayout + 2 QGroupBox
         self.QGBox_H1P = QGroupBox("Release ")
@@ -56,7 +63,7 @@ class GetPublish(QWidget):
         self.QGBox2_P.setMaximumWidth(100)		
         self.radio21_P = QRadioButton("local") # par defaut
         self.radio22_P = QRadioButton("non local")
-        self.radio21_P.setChecked(True)
+        self.radio22_P.setChecked(True)
         self.connect(self.radio21_P, SIGNAL("clicked()"), self.radio21_PClicked)
         self.connect(self.radio22_P, SIGNAL("clicked()"), self.radio22_PClicked)
         vbox2_P = QVBoxLayout()
@@ -117,17 +124,18 @@ class GetPublish(QWidget):
         self.setLayout(posit_P)
  
     def ok_Publish(self):
+        QtCore.QCoreApplication.processEvents()
         # emettra un signal "fermeturegetPublish()" avec l'argument cité
-        self.emit(SIGNAL("fermeturegetPublish(PyQt_PyObject)"), unicode(self.lineEdit.text())) 
+        self.emit(SIGNAL("fermeturegetPublish(PyQt_PyObject)"), '_' + unicode(self.lineEdit.text())) 
         # fermer la fenêtre
         self.close()
 
-    def radio21_PClicked(self):
+    def radio21_PClicked(self): # to be removed ?
         if self.radio21_P.isChecked():
             print 'local'
         QtCore.QCoreApplication.processEvents()
 
-    def radio22_PClicked(self):
+    def radio22_PClicked(self): # to be removed ?
         if self.radio22_P.isChecked():
             print 'external'
         QtCore.QCoreApplication.processEvents()
@@ -135,13 +143,20 @@ class GetPublish(QWidget):
     def radio41_PClicked(self):
         if self.radio41_P.isChecked():
             self.text_ext = "_DQM_std"
+            if self.miniAOD:
+                self.text_ext = "_miniAOD" + self.text_ext 
             self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + self.text_ext)
         QtCore.QCoreApplication.processEvents()
 
     def radio42_PClicked(self):
         if self.radio42_P.isChecked():
             self.text_ext = "_dev"
+            if self.miniAOD:
+                self.text_ext = "_miniAOD" + self.text_ext 
             self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + self.text_ext)
         QtCore.QCoreApplication.processEvents()
-        
+
+    def changeText(self):
+        temp = '_' + unicode(self.lineEdit.text())
+        self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + temp + self.text_ext)        
         

@@ -16,8 +16,8 @@ class GetChoice(QWidget):
  
     def __init__(self, parent=None):
         super(GetChoice, self).__init__(parent)
-        self.setWindowTitle("Files choice")
- 
+        self.setWindowTitle("Files choice") 
+
         # QHBoxLayout + 2 QGroupBox
 #        self.QGBox_H1b = QGroupBox("Release list")
 #        self.gbox_H1 = QGridLayout()

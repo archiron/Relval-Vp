@@ -400,7 +400,7 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
     relvaldir = "RelVal"
     if option_is_from_data == 'data':
         relvaldir = "RelValData"
-#    print "relvaldir : ", relvaldir
+    print "relvaldir : ", relvaldir
     release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
 #    print release
     if not release:
@@ -408,8 +408,10 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
     releasedir = release[0] + "x"
 #    print "releasedir : ", releasedir
     base_url = 'https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/'
+#    base_url = 'https://cmsweb.cern.ch/dqm/relval-test/data/browse/ROOT/'
     filedir_url = base_url + relvaldir + '/' + releasedir + '/'
-#    print "AAAAAAA : ", filedir_url
+#    filedir_url = 'http://cms-project-relval.web.cern.ch/cms-project-relval/relval_stats/'
+    print "AAAAAAA : ", filedir_url
     filedir_html = auth_wget(filedir_url)
 
     #auth_wget("https://cmsweb.cern.ch/dqm/offline/data/browse/ROOT/OfflineData/Run2012/JetHT/0002029xx/DQM_V0001_R000202950__JetHT__Run2012C-PromptReco-v2__DQM.root")
@@ -704,7 +706,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     file = open("OvalFile", "w+") # default : overwrite the OvalFile
 #    file = open("newfile.txt", "w+") # default : overwrite the OvalFile
     file.write('<var name="TEST_COMMENT" value="">\n')
-    
+    print 't rel default : ' , t_rel_default_text
     tmp = '<var name="TEST_NEW" value="' + t_rel_default_text + '">\n'
     file.write(tmp) 
     tmp = '<var name="TEST_REF" value="' + self.lineedit3.text()[6:] + '">\n'
@@ -721,10 +723,22 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     tmp = '<var name="STORE_DIR" value="' + os.getcwd() + '">\n'
     tmp += '<var name="STORE_REF" value="' + os.getcwd() + '">\n\n'
     
-    if ( self.getPublish.text_ext == "_dev" ):
-        tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Dev">\n\n'
-    if ( self.getPublish.text_ext == "_DQM_std" ):
-        tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases">\n\n'
+    if self.getPublish.radio21_P.isChecked():
+        print 'ovalfile local'
+        web_dir_path = self.working_dir_base
+        tmp += '<var name="WEB_DIR" value="' + web_dir_path + '">\n\n'
+    if self.getPublish.radio22_P.isChecked():
+        print 'ovalfile external'
+        web_dir_path = '"/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/'
+#        if ( self.getPublish.text_ext == "_dev" ):
+        print 'extension : ', self.getPublish.text_ext
+        if ( re.search('_dev', self.getPublish.text_ext) ):
+            tmp += '<var name="WEB_DIR" value=' + web_dir_path + 'Dev">\n\n'
+        if ( re.search('_DQM_std', self.getPublish.text_ext) ):
+#        if ( self.getPublish.text_ext == "_DQM_std" ):
+            tmp += '<var name="WEB_DIR" value=' + web_dir_path + 'Releases">\n\n'
+
+#        tmp += '<var name="WEB_DIR" value="/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases">\n\n'
     file.write(tmp)
     tmp = 'The value of OVAL_ENVNAME is automatically set by Oval to the name\n'
     tmp += 'of the current environment, before running any executable. Using it below,\n'
@@ -764,12 +778,23 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     tmp += '  Used if DD_source=/eos/...\n'
     if self.gccs == 'Fast':
         tmp += '  <var name="DD_TIER" value="GEN-SIM-DIGI-RECO">\n\n'
+        tmp += '  <var name="VAL_HISTOS" value="ElectronMcSignalHistos.txt">\n'
+        tmp += '  <var name="VAL_CONFIGURATION" value="ElectronMcSignalValidation_cfg">\n'
+        tmp += '  <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidation_gedGsfElectrons_cfg">\n'
+        tmp += '  <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidation_cfg">\n\n'
     else :
-        tmp += '  <var name="DD_TIER" value="GEN-SIM-RECO">\n\n'
-    tmp += '  <var name="VAL_HISTOS" value="ElectronMcSignalHistos.txt">\n'
-    tmp += '  <var name="VAL_CONFIGURATION" value="ElectronMcSignalValidation_cfg">\n'
-    tmp += '  <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidation_gedGsfElectrons_cfg">\n'
-    tmp += '  <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidation_cfg">\n\n'
+        if self.checkRECOMiniAOD2.isChecked():
+            tmp += '  <var name="DD_TIER" value="MINIAODSIM">\n\n'
+            tmp += '  <var name="VAL_HISTOS" value="ElectronMcSignalHistosMiniAOD.txt">\n'
+            tmp += '  <var name="VAL_CONFIGURATION" value="ElectronMcSignalValidationMiniAOD_cfg">\n'
+            tmp += '  <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidationMiniAOD_cfg">\n'
+            tmp += '  <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidationMiniAOD_cfg">\n\n'
+        else:
+            tmp += '  <var name="DD_TIER" value="GEN-SIM-RECO">\n\n'
+            tmp += '  <var name="VAL_HISTOS" value="ElectronMcSignalHistos.txt">\n'
+            tmp += '  <var name="VAL_CONFIGURATION" value="ElectronMcSignalValidation_cfg">\n'
+            tmp += '  <var name="VAL_CONFIGURATION_gedGsfE" value="ElectronMcSignalValidation_gedGsfElectrons_cfg">\n'
+            tmp += '  <var name="VAL_POST_CONFIGURATION" value="ElectronMcSignalPostValidation_cfg">\n\n'
     file.write(tmp)
 
     if self.gccs == 'Full': # FULLSIM
@@ -786,7 +811,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
         tmp += ' <var name="BLUE_FILE" value="DQM_DUMMY.root">\n'
         tmp += ' <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
         tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
-        tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed_${TEST_REF}/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+        tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedvsGed_${TEST_REF}/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
         tmp += '    </environment>\n\n'
         file.write(tmp)
 
@@ -813,8 +838,10 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
             tmp += '        <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '        <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n'
             tmp += '        <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-            tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
-            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed_${TEST_REF}/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+            tmp += '-t "gedGsfElectrons ${DD_SAMPLE}<br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_REF}</font></b> : ${DD_COND_REF}" '
+            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedvsGed_${TEST_REF}/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+#            tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
+#            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedvsGed_${TEST_REF}/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
         tmp = '  </environment>\n\n' 
@@ -835,7 +862,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
         tmp += ' <var name="BLUE_FILE" value="DQM_DUMMY.root">\n'
         tmp += ' <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
         tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
-        tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed_${TEST_REF}/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+        tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedvsGed_${TEST_REF}/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
         tmp += '    </environment>\n\n'
         file.write(tmp)
         for items in self.files_list:
@@ -853,7 +880,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
             tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
             tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
-            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedVsGed_${TEST_REF}/' + prefix + '_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
+            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedvsGed_${TEST_REF}/' + prefix + '_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
             tmp += '      </environment>\n\n'
             file.write(tmp)
         tmp = '  </environment>\n\n' 
