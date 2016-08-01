@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v1.0.1')
+        self.setWindowTitle('DQMGui publish v1.0.3')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -250,6 +250,7 @@ class ovalGui(QWidget):
                 # TEMPORAIRE TEST REVIENT DE RELEASE FOLDER POUR TRAVAIL
 #                print "liste 3 - current working directory : ", os.getcwd()      # Return the current working directory
                 os.chdir(self.working_dir_base)   # Change current working directory to base directory
+                print "WORKING DIR : ", os.getcwd()
 
                 # work to execute
 #                if self.radio04.isChecked():     # publish
@@ -335,7 +336,9 @@ class ovalGui(QWidget):
                 # step 2 : done
                 option_release_rel = str(self.choice_rel[0]) 
                 actual_dir = os.getcwd() # get the actual directory
+#                print "actual dir : ", actual_dir
                 os.chdir(self.working_dir_rel)   # Change current working directory to release directory
+#                print "working dir : ", os.getcwd()
                 for part_rel_3 in itl2:
                     print "\npart_rel_3 : ", part_rel_3 # OK
                     option_regexp_rel = str( part_rel_3[1] ) 
