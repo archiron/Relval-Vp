@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v1.0.3')
+        self.setWindowTitle('DQMGui publish v1.0.4')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -176,7 +176,7 @@ class ovalGui(QWidget):
         self.connect(self.bouton4, SIGNAL("clicked()"), self.liste3) 
 
         # Création du bouton quitter, ayant pour parent la "fenetre"
-        self.boutonQ = QPushButton(self.trUtf8("Quitter ?"),self)
+        self.boutonQ = QPushButton(self.trUtf8("Quit ?"),self)
         self.boutonQ.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
         self.boutonQ.setIcon(QIcon("../images/smile.png"))
         self.connect(self.boutonQ, SIGNAL("clicked()"), qApp, SLOT("quit()"))

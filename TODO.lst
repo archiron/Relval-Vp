@@ -14,6 +14,7 @@ pbm du Pt1000 avant et apres la PR8202 (voir avec le electronCompare.C (dans Val
 local vs non local (voir avec le electronCompare.py (dans DQMOffline\EGamma\scripts )
 
 mettre les langues sous forme de fichier txt.
+verifier que les fichiers sont bien chargés.
 
 Faire un test avant d'écraser sur /afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases/ que les fichiers n'existent pas
 voir si on ne peut pas mettre __Nom_du_Sample__ au lieu de Nom_du_Sample pour faire les recherches -> en fait Nom_du_Sample__ fonctionne
