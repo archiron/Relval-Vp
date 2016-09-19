@@ -23,6 +23,7 @@ class GetPublish(QWidget):
         self.transmit_rel = ""
         self.transmit_ref = ""
         self.miniAOD = False
+        self.pmx = False
 
         # créer un lineEdit
         self.label01 = QLabel("Web folder customization : ", self)
@@ -145,6 +146,8 @@ class GetPublish(QWidget):
             self.text_ext = "_DQM_std"
             if self.miniAOD:
                 self.text_ext = "_miniAOD" + self.text_ext 
+            if self.pmx:
+                self.text_ext = "_pmx" + self.text_ext 
             self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + self.text_ext)
         QtCore.QCoreApplication.processEvents()
 
@@ -153,6 +156,8 @@ class GetPublish(QWidget):
             self.text_ext = "_dev"
             if self.miniAOD:
                 self.text_ext = "_miniAOD" + self.text_ext 
+            if self.pmx:
+                self.text_ext = "_pmx" + self.text_ext 
             self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + self.text_ext)
         QtCore.QCoreApplication.processEvents()
 

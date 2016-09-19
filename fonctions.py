@@ -442,7 +442,7 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
     
     return 
 
-def clean_collections(collection, gccs):
+def clean_collections(self, collection, gccs):
     import re
     i = 0
     temp = []
@@ -459,9 +459,16 @@ def clean_collections(collection, gccs):
         elif ( gccs == 'PU' ):
             if ( re.search('Fast', items) ):
                 print " Fast exist in PU", items # to be removed
-                temp.append(items) # TEMP. To be removed
+#                temp.append(items) # TEMP. To be removed
             else:
-                temp.append(items)
+                if self.checkRECOMiniAOD3.isChecked(): # pmx
+#                    if ( re.search('PUpmx', items) ):
+#                        temp.append(items)
+                    temp.append(items)
+                else: # no pmx, only PU
+                    if ( not re.search('pmx', items) ):
+                        temp.append(items)
+#                temp.append(items)
         else: # gccs == 'FAST'
             if ( re.search('PU', items) ):
                 print " PU exist in Fast", items # to be removed
@@ -470,11 +477,6 @@ def clean_collections(collection, gccs):
     return temp
 
 def list_search(self):
-    texte_release1 = self.lineedit1.text()
-    texte_release3 = self.lineedit3.text()
-#    print "texte 1 : ", texte_release1
-#    print "texte 3 : ", texte_release3
-        
     # on fera la fonction par un appel a cmd_fetchall(options)
     # ou options regroupera option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run
         
@@ -482,6 +484,10 @@ def list_search(self):
     option_is_from_data = "mc" # mc ou data
     option_release_1 = str(self.lineedit1.text()) # self.cmsenv.getCMSSWBASECMSSWVERSION()
     option_release_3 = str(self.lineedit3.text()) # self.cmsenv.getCMSSWBASECMSSWVERSION()
+    if self.checkRECOMiniAOD2.isChecked(): # miniAOD
+        option_release_3 = option_release_1
+    if self.checkRECOMiniAOD3.isChecked(): # pmx
+        option_release_3 = option_release_1
     option_regexp = '_RelValTTbar_13' # str( self.lineedit4.text() ) to be removed
     option_mthreads = 3
     option_dry_run = True # False for loading files
@@ -497,18 +503,29 @@ def list_search(self):
     for items in coll_list:
         print "ITEMS : ", items
         option_regexp = str( items ) + '__'
-        if ( self.gccs != 'Full' ):
+#        if ( self.gccs != 'Full' ):
+#            option_regexp += ',' + str(self.gccs)
+        if ( self.gccs == 'Fast' ):
             option_regexp += ',' + str(self.gccs)
-#        print "**********", items, "- ", option_release_1 # to be removed
-        (liste_fichiers_1) = cmd_fetch(option_is_from_data, option_release_1, option_regexp, option_mthreads, option_dry_run)
-        self.rel_list += liste_fichiers_1
+        if ( self.gccs == 'PU' ):
+            option_regexp += ',PU'
 #        print "**********", items, "- ", option_release_3 # to be removed
         (liste_fichiers_3) = cmd_fetch(option_is_from_data, option_release_3, option_regexp, option_mthreads, option_dry_run)
         self.ref_list += liste_fichiers_3
+
+        option_regexp = str( items ) + '__'
+        if ( self.gccs == 'PU' ):
+            if self.checkRECOMiniAOD3.isChecked(): # pmx
+                option_regexp += ',PUpmx'
+            else:
+                option_regexp += ',PU'
+#        print "**********", items, "- ", option_release_1 # to be removed
+        (liste_fichiers_1) = cmd_fetch(option_is_from_data, option_release_1, option_regexp, option_mthreads, option_dry_run)
+        self.rel_list += liste_fichiers_1
         
 #    print "\n****** cleaning ******"
-    self.rel_list = clean_collections(self.rel_list, self.gccs)
-    self.ref_list = clean_collections(self.ref_list, self.gccs)
+    self.rel_list = clean_collections(self, self.rel_list, self.gccs)
+    self.ref_list = clean_collections(self, self.ref_list, self.gccs)
 #    print "****** done ******"
     
     # si on veut comparer deux releases par fichiers DQM
@@ -711,6 +728,9 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     file.write(tmp) 
     print 't ref default : ' , self.lineedit3.text()[6:] + self.getPublish.text_ext
     tmp = '<var name="TEST_REF" value="' + self.lineedit3.text()[6:] + self.getPublish.text_ext + '">\n'
+    if self.checkRECOMiniAOD3.isChecked():
+        print 't ref default : ' , self.lineedit1.text()[6:] + self.getPublish.text_ext
+        tmp = '<var name="TEST_REF" value="' + self.lineedit1.text()[6:] + self.getPublish.text_ext + '">\n'
     file.write(tmp) 
     tmp = '\n<var name="TAG_STARTUP" value="' + tag_startup + '">\n'
     tmp += '<var name="DATA_VERSION" value="' + data_version + '">\n\n'

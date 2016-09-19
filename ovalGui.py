@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v1.0.4')
+        self.setWindowTitle('DQMGui publish v1.0.5')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -98,17 +98,20 @@ class ovalGui(QWidget):
         self.QGBoxAllNone.setLayout(vboxAllNone)
                 				
 		# creation du grpe RECO/MiniAOD
-        self.QGBoxRECOMiniAOD = QGroupBox("RECO / MiniAOD")
+        self.QGBoxRECOMiniAOD = QGroupBox("RECO / MiniAOD / pmx")
         self.QGBoxRECOMiniAOD.setMaximumHeight(150)
         self.QGBoxRECOMiniAOD.setMinimumHeight(150)
         self.checkRECOMiniAOD1 = QRadioButton("RECO")
         self.checkRECOMiniAOD2 = QRadioButton("MiniAOD")
+        self.checkRECOMiniAOD3 = QRadioButton("pmx")
         self.checkRECOMiniAOD1.setChecked(True)
         self.connect(self.checkRECOMiniAOD1, SIGNAL("clicked()"), self.checkRECOMiniAOD1Clicked)
         self.connect(self.checkRECOMiniAOD2, SIGNAL("clicked()"), self.checkRECOMiniAOD2Clicked)
+        self.connect(self.checkRECOMiniAOD3, SIGNAL("clicked()"), self.checkRECOMiniAOD3Clicked)
         vboxRECOMiniAOD = QVBoxLayout()
         vboxRECOMiniAOD.addWidget(self.checkRECOMiniAOD1)
         vboxRECOMiniAOD.addWidget(self.checkRECOMiniAOD2)
+        vboxRECOMiniAOD.addWidget(self.checkRECOMiniAOD3)
         vboxRECOMiniAOD.addStretch(1)
         self.QGBoxRECOMiniAOD.setLayout(vboxRECOMiniAOD)
                 				
@@ -598,6 +601,9 @@ class ovalGui(QWidget):
                 self.getPublish.miniAOD = False
                 if self.checkRECOMiniAOD2.isChecked():
                     self.getPublish.miniAOD = True
+                self.getPublish.pmx = False
+                if self.checkRECOMiniAOD3.isChecked():
+                    self.getPublish.pmx = True
                 
                 (tag_startup, data_version) = to_transmit[0][1].split('-')
                 if self.gccs == 'Fast':
@@ -611,6 +617,8 @@ class ovalGui(QWidget):
                 t_rel_default_text = self.getPublish.to_transmit[0][0][6:]
                 if self.checkRECOMiniAOD2.isChecked():
                     t_rel_default_text = t_rel_default_text + "_miniAOD"
+                if self.checkRECOMiniAOD3.isChecked():
+                    t_rel_default_text = t_rel_default_text + "_pmx"
                 t_rel_default_text = t_rel_default_text + self.getPublish.text_ext
                 print "getPublish_update - t_rel_default_text : ", self.getPublish.text_ext, t_rel_default_text
                 self.getPublish.t_rel_default.setText('Default web folder name : ' + t_rel_default_text)
@@ -639,6 +647,11 @@ class ovalGui(QWidget):
                 t_rel_default_text = t_rel_default_text # rien
             else:
                 t_rel_default_text = t_rel_default_text + "_miniAOD"
+        if self.checkRECOMiniAOD3.isChecked():
+            if ( re.search('pmx', self.getPublish.text_ext) ):
+                t_rel_default_text = t_rel_default_text # rien
+            else:
+                t_rel_default_text = t_rel_default_text + "_pmx"
         t_rel_default_text = t_rel_default_text + self.getPublish.text_ext
         
         self.Oval_OK = write_OvalFile(self, t_rel_default_text, self.getPublish.to_transmit[0][1], self.getPublish.to_transmit[1][1])
@@ -653,13 +666,13 @@ class ovalGui(QWidget):
         self.labelResume.setText(tmp)
             
         QtCore.QCoreApplication.processEvents()
-
-        
+   
     def radio11Clicked(self):
         if self.radio11.isChecked():
             self.QGBox31.setVisible(True)
             self.QGBox32.setVisible(False)
             self.choix_calcul = 'Full'
+            self.checkRECOMiniAOD1.setChecked(True)
         QtCore.QCoreApplication.processEvents()
 
     def radio12Clicked(self):
@@ -674,6 +687,7 @@ class ovalGui(QWidget):
             self.QGBox31.setVisible(False)
             self.QGBox32.setVisible(True)
             self.choix_calcul = 'Fast'
+            self.checkRECOMiniAOD1.setChecked(True)
         QtCore.QCoreApplication.processEvents()
                         
     def checkAllNone1Clicked(self):
@@ -710,5 +724,19 @@ class ovalGui(QWidget):
     def checkRECOMiniAOD2Clicked(self):
         if self.checkRECOMiniAOD2.isChecked():
             print "MiniAOD"
+            self.radio11.isChecked()
+            self.QGBox31.setVisible(True)
+            self.QGBox32.setVisible(False)
+            self.choix_calcul = 'Full'
+            self.radio11.setChecked(True)
+        QtCore.QCoreApplication.processEvents() 
+        
+    def checkRECOMiniAOD3Clicked(self):
+        if self.checkRECOMiniAOD3.isChecked():
+            print "pmx"
+            self.radio12.setChecked(True)
+            self.QGBox31.setVisible(False)
+            self.QGBox32.setVisible(True)
+            self.choix_calcul = 'PileUp'
         QtCore.QCoreApplication.processEvents() 
         
