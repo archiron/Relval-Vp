@@ -212,11 +212,11 @@ def get_collection_list(self):
     collection_list = []
     if self.radio11.isChecked(): # FULL
         if self.check31.isChecked():
-            collection_list.append('Pt10Startup_UP15')
+            collection_list.append('Pt10Startup') #_UP15
         if self.check32.isChecked():
-            collection_list.append('Pt35Startup_UP15')
+            collection_list.append('Pt35Startup') #_UP15
         if self.check33.isChecked():
-            collection_list.append('Pt1000Startup_UP15')
+            collection_list.append('Pt1000Startup') #_UP15
         if self.check34.isChecked():
             collection_list.append('QcdPt80120Startup_13') # QcdPt80Pt120Startup_13
         if self.check35.isChecked():
@@ -235,11 +235,11 @@ def get_collection_list_search(self):
     collection_list = []
     if self.radio11.isChecked(): # FULL 
         if self.check31.isChecked():
-            collection_list.append('RelValSingleElectronPt10_UP15')
+            collection_list.append('RelValSingleElectronPt10') #_UP15
         if self.check32.isChecked():
-            collection_list.append('RelValSingleElectronPt35_UP15')
+            collection_list.append('RelValSingleElectronPt35') #_UP15
         if self.check33.isChecked():
-            collection_list.append('RelValSingleElectronPt1000_UP15')
+            collection_list.append('RelValSingleElectronPt1000') #_UP15
         if self.check34.isChecked():
             collection_list.append('RelValQCD_Pt_80_120_13')
         if self.check35.isChecked():
@@ -751,6 +751,8 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     if self.getPublish.radio22_P.isChecked():
         print 'ovalfile external'
         web_dir_path = '"/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/'
+#        web_dir_path = '"/eos/user/a/archiron/www/'
+#        web_dir_path = ''
 #        if ( self.getPublish.text_ext == "_dev" ):
         print 'extension : ', self.getPublish.text_ext
         if ( re.search('_dev', self.getPublish.text_ext) ):
@@ -882,7 +884,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
         tmp += '        <var name="RED_FILE" value="DQM_DUMMY.root">\n'
         tmp += ' <var name="BLUE_FILE" value="DQM_DUMMY.root">\n'
         tmp += ' <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-        tmp += '-t "gedGsfElectrons<br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_REF}</font></b> : ${DD_COND_REF}" '
+        tmp += '-t "gedGsfElectrons ${DD_SAMPLE}<br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_REF}</font></b> : ${DD_COND_REF}" '
         tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedvsGed_${TEST_REF}/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
 #        tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
 #        tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedvsGed_${TEST_REF}/Fullgedvsged_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
@@ -902,7 +904,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-            tmp += '-t "gedGsfElectrons<br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_REF}</font></b> : ${DD_COND_REF}" '
+            tmp += '-t "gedGsfElectrons ${DD_SAMPLE}<br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_REF}</font></b> : ${DD_COND_REF}" '
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedvsGed_${TEST_REF}/' + prefix + '_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'
 #            tmp += '-t "${TEST_NEW} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / gedGsfElectrons / ${DD_SAMPLE} / ${DD_COND_REF}" '
 #            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/GedvsGed_${TEST_REF}/' + prefix + '_${DD_SAMPLE}_gedGsfE_Startup\'>\n\n'

@@ -15,6 +15,7 @@ local vs non local (voir avec le electronCompare.py (dans DQMOffline\EGamma\scri
 
 mettre les langues sous forme de fichier txt.
 verifier que les fichiers sont bien chargés.
+faire un bouton pmx ? et sortir les pmx des PU classiques.
 
 Faire un test avant d'écraser sur /afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases/ que les fichiers n'existent pas
 voir si on ne peut pas mettre __Nom_du_Sample__ au lieu de Nom_du_Sample pour faire les recherches -> en fait Nom_du_Sample__ fonctionne

@@ -57,9 +57,9 @@ class ovalGui(QWidget):
         self.QGBox32.setMaximumHeight(150)
         self.QGBox31.setVisible(True)
         self.QGBox32.setVisible(False)
-        self.check31 = QCheckBox("Pt10Startup_UP15")
-        self.check32 = QCheckBox("Pt35Startup_UP15")
-        self.check33 = QCheckBox("Pt1000Startup_UP15")
+        self.check31 = QCheckBox("Pt10Startup") #_UP15
+        self.check32 = QCheckBox("Pt35Startup_UP15") #
+        self.check33 = QCheckBox("Pt1000Startup_UP15") #
         self.check34 = QCheckBox("QcdPt80120Startup_13") # ex QcdPt80Pt120Startup_13
         self.check35 = QCheckBox("TTbarStartup_13")
         self.check36 = QCheckBox("ZEEStartup_13")
