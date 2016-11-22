@@ -174,8 +174,6 @@ def cmd_test():
 #    print "fichiers txt pour la release : ", cmsenv.CMSSWBASECMSSWVERSION
     toto = "fichiers txt pour la release : "
     titi = cmsenv.CMSSWBASECMSSWVERSION
-#    print toto, titi
-#    return toto, titi
 
 def cmd_folder_creation(choix_calcul, working_dir):
     import subprocess, os, datetime
@@ -638,11 +636,11 @@ def compare_datasets(t1, t2):
             if ( re.search(it11, it21) ):
 #                print "search : ", it11, " ", it21
                 it22 = it21[-2:]
-                if ( ( it22 == '13' ) or ( it22 == '15' ) ):
-#                    print "OK"
-                    temp.append([it1, it2])
-                else:
-                    print "KO : ", it22, it2, it1
+#                temp.append([it1, it2]) # UP15
+                if ( ( it22 == '13' ) or ( it22 == '15' ) ): # UP15
+                    temp.append([it1, it2])                  # UP15
+                else:                                        # UP15
+                    print "KO : ", it22, it2, it1            # UP15
     
     return temp
 

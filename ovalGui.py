@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v1.0.5')
+        self.setWindowTitle('DQMGui publish v1.0.5.1')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
