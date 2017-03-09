@@ -210,11 +210,11 @@ def get_collection_list(self):
     collection_list = []
     if self.radio11.isChecked(): # FULL
         if self.check31.isChecked():
-            collection_list.append('Pt10Startup') #_UP15
+            collection_list.append('Pt10Startup_UP15') #
         if self.check32.isChecked():
-            collection_list.append('Pt35Startup') #_UP15
+            collection_list.append('Pt35Startup_UP15') #
         if self.check33.isChecked():
-            collection_list.append('Pt1000Startup') #_UP15
+            collection_list.append('Pt1000Startup_UP15') #
         if self.check34.isChecked():
             collection_list.append('QcdPt80120Startup_13') # QcdPt80Pt120Startup_13
         if self.check35.isChecked():
@@ -233,11 +233,11 @@ def get_collection_list_search(self):
     collection_list = []
     if self.radio11.isChecked(): # FULL 
         if self.check31.isChecked():
-            collection_list.append('RelValSingleElectronPt10') #_UP15
+            collection_list.append('RelValSingleElectronPt10_UP15') #
         if self.check32.isChecked():
-            collection_list.append('RelValSingleElectronPt35') #_UP15
+            collection_list.append('RelValSingleElectronPt35_UP15') #
         if self.check33.isChecked():
-            collection_list.append('RelValSingleElectronPt1000') #_UP15
+            collection_list.append('RelValSingleElectronPt1000_UP15') #
         if self.check34.isChecked():
             collection_list.append('RelValQCD_Pt_80_120_13')
         if self.check35.isChecked():
@@ -367,8 +367,10 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
         opener = build_opener(X509CertOpen())
         url_file = opener.open(Request(url))
         size = int(url_file.headers["Content-Length"])
+        print "size= ", size
 
-        if size < 1048576:   # if File size < 1MB
+        #if size < 1048576:   # if File size < 1MB
+        if size < 2048576:   # if File size < 2MB
             filename = basename(url)    #still download
             readed = url_file.read()    ## and then check if its not an empty dir (parent directory)
             if filename != '':
@@ -398,13 +400,10 @@ def cmd_fetch(option_is_from_data, option_release, option_regexp, option_mthread
     relvaldir = "RelVal"
     if option_is_from_data == 'data':
         relvaldir = "RelValData"
-    print "relvaldir : ", relvaldir
     release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
-#    print release
     if not release:
         parser.error('No such CMSSW release found. Please check the ``--release`` commandline option value.')
     releasedir = release[0] + "x"
-#    print "releasedir : ", releasedir
     base_url = 'https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/'
 #    base_url = 'https://cmsweb.cern.ch/dqm/relval-test/data/browse/ROOT/'
     filedir_url = base_url + relvaldir + '/' + releasedir + '/'
@@ -636,11 +635,11 @@ def compare_datasets(t1, t2):
             if ( re.search(it11, it21) ):
 #                print "search : ", it11, " ", it21
                 it22 = it21[-2:]
-#                temp.append([it1, it2]) # UP15
-                if ( ( it22 == '13' ) or ( it22 == '15' ) ): # UP15
-                    temp.append([it1, it2])                  # UP15
-                else:                                        # UP15
-                    print "KO : ", it22, it2, it1            # UP15
+                temp.append([it1, it2]) # UP15
+#                if ( ( it22 == '13' ) or ( it22 == '15' ) ): # UP15
+#                    temp.append([it1, it2])                  # UP15
+#                else:                                        # UP15
+#                    print "KO : ", it22, it2, it1            # UP15
     
     return temp
 
@@ -749,7 +748,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
     if self.getPublish.radio22_P.isChecked():
         print 'ovalfile external'
         web_dir_path = '"/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/'
-#        web_dir_path = '"/eos/user/a/archiron/www/'
+#        web_dir_path = '"/eos/project/c/cmsweb/www/egamma/validation/Electrons/'
 #        web_dir_path = ''
 #        if ( self.getPublish.text_ext == "_dev" ):
         print 'extension : ', self.getPublish.text_ext
@@ -942,7 +941,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
         file.write(tmp)
         tmp = '      <var name="TEST_GLOBAL_TAG" value="${TAG_STARTUP}">\n'
         tmp += '      <var name="TEST_GLOBAL_AUTOCOND" value="startup">\n'
-        tmp += '      <var name="DD_COND" value="-${TEST_GLOBAL_TAG}-${DATA_VERSION}">\n\n'
+        tmp += '      <var name="DD_COND" value="${TEST_GLOBAL_TAG}_FastSim-${DATA_VERSION}">\n\n'
         file.write(tmp)
         for items in self.files_list:
             print "fast vs full : ", items
