@@ -210,11 +210,11 @@ def get_collection_list(self):
     collection_list = []
     if self.radio11.isChecked(): # FULL
         if self.check31.isChecked():
-            collection_list.append('Pt10Startup_UP15') #
+            collection_list.append('Pt10Startup') #_UP15
         if self.check32.isChecked():
-            collection_list.append('Pt35Startup_UP15') #
+            collection_list.append('Pt35Startup') #_UP15
         if self.check33.isChecked():
-            collection_list.append('Pt1000Startup_UP15') #
+            collection_list.append('Pt1000Startup') #_UP15
         if self.check34.isChecked():
             collection_list.append('QcdPt80120Startup_13') # QcdPt80Pt120Startup_13
         if self.check35.isChecked():
@@ -233,11 +233,11 @@ def get_collection_list_search(self):
     collection_list = []
     if self.radio11.isChecked(): # FULL 
         if self.check31.isChecked():
-            collection_list.append('RelValSingleElectronPt10_UP15') #
+            collection_list.append('RelValSingleElectronPt10') #_UP15
         if self.check32.isChecked():
-            collection_list.append('RelValSingleElectronPt35_UP15') #
+            collection_list.append('RelValSingleElectronPt35') #_UP15
         if self.check33.isChecked():
-            collection_list.append('RelValSingleElectronPt1000_UP15') #
+            collection_list.append('RelValSingleElectronPt1000') #_UP15
         if self.check34.isChecked():
             collection_list.append('RelValQCD_Pt_80_120_13')
         if self.check35.isChecked():
@@ -926,7 +926,7 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '      <var name="BLUE_FILE" value="' + str(self.lineedit3.text()[6:]) + '/' + items[3] + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-            tmp += '-t "<br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_REF}</font></b> : ${DD_COND_REF}" '
+            tmp += '-t "Fast vs Fast ${DD_SAMPLE} <br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_REF}</font></b> : ${DD_COND_REF}" '
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFast_${TEST_REF}/Fast_${DD_SAMPLE}_Startup\'>\n\n'
 #            tmp += '-t "${TEST_NEW} / ${DD_SAMPLE} / ${DD_COND} vs ${TEST_REF} / ${DD_SAMPLE} / ${DD_COND_REF}" '
 #            tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFast_${TEST_REF}/Fast_${DD_SAMPLE}_Startup\'>\n\n'
@@ -948,14 +948,15 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
 #            print items[0]
 #            print items[2]
             it_tmp = items[2].replace('_FastSim', '')
-#            print "COUCOU FAST " , items[2], ' - ', it_tmp
+            dd_cond_full = explode_item(it_tmp)
+            #print "COUCOU FAST " , dd_cond_full, ' - ', it_tmp, ' - ', dd_cond_full[2]
             tmp = ''
             tmp += '      <environment name="ValFastVsFull' + items[0] + '_gedGsfE">\n\n' # environment DD_SAMPLE
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
             tmp += '      <var name="BLUE_FILE" value="' + it_tmp + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-            tmp += '-t "Fast vs Full / ${DD_SAMPLE} / ${DD_COND}" '
+            tmp += '-t "Fast vs Full ${DD_SAMPLE} <br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_REF}</font></b> : ' + dd_cond_full[2] + '" ' 
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFull/${DD_SAMPLE}_Startup\'>\n\n'
             tmp += '      </environment>\n\n'                                             # environment DD_SAMPLE
             file.write(tmp)
