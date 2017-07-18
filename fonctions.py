@@ -216,11 +216,11 @@ def get_collection_list(self):
         if self.check33.isChecked():
             collection_list.append('Pt1000Startup') #_UP15
         if self.check34.isChecked():
-            collection_list.append('QcdPt80120Startup_13') # QcdPt80Pt120Startup_13
+            collection_list.append('QcdPt80120Startup') #_13 QcdPt80Pt120Startup_13
         if self.check35.isChecked():
-            collection_list.append('TTbarStartup_13')
+            collection_list.append('TTbarStartup_13') #
         if self.check36.isChecked():
-            collection_list.append('ZEEStartup_13')
+            collection_list.append('ZEEStartup_13') #
     else: #FAST, PU
         if self.check37.isChecked():
             collection_list.append('TTbarStartup')
@@ -239,11 +239,11 @@ def get_collection_list_search(self):
         if self.check33.isChecked():
             collection_list.append('RelValSingleElectronPt1000') #_UP15
         if self.check34.isChecked():
-            collection_list.append('RelValQCD_Pt_80_120_13')
+            collection_list.append('RelValQCD_Pt_80_120') #_13
         if self.check35.isChecked():
-            collection_list.append('RelValTTbar_13')
+            collection_list.append('RelValTTbar_13') #
         if self.check36.isChecked():
-            collection_list.append('RelValZEE_13')
+            collection_list.append('RelValZEE_13') #
     else: #FAST, PU
         if self.check37.isChecked():
             collection_list.append('TTbar_13')
@@ -945,18 +945,23 @@ def write_OvalFile(self, t_rel_default_text, to_transmit_rel, to_transmit_ref):
         file.write(tmp)
         for items in self.files_list:
             print "fast vs full : ", items
-#            print items[0]
-#            print items[2]
+            print items[0]
+            print "red file : ", items[2]
             it_tmp = items[2].replace('_FastSim', '')
             dd_cond_full = explode_item(it_tmp)
-            #print "COUCOU FAST " , dd_cond_full, ' - ', it_tmp, ' - ', dd_cond_full[2]
+            print "OVALFILE FAST " , dd_cond_full, ' - ', it_tmp, ' - ', dd_cond_full[2]
+            print "blue file : ", it_tmp
+            print "self.FastvsFastTag :", self.FastvsFastTag
+            print "self.FastvsFullTag :", self.FastvsFullTag
+            it_tmp2 = it_tmp.replace(self.FastvsFastTag, self.FastvsFullTag)
+            print "blue file :", it_tmp2
             tmp = ''
             tmp += '      <environment name="ValFastVsFull' + items[0] + '_gedGsfE">\n\n' # environment DD_SAMPLE
             tmp += '        <var name="DD_SAMPLE" value="RelVal' + items[1] + '">\n\n'
             tmp += '      <var name="RED_FILE" value="' + items[2] + '">\n'
-            tmp += '      <var name="BLUE_FILE" value="' + it_tmp + '">\n'
+            tmp += '      <var name="BLUE_FILE" value="' + it_tmp2 + '">\n'
             tmp += '      <target name="publish" cmd=\'electronCompare.py -c ${VAL_HISTOS} -r ${RED_FILE} -b ${BLUE_FILE} '
-            tmp += '-t "Fast vs Full ${DD_SAMPLE} <br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_REF}</font></b> : ' + dd_cond_full[2] + '" ' 
+            tmp += '-t "Fast vs Full ${DD_SAMPLE} <br><b><font color=\'red\'>${TEST_NEW}</font></b> : ${DD_COND}<br><b><font color=\'blue\'>${TEST_NEW}</font></b> : ' + self.FastvsFullTag + '" ' 
             tmp += '${STORE_DIR}/${RED_FILE} ${STORE_REF}/${BLUE_FILE} ${WEB_DIR}/${TEST_NEW}/FastVsFull/${DD_SAMPLE}_Startup\'>\n\n'
             tmp += '      </environment>\n\n'                                             # environment DD_SAMPLE
             file.write(tmp)

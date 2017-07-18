@@ -38,6 +38,20 @@ class GetPublish(QWidget):
         hbox_P0.addWidget(self.lineEdit)
         hbox_P0.addStretch(1)
         self.QGBox_P0.setLayout(hbox_P0)
+
+		# creation du grpe FastSim
+        self.labelFastSim = QLabel("FastvsFull Tag : ", self)
+        self.labelFastSim.setMaximumWidth(150)
+        self.labelFastSim.setMinimumWidth(150)
+        self.lineEditFastSim = QLineEdit(self)
+        self.lineEditFastSim.setMinimumWidth(500)
+#        self.lineEditFastSim.connect(self.lineEdit, SIGNAL("textChanged(QString)"), self.changeTextFastSim)
+        self.QGBoxFastSim_P = QGroupBox("FastSim")
+        hboxFastSim_P = QHBoxLayout()
+        hboxFastSim_P.addWidget(self.labelFastSim)
+        hboxFastSim_P.addWidget(self.lineEditFastSim)
+        hboxFastSim_P.addStretch(1)
+        self.QGBoxFastSim_P.setLayout(hboxFastSim_P)
         
         # QHBoxLayout + 2 QGroupBox
         self.QGBox_H1P = QGroupBox("Release ")
@@ -119,6 +133,7 @@ class GetPublish(QWidget):
         # positionner les widgets dans la fenêtre
         posit_P = QVBoxLayout()
         posit_P.addWidget(self.QGBox_P0)
+        posit_P.addWidget(self.QGBoxFastSim_P)
         posit_P.addLayout(hbox_H0_P)
         posit_P.addLayout(hbox_button_P)
 
@@ -127,7 +142,7 @@ class GetPublish(QWidget):
     def ok_Publish(self):
         QtCore.QCoreApplication.processEvents()
         # emettra un signal "fermeturegetPublish()" avec l'argument cité
-        self.emit(SIGNAL("fermeturegetPublish(PyQt_PyObject)"), '_' + unicode(self.lineEdit.text())) 
+        self.emit(SIGNAL("fermeturegetPublish(PyQt_PyObject)"), '_' + unicode(self.lineEdit.text()) + ':' + unicode(self.lineEditFastSim.text()) ) 
         # fermer la fenêtre
         self.close()
 
@@ -164,4 +179,8 @@ class GetPublish(QWidget):
     def changeText(self):
         temp = '_' + unicode(self.lineEdit.text())
         self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + temp + self.text_ext)        
+        
+#    def changeTextFastSim(self):
+        #temp = '_' + unicode(self.lineEditFastSim.text())
+        #self.t_rel_default.setText("Default web folder name : " + self.transmit_rel[6:] + temp + self.text_ext)        
         

@@ -17,7 +17,7 @@ from getPublish import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('DQMGui publish v1.0.5.4')
+        self.setWindowTitle('DQMGui publish v1.0.6.0') # use of self.FastvsFastTag and self.FastvsFullTag in order to avoid file manipulation "by hand" after publishing
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -594,6 +594,12 @@ class ovalGui(QWidget):
                 BoiteMessage.setWindowTitle("WARNING !")
                 BoiteMessage.exec_()
             else:  # release and reference globaltag OK
+                if self.radio13.isChecked():
+                    print "GetPublish : Fast"
+                    self.getPublish.QGBoxFastSim_P.setVisible(True)
+                else:
+                    self.getPublish.QGBoxFastSim_P.setVisible(False)
+
                 self.getPublish.t_rel.setText('release : ' + to_transmit[0][0])
                 self.getPublish.t_ref.setText('reference : ' + to_transmit[1][0])
                 self.getPublish.test_new.setText('test new : ' + self.getPublish.transmit_rel[6:])
@@ -613,6 +619,8 @@ class ovalGui(QWidget):
                     tag_startup = tag_startup[len_prefix:]
                 self.getPublish.tag_startup.setText('Tag Startup : ' + tag_startup) # pbm with fastsim_ pu get choix calcul -> done
                 self.getPublish.data_version.setText('Data Version : ' + data_version)
+                self.getPublish.lineEditFastSim.setText(tag_startup + '-' + data_version) # FastSim
+                self.FastvsFastTag = tag_startup + '-' + data_version
 
                 t_rel_default_text = self.getPublish.to_transmit[0][0][6:]
                 if self.checkRECOMiniAOD2.isChecked():
@@ -633,7 +641,12 @@ class ovalGui(QWidget):
     def clientpublish(self, x):
         import os,sys,re
         """affiche le résultat x transmis par le signal à l'arrêt de la deuxième fenêtre"""
-#        print "recup2 = ", x, "\n" # to be removed
+#        print "clientpublish = ", x, "\n" # to be removed
+        (a,b) = x.split(":")
+#        print "clientpublish = ", a # to be removed
+        self.FastvsFullTag = b
+        print "clientpublish = ", self.FastvsFullTag # to be removed
+        x = a
         tmp = self.labelResume.text()
         self.Oval_OK = False
 #        t_rel_default_text = self.getPublish.to_transmit[0][0][6:] + self.getPublish.text_ext
@@ -667,7 +680,7 @@ class ovalGui(QWidget):
             
         QtCore.QCoreApplication.processEvents()
    
-    def radio11Clicked(self):
+    def radio11Clicked(self): # Full
         if self.radio11.isChecked():
             self.QGBox31.setVisible(True)
             self.QGBox32.setVisible(False)
@@ -675,14 +688,14 @@ class ovalGui(QWidget):
             self.checkRECOMiniAOD1.setChecked(True)
         QtCore.QCoreApplication.processEvents()
 
-    def radio12Clicked(self):
+    def radio12Clicked(self): # PileUp
         if self.radio12.isChecked():
             self.QGBox31.setVisible(False)
             self.QGBox32.setVisible(True)
             self.choix_calcul = 'PileUp'
         QtCore.QCoreApplication.processEvents()
         
-    def radio13Clicked(self):
+    def radio13Clicked(self): # Fast
         if self.radio13.isChecked():
             self.QGBox31.setVisible(False)
             self.QGBox32.setVisible(True)
